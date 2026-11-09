@@ -1,6 +1,6 @@
 # Upstream-report draft D-03 — skills/AGENTS.md over-claims test enforcement
 
-STATUS: DRAFT — NOT POSTED. License firewall: owner approval required before any external posting (coordinator owns the approvals log).
+STATUS: PARKED (owner ruling 2026-11-08) — tracked as Known gap in the spec; do not file upstream without fresh approval.
 
 Repo: NousResearch/hermes-agent @ pin 2bd378ed (v0.23.0)
 

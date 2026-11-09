@@ -1,6 +1,6 @@
 # Upstream-report draft D-04 — delegation doc/code staleness cluster
 
-STATUS: DRAFT — NOT POSTED. Owner approval required before any external posting.
+STATUS: PARKED (owner ruling 2026-11-08) — tracked as Known gap in the spec; do not file upstream without fresh approval.
 
 Repo: NousResearch/hermes-agent @ pin 2bd378ed (v0.23.0)
 
