@@ -326,13 +326,10 @@ Notification subscriptions SHALL carry a `notifier_profile`; a gateway notifier 
 **Evidence**: doc: cron/AGENTS.md § Kanban (Notifications bullet); [PR #110919](https://github.com/NousResearch/hermes-agent/pull/110919) — anchorless thread subscription warns once instead of vanishing; [issue #115460](https://github.com/NousResearch/hermes-agent/pull/115460)
 **Anchor**: `hermes_cli/kanban_db_notify.py:144` (`_notify_profile_filter`) — SQL predicate over `notifier_profile`; `list_notify_subs` docstring (:175): "Gateway notifiers pass the profiles they own so they cannot claim another gateway's events"; `gateway/kanban_watchers_notifier.py:162` (`_adapter_for_subscription`) — a profile holding its OWN adapter is a credential boundary "the primary never stands in"; `gateway/kanban_watchers_notifier.py:145` (`_warn_unroutable_sub_once`) — one WARNING naming the re-subscribe remedy
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** Notification subscriptions SHALL carry a `notifier_profile`;
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A routed sub hits a closed credential gate
+- **WHEN** a kanban notification subscription's owning profile fails the credential gate at delivery
+- **THEN** it is a "permanent dead-end: delivery rewinds every tick with only a DEBUG line. Say so ONCE per row at WARNING" — never a silent `continue` (#115460)
+- Source: doc: gateway/kanban_watchers_notifier.py:146-148 (`_warn_unroutable_sub_once` docstring)
 ### Requirement: Workers get the assignee's profile and board in a scrubbed child env
 Dispatch SHALL build the worker's env via `build_subprocess_env` under the assignee's secret scope, pin the assignee's `HERMES_HOME`, and then call `strip_launch_profile_env` — the worker SHALL never inherit the default/launch profile's `.env` settings, `TERMINAL_*` policy, or a previous conversation's routing vars.
 **Status**: VERIFIED
@@ -359,13 +356,10 @@ A delegated child's Kanban marker (`DELEGATED_CHILD_ENV_MARKER`) SHALL carry the
 **Evidence**: doc: cron/AGENTS.md § Kanban (Descendant fence bullet)
 **Anchor**: `agent/delegation_context.py:144` (`kanban_path_is_fenced`) — pinned-DB equality at :158-160, `target.relative_to(Path(marker)...)` under-root check at :161-165, marker `"1"` fences all at :154; `agent/delegation_context.py:20` (`DELEGATED_CHILD_ENV_MARKER = "HERMES_DELEGATED_CHILD_CONTEXT"`); `agent/delegation_context.py:122` (`scrub_kanban_env`) — strips worker identity but keeps an inherited path-valued marker, docstring: "a child running a repro against a temp `HERMES_HOME` got a silently read-only board there"
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** A delegated child's Kanban marker (`DELEGATED_CHILD_ENV_MARKER`) SHALL carry the fenced board ROOT, and `kanban_path_is_fenced` SHALL deny mutations only at the dispatcher-pinned `HERMES_KANBAN_DB` or under that root — so a child working against a scratch `HERMES_HOME` keeps a writable board;
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A delegated child runs against a scratch home
+- **WHEN** a delegated child touches a Kanban DB other than the dispatcher-pinned one (e.g. a repro against a temp `HERMES_HOME`)
+- **THEN** the fence applies only to the pinned DB or the marker's board root — otherwise "a child running a repro against a temp `HERMES_HOME` got a silently read-only board there"
+- Source: doc: agent/delegation_context.py:129-131 (`scrub_kanban_env` docstring) — "a child running a repro against a temp ``HERMES_HOME`` got a silently read-only board there"
 ### Requirement: Owner recovery refuses to guess; a lost worker's exit is booked once
 The dispatcher SHALL not authorize another attempt on missing or ambiguous owner receipts
 ("Missing/ambiguous owner receipts never authorize another attempt"), and SHALL treat missing
@@ -385,6 +379,7 @@ e62c15e667e4; 89f13590e0e8).
   replace with evidence-backed scenarios on next recon pass.
 
 ## Known gaps / open questions
+- Kanban pass 3 (G-07) residual scenario-debt, kept ungrounded per rule (no Tier A/B/C trigger+outcome text): REQ "Board is the hard isolation boundary" — cron/AGENTS.md states the invariant but no incident/documented trigger exists at the pin; REQ "Owner recovery refuses to guess" — evidence is code docstrings (invariants) + tail commit subjects, no documented scenario pair.
 - Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2.
 - Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass.
 - Kanban dispatcher invariants (cron/AGENTS.md second half) not read/drafted; kanban sits at the deferred plugins boundary — ownership decision needed.
