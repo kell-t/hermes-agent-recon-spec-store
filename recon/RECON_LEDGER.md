@@ -2,31 +2,45 @@
 
 Store: `github/NousResearch/hermes-agent` (id `hermes-agent`). Boot order: PLAYBOOK.md → repo_config.yaml → this file.
 
-## CURRENT STATE (pass 2 complete, 2026-11-08)
+## CURRENT STATE (pass 3 complete, 2026-11-08)
 
 - Baseline pin: `main @ 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19` (tag **v0.23.0**, 2026-11-05). `recon/baseline.txt`. Unchanged — owner has not re-pinned.
-- Validation: `openspec validate --all --strict --store hermes-agent` → **Totals: 10 passed, 0 failed** (openspec 1.16.1).
-- Scenario debt: **130 → 23** derived SCENARIO-DEBT blocks (target <40 met); **213 evidence-backed scenarios** (Tier A release-note quotes, Tier B in-repo docs, Tier C test names) under requirements in `specs_draft/` and converted specs. Residual debt: config-provider-models 7, profiles-isolation 4, tools-toolsets 4, gateway-messaging 3, cron-background 2, cli-surface 1, sessions-state 1, skills-system 1.
-- Fleet: **158 requirements** (pass 1: 130; +28 from tail folds), **94 VERIFIED (59.5%)** (pass 1: 62/47.7%; reference 89.6%), 64 INFERRED, 0 UNVERIFIED-as-spec.
+- Validation: `openspec validate --all --strict --store hermes-agent` → **Totals: 10 passed, 0 failed** (openspec 1.16.1), GREEN at every pass-3 commit.
+- Fleet: **166 requirements** (pass 2: 158; +9 kanban G-07, −2 dead-at-pin removed → D-05), **156 VERIFIED (94.0%)** (pass 2: 94/59.5%; +64 anchor-verified upgrades), 10 INFERRED, 0 UNVERIFIED-as-spec.
+- Scenario debt: **23 → 10** (16 new Tier-B grounded scenarios — verbatim docstring/comment/log-string quotes re-opened by the spec-writer at the pin). Residual: gateway-messaging 3, cron-background 2, tools-toolsets 2, cli-surface 1, sessions-state 1, skills-system 1 (reasons in per-file Known gaps). **234 evidence-backed scenarios.**
+- Audit gate (NEW pass 3): `recon/scripts/audit_gate.py` — scripted per-requirement checks: anchor file+line at pin, hint-keyword window (stem + dotted-symbol tolerant), relnote quote overlap ≥60% (release-name version aliases resolved), test path + `::` segment existence, tail-sha `cat-file` resolution, PR/issue cites vs pr_index/bundles/releases/`recon/evidence/verified_numbers.json`, body <500 chars, requirement-section rules. MANDATORY between every wave completion and every commit.
 - Store registration: store must be registered on the machine (`openspec store register <store-path>`); registrations do not travel with the git repo.
 
-### Coverage table (scripted tally of specs_draft/, pass 2)
+### Coverage table (scripted tally of specs_draft/, pass 3)
 
 | Capability | Reqs | VERIFIED | INFERRED | Grounded scenarios | Scenario debt |
 |---|---|---|---|---|---|
 | agent-turn-loop | 17 | 12 | 5 | 29 | 0 |
 | gateway-messaging | 17 | 16 | 1 | 28 | 3 |
-| sessions-state | 13 | 7 | 6 | 23 | 1 |
-| tools-toolsets | 15 | 6 | 9 | 17 | 4 |
-| profiles-isolation | 16 | 6 | 10 | 15 | 4 |
-| cron-background | 17 | 7 | 10 | 23 | 2 |
+| sessions-state | 13 | 13 | 0 | 23 | 1 |
+| tools-toolsets | 15 | 15 | 0 | 19 | 2 |
+| profiles-isolation | 16 | 16 | 0 | 19 | 0 |
+| cron-background | 26 | 26 | 0 | 32 | 2 |
 | skills-system | 17 | 16 | 1 | 28 | 1 |
-| config-provider-models | 15 | 6 | 9 | 12 | 7 |
-| cli-surface | 14 | 4 | 10 | 18 | 1 |
+| config-provider-models | 14 | 14 | 0 | 18 | 0 |
+| cli-surface | 14 | 14 | 0 | 18 | 1 |
 | delegation-orchestration | 17 | 14 | 3 | 20 | 0 |
-| **TOTAL** | **158** | **94 (59.5%)** | **64** | **213** | **23** |
+| **TOTAL** | **166** | **156 (94.0%)** | **10** | **234** | **10** |
 
-Audit performed (scripted, pass 2): all `file:line` anchors exist at the pin, line numbers within file length; every `pull/NNNN` cite matches mined evidence; **54 tail-commit sha cites all resolve to real commits at the pin**; 27 relnote quotes overlap their release bodies (one flag hand-verified verbatim — audit regex punctuation artifact, not a fabrication); 84 test cites verified as existing paths + class/function names. Incidents caught by the spec-writer audit gate and fixed (children's self-checks missed them): 1 fabricated test-class segment (`TestBusyPathAuthz` → `TestBusySessionAuthBypass`), 2 relnote tag mislabels (`v0.6.0` → `v2026.3.30 (v0.6.0)`), 2 bare-filename anchors qualified, 4 requirement bodies trimmed under the 500-char strict limit, 13 tail-fold requirement blocks relocated into `## Requirements` (validator rule, see quirks).
+Pass-3 audit (scripted gate + ~15 spec-writer spot-checks at pin, all child anchors true). Caught and fixed: 2 pass-2 sha transpositions (6b2895cacb86→6b2895cacb85, e20007e4e70c→e20007e4e7c0 — pass-2's own sha audit had missed the rejected-list items); 1 phantom-PR cite (#112647 = ISSUE, pulls/ 404; code comments cite it); 1 closed-unmerged PR cite kept with salvage note (#64611); 5 pass-2 VERIFIEDs with file-only anchors re-anchored file:line by the spec-writer; 2 DEAD pass-2 requirements (D-05); 4 child-cited kanban numbers API-verified (issues #114587 #111306 #115460, PR #99558) and 3 issue-cites relabeled from "PR"; 12 gate false-positives fixed in the gate (range anchors `:A-B`, prose-hint stoplist, dotted `Cls.member` tokens, release-name aliases like v2026.4.3=v0.7.0, prose sections after Known gaps).
+
+## Gap register (pass 3 state)
+
+Closed this pass:
+- G-06 **INFERRED mass CLOSED**: 64 → 10 (residual 10 = agent-turn-loop 5, delegation-orchestration 3, gateway-messaging 1, skills-system 1 — non-target residue, unchanged honest statuses). sessions-state's Tier-B-only fear did NOT materialize: all 6 had real implementations at the pin (image replay lives in `agent/image_replay.py` + `agent/turn_context.py:1417`, correcting the draft's guessed location).
+- G-07 **Kanban dedicated pass CLOSED**: `recon/evidence/bundle_kanban.txt` (98 PR-window + 23 tail, strict scope=kanban/subject-word; plugin-catalog pins excluded — deferred). 9 NEW cron-background requirements VERIFIED under § Sub-area: Kanban — dispatcher loop + single-writer tick lock (#50331 #41448 #17805); failure_limit breaker + exit-78 sticky first-attempt trip (#114587); board-hard/tenant-soft isolation (#19653); (pid, worker_started_at) liveness fingerprint + hold-not-signal on unverified fingerprint (#99558); notifications via owning-profile adapter, one-WARNING fail-closed (#110919 #115460); scrubbed assignee child env (build_subprocess_env + strip_launch_profile_env); `owned_kanban_task()` ownership gating; path-scoped descendant fence (`kanban_path_is_fenced`, `DELEGATED_CHILD_ENV_MARKER`); owner-recovery refuses-to-guess tail cluster (d4283a9c9cdf post-commit block hook, e62c15e667e4, c777ba429fc8, 89f13590e0e8, b2e0171c29e5; test 25e7f5fc21d8).
+- G-08 **Scenario-debt 23 → 10** via 16 new Tier-B scenarios (grounding rule held: only quotes read fresh at the pin during objectives 1–2; nothing derived).
+- D-05 **NEW→CLOSED same pass**: two pass-2 requirements were DEAD at the pin — role-based setup toolset grant (#119491; deleted by c3f85bc54f 2026-09-29, setup-profile machinery removed b120ac575d 2026-10-13) rewritten to the surviving session-platform-gated toolsets (`toolsets.py` TOOLSET_SESSION_PLATFORMS, VERIFIED); setup-chat low reasoning effort (#129405, added df150ec10d1e, deleted b120ac575d) removed. **Law: PR-landed evidence must be re-checked for later removal commits at every pin re-verification.**
+
+Open:
+- G-02 **UNVERIFIED backlog** (per-file `## Known gaps`, never presented as spec): `/compress` parser contract; chronos managed-cron contract; worktree isolation knob; human-first author credit (→ D-03). Note: the `--now` parse site was FOUND pass 3 (`hermes_cli/skills_hub.py:1646` `invalidate_cache="--now" in args`) and the deferral requirement is now VERIFIED in cli-surface.
+- G-08' **Scenario-debt 10**: no Tier A/B/C trigger+outcome text (2 kanban reqs are invariant-only prose; reasons per-file). NOT cut.
+- G-09 **plugin×skill and plugin×tool contracts** unassigned (boundary vs deferred plugins-mcp; revisit when that bucket opens).
 
 ### Evidence inventory (`recon/evidence/`)
 - `pr_commits.json` — 5,893 PR-landed commits (of 58,953 no-merge, 62,624 total), window 2026-02-26..2026-10-27; `pr_index.json` (5,601 unique PRs).
@@ -55,6 +69,7 @@ Deferred buckets (not reconstructed — deliberate): desktop-ui (7,059 scope com
 - D-01 **CLOSED pass 2**: the 85% gateway session-hygiene threshold claimed by `agent/AGENTS.md:83` exists at the pin — `gateway/run_turn_hygiene.py:102` (`threshold_pct=0.85`; :97 "deliberately HIGHER than the agent's compressor (0.50)"). Pass 1 had searched only `gateway/session*.py`. Anchor set in the gateway spec.
 - D-02 `provider-runtime.md` matched the tree; no drift (pass 1, unchanged).
 - D-03 **OPEN**: `skills/AGENTS.md` calls authoring standards "HARDLINE — enforced by test_authoring_standards.py", but that test enforces only the mechanical subset; prose rules 2–3 exist as advisory lints (`tools/skill_linter.py` — "Findings never block by themselves") and rule 4 (author credit) has no mechanical check. Doc claim kept as requirement per DRAFT_TEMPLATE rule 6. Upstream-report candidate (owner approval required).
+- D-05 pass 3: 2 dead-at-pin requirements found+fixed by the anchor sweep — see Gap register G closed list; the audit-gate law is now in PLAYBOOK-level practice.
 - D-04 **OPEN** (pass-2 flags, recorded in per-file Known gaps): `tools/AGENTS.md` § Delegation "default 3" stale vs code `_DEFAULT_MAX_CONCURRENT_CHILDREN = 10` and docs ("Up to 10"); "tasks-only" vs "Shapes: single or batch"; `delegation.backend` (plugin selector) vs `delegation.provider` (credential pin) naming trap; kanban.md calls handoff evidence "a convention" while the hard-refusal requirement rests on #91264 tests that pin goal-loop stops; relnote 2026.3.23 records disabled toolsets historically re-enabling (reduction invariant pinned only at resolution-test level).
 
 ## Pass history
@@ -62,15 +77,16 @@ Deferred buckets (not reconstructed — deliberate): desktop-ui (7,059 scope com
 |---|---|---|---|
 | 2026-11-08 | 1 (solo — fleet delegation blocked in one-shot runs; waves inline) | v0.23.0 @ 2bd378ed | Scope set (10 caps); 130 reqs drafted, converted, strict-valid green; 130 scenario-debt; 47.7% VERIFIED |
 | 2026-11-08 | 2 (fleet: 2 waves × 3 children + inline audit gate; owner steering mid-pass) | v0.23.0 @ 2bd378ed | 158 reqs / 59.5% VERIFIED / 23 debt / 213 grounded scenarios; G-01/03(3of4)/04/05 closed; D-01 closed; strict green |
+| 2026-11-08 | 3 (fleet: W1 3 + W2 3 + W3 1 children, scripted audit_gate.py between waves; 2 approvals blocked on owner non-response, retried per standing instruction) | v0.23.0 @ 2bd378ed | 166 reqs / 156 VERIFIED (94.0%) / 10 INFERRED / 234 scenarios / 10 debt; G-06/G-07/G-08 closed; D-05 found+fixed; audit_gate.py + verified_numbers.json; D-03/D-04 upstream drafts staged (unposted); strict green at every commit |
 
-Commits — pass 1: e785176 → a77b2e9 → ee3db62 → e9a612c → 3f2166f → cb0cffa. Pass 2: cf0bf41 (tail mined) → 9887505 (ownership decisions) → (W1: skills deep verify + agent-turn-loop/sessions-state/gateway scenarios) → (W2: remaining-cap scenarios + delegation 8/8 anchor pass + gateway anchor pass incl. D-01 close) → 6753130 (validator gate + strict green) → this ledger.
+Commits — pass 3: aaf6e08 (gate + baseline triage) → afa4123 (W1) → 20764e7 (D-03/D-04 drafts) → 24f9f7b (W2) → 6689081 (W3 kanban + debt sweep) → (ledger + gap lines, this commit).
 
-## NEXT-PASS instructions (pass 3)
-1. Baseline: stay at v0.23.0 @ 2bd378ed until owner re-pins. On re-pin: `scripts/mine_evidence.py` (full corpus) then `scripts/mine_tail.py` (window = > newest PR-ref date); re-verify anchors touched by the diff.
-2. Anchor-verify the 64-INFERRED mass (G-06): cli-surface → tools-toolsets → config-provider-models → profiles-isolation → cron-background; then sessions-state (its INFERRED set is mostly Tier-B-only).
-3. Ground the remaining 23 debt scenarios only if NEW Tier A/B/C text appears; never derive.
-4. Kanban dedicated pass (G-07): cron/AGENTS.md § Kanban + `hermes_cli/kanban*.py` + kanban tail items → expect 5–8 new cron-background reqs.
-5. D-03/D-04 are upstream-report candidates — owner approval before any external posting (license firewall + coordinator-owned approvals log).
-6. Fleet: waves of 3 children work well, but leaf children DO fabricate at the margin (this pass: invented test-class segment, wrong release tags) — the scripted audit gate (anchor existence, relnote quote overlap ≥60%, test-name grep, tail-sha resolution against the pin) is mandatory between wave completion and conversion.
-7. Converter/validator quirks: (a) `draft_to_spec.py ... ""` emits `-<cap>` dirs — strip the leading dash; (b) the validator parses requirements ONLY inside the main `## Requirements` section — put new blocks there, use `## Sub-area:` (converter flattens it), never a new `## ` section after `## Known gaps`; (c) requirement body >500 chars fails strict — push detail into anchors/scenarios; (d) re-register the store after machine moves.
+## NEXT-PASS instructions (pass 4)
+1. Baseline: stay at v0.23.0 @ 2bd378ed until owner re-pins. On re-pin: `scripts/mine_evidence.py` (full corpus) then `scripts/mine_tail.py` (window = > newest PR-ref date); re-verify anchors touched by the diff; RE-CHECK removal commits for every PR-cited requirement (D-05 law).
+2. Remaining INFERRED 10: agent-turn-loop 5, delegation-orchestration 3, gateway-messaging 1, skills-system 1 — anchor-verify as a small W1; expect most to close (all pass-3 target sets closed).
+3. Scenario-debt 10: ground only on fresh Tier A/B/C text; 2 kanban + gateway-messaging 3 are invariant-only — candidates to stay debt permanently; say so in the spec rather than churning.
+4. G-09 plugin×skill/plugin×tool contracts: needs the deferred plugins-mcp bucket decision from the owner first.
+5. D-03/D-04: drafts staged in `recon/upstream-drafts/` — posting requires owner approval + coordinator approvals log; do not post without both.
+6. Fleet: waves of 3 + `scripts/audit_gate.py` between wave completion and commit (mandatory; extend it with new check classes as incidents dictate). Children self-report PR numbers labeled "PR" that are issues — gate's verified_numbers flow works; keep requiring children to hit issues API and label kind.
+7. Converter/validator quirks (binding): (a) `draft_to_spec.py ... ""` emits `-<cap>` dirs — merge `./-<cap>/spec.md` into `./<cap>/spec.md` (prefix paths with `./` so leading dashes don't parse as options) and rmdir; (b) requirements ONLY inside the main `## Requirements` region — `## Sub-area:` is fine, new `## ` prose sections after Known gaps are fine but must not contain `### Requirement:`; (c) requirement body >500 chars fails strict; (d) re-register the store after machine moves.
 8. Keep `openspec validate --all --strict --store hermes-agent` green at every commit.
