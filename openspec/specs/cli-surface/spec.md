@@ -74,9 +74,9 @@ CLI behavior SHALL live in `cli_*_mixin.py` mixins on `HermesCLI`; moved bodies 
 
 ### Requirement: System-prompt-changing slash commands defer to the next session
 Slash commands that change system-prompt state SHALL defer their effect to the next session by default (prompt-caching invariant), with an explicit opt-in `--now` variant (e.g. `/skills install --now`).
-**Status**: INFERRED
-**Evidence**: doc: AGENTS.md (root) § "What Hermes Is" ("Slash commands that change system-prompt state defer to the next session, with an opt-in --now (/skills install --now)")
-**Anchor**: not located (`--now` parse site not found in agent/skill_commands.py or commands.py by grep)
+**Status**: VERIFIED
+**Evidence**: doc: AGENTS.md (root) § "What Hermes Is" ("Slash commands that change system-prompt state defer to the next session, with an opt-in --now (/skills install --now)") — code: /skills install|uninstall|reset parse `--now` into invalidate_cache; default path prints 'in your next session'
+**Anchor**: `hermes_cli/skills_hub.py:122` (`_finish_change`) — without invalidate_cache prints "Change will take effect in your next session" and "Use /reset ... or --now to apply immediately (invalidates prompt cache)"; `hermes_cli/skills_hub.py:1637` (comment above `_SLASH_ACTIONS`) — "`--now` invalidates the prompt cache immediately (costs more money); the default defers to the next session"; `hermes_cli/skills_hub.py:1646` (`_SLASH_ACTIONS['install']`) — `invalidate_cache="--now" in args` (same for uninstall :1659, reset :1662)
 
 #### Scenario: A slash command mutates system-prompt state
 - **WHEN** a slash command changes system-prompt state
@@ -90,9 +90,9 @@ Slash commands that change system-prompt state SHALL defer their effect to the n
 
 ### Requirement: Non-interactive single-query mode
 The CLI SHALL provide `-q` single-query execution (`hermes -q "..."`) with defined exit codes for scripted/headless use (`cli_single_query.py`).
-**Status**: INFERRED
-**Evidence**: doc: hermes_cli/AGENTS.md § CLI architecture (`cli_single_query.py` (-q runner, exit codes, kanban loops))
-**Anchor**: `hermes_cli/cli_single_query.py` (module exists; not opened)
+**Status**: VERIFIED
+**Evidence**: doc: hermes_cli/AGENTS.md § CLI architecture (`cli_single_query.py` (-q runner, exit codes, kanban loops)) — code: exit-code mapping and quiet runner in cli_single_query.py; TTY-seed vs answer-and-exit gate in cli.py
+**Anchor**: `hermes_cli/_parser.py:237` (`-q/--query` argparse) — help: "On a real TTY the prompt seeds an interactive session (submitted literally as the first turn); combined with --oneshot or -Q, or on a non-TTY, it answers and exits."; `hermes_cli/cli_single_query.py:148` (`_single_query_exit_code`) — maps a one-shot turn onto process exit codes (0/130/1; Kanban EX_TEMPFAIL/EX_CONFIG sentinels); `cli.py:847` (`_should_seed_interactive`) — "`-q` seeds an interactive session only on a real TTY without `--oneshot`/`-Q` (automation answers and exits)"; literal-seed sentinel `_SeededQueryMessage` at cli.py:831
 
 #### Scenario: -q on a real TTY
 - **WHEN** the user runs `hermes -q "..."` on a real TTY
@@ -106,9 +106,9 @@ The CLI SHALL provide `-q` single-query execution (`hermes -q "..."`) with defin
 
 ### Requirement: Interactive pickers use curses; display code avoids erase-to-EOL
 Interactive menu pickers SHALL use the curses UI helper, and spinner/display code SHALL NEVER emit `\033[K` (it leaks as literal `?[K` under prompt_toolkit `patch_stdout`) — space-padding instead.
-**Status**: INFERRED
-**Evidence**: doc: hermes_cli/AGENTS.md § Rules ("all interactive menu-pickers use curses"; no-`\033[K` rule)
-**Anchor**: not located (`hermes_cli/curses_ui.py` named by doc)
+**Status**: VERIFIED
+**Evidence**: doc: hermes_cli/AGENTS.md § Rules ("all interactive menu-pickers use curses"; no-`\033[K` rule) — code: grep `\033[K` over cli.py+hermes_cli matches only AGENTS.md:37 (the prohibition) — no display code emits it
+**Anchor**: `hermes_cli/curses_ui.py:1` (module docstring) — "Curses checklist / radiolist / single-select menus with keyboard navigation and fuzzy `/` search, plus a numbered text fallback for terminals without curses"; `hermes_cli/mcp_picker.py:11` — picker imports `curses_single_select` from `hermes_cli.curses_ui` (also used by tools_config.py, auth_model_picker.py, moa_cmd.py, skills_config.py, ...)
 
 #### Scenario: Display code clears a line under prompt_toolkit
 - **WHEN** spinner/display code emits `\033[K` (ANSI erase-to-EOL)
@@ -122,9 +122,9 @@ Interactive menu pickers SHALL use the curses UI helper, and spinner/display cod
 
 ### Requirement: Gateway process management via facade with platform backends
 `hermes gateway` SHALL manage gateway processes through its facade — process discovery, PM-aware systemd unit generation/refresh, launchd (macOS) and Windows backends, supervised restart, migration, multiplex helpers — with siblings reading facade names late (`_gw()`).
-**Status**: INFERRED
-**Evidence**: doc: hermes_cli/AGENTS.md § CLI architecture (`hermes_cli/gateway.py` facade + named siblings); [PR #139041](https://github.com/NousResearch/hermes-agent/pull/139041) — `hermes update` drain stays reachable for a parked approval/clarify (update/gateway drain boundary, drafted there too)
-**Anchor**: `hermes_cli/gateway.py` (facade exists; dispatch lines not opened)
+**Status**: VERIFIED
+**Evidence**: doc: hermes_cli/AGENTS.md § CLI architecture (`hermes_cli/gateway.py` facade + named siblings); [PR #139041](https://github.com/NousResearch/hermes-agent/pull/139041) — `hermes update` drain stays reachable for a parked approval/clarify (update/gateway drain boundary, drafted there too) — code: 5690-line gateway.py facade + platform siblings (launchd/windows/supervised-restart/migrate/multiplex) reading facade names via _gw()
+**Anchor**: `hermes_cli/gateway.py:139` — systemd (user + system scope) service PID discovery in the facade; `os.kill(pid, signal.SIGUSR1)` hand-back at :262; `--external-supervisor` argv marker check at :975; `hermes_cli/gateway_launchd.py:3` (docstring) — "Extracted from `hermes_cli/gateway.py`. Bodies read facade helpers through `_gw()` (late...)" with `def _gw()` at :25; `hermes_cli/` sibling files present: gateway_windows.py, gateway_supervised_restart.py, gateway_migrate.py, gateway_multiplex_{mode,s6,served}.py, gateway_runtime_{discovery,start,service,replace}.py (ls of hermes_cli/)
 
 #### Scenario: Restarting a gateway Hermes did not install
 - **WHEN** `hermes gateway restart` targets a gateway Hermes did not install (custom launchd agent / unit running `gateway run --external-supervisor`)
@@ -134,9 +134,9 @@ Interactive menu pickers SHALL use the curses UI helper, and spinner/display cod
 
 ### Requirement: First-run surfaces reach their own setup
 A blank install on any interactive surface (e.g. TUI) SHALL reach its own setup screen rather than dead-ending (onboarding reachability).
-**Status**: INFERRED
-**Evidence**: [PR #128663](https://github.com/NousResearch/hermes-agent/pull/128663) — "blank-install TUI reaches its own setup screen"; [PR #129200](https://github.com/NousResearch/hermes-agent/pull/129200) — quick tour covers the model picker
-**Anchor**: not located
+**Status**: VERIFIED
+**Evidence**: [PR #128663](https://github.com/NousResearch/hermes-agent/pull/128663) — "blank-install TUI reaches its own setup screen"; [PR #129200](https://github.com/NousResearch/hermes-agent/pull/129200) — quick tour covers the model picker — code: TUI boot checks setup.status and routes to its own setup panel/wizard; desktop first-run gating lives in hermes_cli/onboarding_due.py + onboarding_run.py
+**Anchor**: `ui-tui/src/app/useSessionLifecycle.ts:437` — on session start, when `setup.status` returns `provider_configured === false`, the TUI renders the setup-required panel (`setupRequiredTitle`/`buildSetupRequiredSections`) and sets status setupRequired (same at :688); `ui-tui/src/app/setupHandoff.ts:18` (`runExternalSetup`) — launches the external setup wizard in-process, re-checks `setup.status`, then starts a new session (falls back to setupRequired on failure); `ui-tui/src/content/setup.ts:6` (`buildSetupRequiredSections`) — the panel offers `/setup` and `/model` actions so the surface cannot dead-end
 
 
 #### Scenario: Conformance check (derived)
@@ -147,9 +147,9 @@ A blank install on any interactive surface (e.g. TUI) SHALL reach its own setup 
 
 ### Requirement: Connection cards render on the classic CLI
 Connection/approval cards (e.g. `manage_connections`) SHALL be available on the classic CLI, not only desktop.
-**Status**: INFERRED
-**Evidence**: [PR #142039](https://github.com/NousResearch/hermes-agent/pull/142039) — "bring the manage_connections card back to the classic CLI"
-**Anchor**: not located
+**Status**: VERIFIED
+**Evidence**: [PR #142039](https://github.com/NousResearch/hermes-agent/pull/142039) — "bring the manage_connections card back to the classic CLI" — code: connection card state machine (_connection_show_target/_connection_fields, cli_modal_mixin.py:600-660) lives on the classic-CLI HermesCLI via CLIModalMixin
+**Anchor**: `hermes_cli/cli_modal_mixin.py:597` (comment) — "The gateway runs the manage_connections operation; this card renders its connection.request / connection.update events ... and answers through the agent's connection.respond / connectors.connect calls"; `cli.py:881` (`class HermesCLI(... CLIModalMixin ...)`) — the modal/connection card mixin is assembled onto the classic CLI's HermesCLI (import at cli.py:40)
 
 #### Scenario: A connector needs setup on the classic CLI
 - **WHEN** a hosted app or local MCP server needs connect/setup
@@ -158,9 +158,9 @@ Connection/approval cards (e.g. `manage_connections`) SHALL be available on the 
 
 ### Requirement: Extension points over overrides
 Wrapper CLIs SHALL extend the REPL through the protected hooks in `cli_tui_mixin.py` (per `website/docs/developer-guide/extending-the-cli.md`) rather than overriding `run()`.
-**Status**: INFERRED
-**Evidence**: doc: hermes_cli/AGENTS.md § Rules ("Wrapper CLIs extend via the protected hooks")
-**Anchor**: `hermes_cli/cli_tui_mixin.py` (module exists; hooks not opened)
+**Status**: VERIFIED
+**Evidence**: doc: hermes_cli/AGENTS.md § Rules ("Wrapper CLIs extend via the protected hooks") — code: the two protected hooks exist and are invoked from the mixin's layout/keybinding builders
+**Anchor**: `hermes_cli/cli_tui_mixin.py:349` (`_get_extra_tui_widgets`) — "Extension hook: wrapper CLIs return widgets inserted between the spacer and status bar" (consumed in layout build at :390); `hermes_cli/cli_tui_mixin.py:353` (`_register_extra_tui_keybindings`) — "Extension hook: wrapper CLIs add bindings to `kb`" (invoked at :2163); `hermes_cli/cli_tui_mixin.py:377` — "(wrappers normally override `_get_extra_tui_widgets`)" inside `_build_tui_layout_children`, i.e. extension is via hooks, not run()
 
 #### Scenario: A wrapper CLI adds widgets or keybindings
 - **WHEN** a wrapper CLI wants to add widgets, keybindings, or layout customizations
@@ -170,9 +170,9 @@ Wrapper CLIs SHALL extend the REPL through the protected hooks in `cli_tui_mixin
 
 ### Requirement: Rewind edits or forks an earlier prompt
 The classic CLI (and TUI) SHALL offer a backtrack picker — press Esc twice or `/rewind` — to edit and resend an earlier message or fork a new session from that point, leaving the original session unchanged.
-**Status**: INFERRED
-**Evidence**: [commit 1a71782f1795] — "backtrack picker — Esc Esc / /rewind to edit & resend or fork from an earlier prompt"; [relnote v0.23.0] "Press Esc twice or type `/rewind` in the TUI or classic CLI, pick an earlier message, then edit and resend it or fork a new session from that point. The original session stays exactly as it was."
-**Anchor**: not located (backtrack picker implementation lines not opened)
+**Status**: VERIFIED
+**Evidence**: [commit 1a71782f1795] — "backtrack picker — Esc Esc / /rewind to edit & resend or fork from an earlier prompt"; [relnote v0.23.0] "Press Esc twice or type `/rewind` in the TUI or classic CLI, pick an earlier message, then edit and resend it or fork a new session from that point. The original session stays exactly as it was." — code: edit-resend cuts nothing until submit (BacktrackResend, durable _rewind_to_user_ordinal); fork rewinds only the child — original session unchanged
+**Anchor**: `hermes_cli/cli_backtrack.py:1` (module docstring) — "Esc Esc on an idle, empty composer (or `/rewind`) lists earlier prompts newest first; Enter edits & resends one, `f` forks a branch before it"; "Cancelling ... leaves the session as it was. Fork reuses `/branch` and rewinds only the child"; `hermes_cli/cli_backtrack.py:195` (`CLIBacktrackMixin._tui_handle_double_escape`) — idle+empty composer opens the picker; `_handle_rewind_command` at :170 dispatches `/rewind`, `/rewind N`, `/rewind fork N`; `hermes_cli/commands.py:105` (`CommandDef("rewind", ...)`) — "Rewind to an earlier prompt to edit & resend it, or fork from there (Esc Esc)", cli_only
 
 #### Scenario: User rewinds to an earlier prompt
 - **WHEN** the user presses Esc twice or types `/rewind` in the classic CLI (or TUI)
@@ -182,9 +182,9 @@ The classic CLI (and TUI) SHALL offer a backtrack picker — press Esc twice or 
 
 ### Requirement: Inline images in the classic CLI terminal
 The classic CLI SHALL draw pasted/tool-produced images in the terminal (kitty/Ghostty; iTerm2, WezTerm and Konsole; full resolution in VS Code when its image support is on; colour blocks elsewhere) instead of only printing a file path.
-**Status**: INFERRED
-**Evidence**: [commit ab9dda55d610] — "draw images inline in the classic CLI scrollback"; [commit e0d6efd4dee1] — "full-resolution images in iTerm2, WezTerm and Konsole"; [commit be01eb2a9585] — "full-resolution images in VS Code when its image support is on"; [relnote v0.23.0] "the CLI and TUI now draw it right in the chat instead of printing a file path"
-**Anchor**: not located (image-draw backends not opened)
+**Status**: VERIFIED
+**Evidence**: [commit ab9dda55d610] — "draw images inline in the classic CLI scrollback"; [commit e0d6efd4dee1] — "full-resolution images in iTerm2, WezTerm and Konsole"; [commit be01eb2a9585] — "full-resolution images in VS Code when its image support is on"; [relnote v0.23.0] "the CLI and TUI now draw it right in the chat instead of printing a file path" — code: VS Code full-res gated on probe_vscode_images (agent/terminal_image.py:74; hint in cli_inline_images.py:69)
+**Anchor**: `hermes_cli/cli_inline_images.py:51` (`image_rows`) — draws kitty Unicode-placeholder rows (:54), iTerm2 reserved-row pixel draw (:60), half-block colour fallback (:66); module docstring: "Inline images in the classic CLI scrollback"; `agent/terminal_image.py:36` (`detect_terminal_graphics`) — kitty protocol for kitty/Ghostty/WezTerm (:46), iTerm2 (:48); half-blocks documented at :5; `agent/terminal_image.py:55` (`supports_iterm_images`) — "iTerm2, WezTerm, Konsole, and VS Code once probe_vscode_images saw its image support switched on"
 
 #### Scenario: An image is pasted or captured in the terminal
 - **WHEN** the user pastes an image, or a tool takes a screenshot
@@ -193,9 +193,9 @@ The classic CLI SHALL draw pasted/tool-produced images in the terminal (kitty/Gh
 
 ### Requirement: /model reset returns a pinned session to the default
 `/model reset` in the classic CLI SHALL take a session pinned via `/model` back to the configured default without losing the conversation.
-**Status**: INFERRED
-**Evidence**: [commit 66c48cb158de] — "/model reset in the classic CLI, help hint and queued-pick display (salvage #74899)"; [relnote v0.22.6] "`/model reset` to clear a session's model pin without losing history"; [relnote v0.23.0] "Takes a session pinned with `/model` back to your configured default without losing the conversation, in the CLI, TUI, Desktop and messaging."
-**Anchor**: not located (command handler lines not opened)
+**Status**: VERIFIED
+**Evidence**: [commit 66c48cb158de] — "/model reset in the classic CLI, help hint and queued-pick display (salvage #74899)"; [relnote v0.22.6] "`/model reset` to clear a session's model pin without losing history"; [relnote v0.23.0] "Takes a session pinned with `/model` back to your configured default without losing the conversation, in the CLI, TUI, Desktop and messaging." — code: reset token parsed by the single /model parser (parse_model_switch_args) shared by every /model surface
+**Anchor**: `hermes_cli/model_switch.py:578` (comment) — "`/model reset` clears the session's /model override instead of switching to a model named 'reset'"; `MODEL_SWITCH_RESET_TOKEN = "reset"` at :582; `hermes_cli/model_switch.py:614` (`ModelSwitchRequest.is_reset`) — "`/model reset` with no flags: clear the session override, keep the conversation"; `hermes_cli/model_switch.py:575` (MODEL_SWITCH_ERROR_TEXT) — "/model reset takes no flags — it clears this session's model override so the configured default applies again."
 
 #### Scenario: A pinned model is reset mid-conversation
 - **WHEN** the user runs `/model reset` on a session pinned with `/model`

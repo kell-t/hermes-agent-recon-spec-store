@@ -133,7 +133,11 @@ def audit_block(header_and_body, failures, ctx):
         window = " ".join(lines[lo:hi])
         toks = [t for t in IDENT.findall(hint)
                 if not t.lower() in ("field", "example", "gate", "line", "the", "dict",
-                                      "method", "class", "function", "entry", "name")]
+                                      "method", "class", "function", "entry", "name",
+                                      "module", "docstring", "comment", "docstrings",
+                                      "comments", "header", "note")]
+        # dotted symbols (Cls.member): check the final segment
+        toks = [t.split(".")[-1] if "." in t else t for t in toks]
         # stem-tolerant: a hint word matches a window word sharing a >=5-char prefix
         wwords = re.findall(r"[\w.\-]+", window)
         def hit(t):
