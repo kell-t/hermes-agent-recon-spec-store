@@ -1,6 +1,7 @@
 # Issue drafts — hermes-agent docs drift (for owner review)
 
 Prepared 2026-11-08. All claims verified by the spec pass at tag **v0.23.0** (`2bd378e`); line refs are from that tag.
+**Re-check vs current main `e0754412` (2026-11-08): D-03 unfixed (header + test file identical to pin). "Default 3" staleness has open fix PRs #125133/#111838/#105997 — excluded here. Kanban "convention" phrasing still present on main; #120013 covers a different angle.**
 Overlap check (searched issues incl. closed): D-04's "default 3" staleness is **already reported** — #125131 (tools/AGENTS.md + configuration.md + environment-variables.md) and #125183 (docs site). Do not re-file; it is excluded below. D-03 and cluster items 2–3: no existing issues found (`test_authoring_standards` → 0 hits; `delegation.backend`/`provider` → none).
 
 ---
