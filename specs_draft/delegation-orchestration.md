@@ -183,7 +183,7 @@ Subagents SHALL be allowed the `execute_code` tool (subject to the parent's tool
 - **THEN** "both roles retain `execute_code` (programmatic tool calling) so children can batch mechanical work", while leaf children lose `delegate_task`, `clarify`, `memory`, `send_message`, `cronjob`
 - Source: doc: website/docs/user-guide/features/delegation.md ("Both roles retain execute_code..."); doc: tools/AGENTS.md § Delegation ("leaf (default; no delegate_task, clarify, memory, send_message, cronjob; keeps execute_code)")
 
-## Tail-folded requirements (commits after 2026-10-27, bundle TAIL APPEND G-01)
+## Sub-area: Tail fold (commits after 2026-10-27, bundle TAIL APPEND G-01)
 
 ### Requirement: Opt-in prompt-cache warm-up gate staggers batch siblings behind a leader
 With `delegation.prefix_stagger_seconds` set, cache-sharing batch siblings SHALL wait for the leader's first response to begin before starting, bounded by the configured cap as a warm-up wait (not a fixed stagger); a stopped leader or non-streamed first response SHALL release siblings before the cap, and background siblings SHALL ignore a parent stop while waiting.

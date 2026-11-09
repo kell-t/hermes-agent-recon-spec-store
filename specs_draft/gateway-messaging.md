@@ -244,7 +244,7 @@ The gateway turn executor SHALL hand work to parked threads instead of starting 
 - **THEN** turn 1's thread-keyed state "is gone in turn 2" — interrupt bit, per-turn thread-locals, the thread-scoped sudo cache, context variables — and it does not log as the previous turn's session
 - Source: test: tests/gateway/test_turn_executor_reuse.py::test_a_reused_worker_sees_none_of_the_previous_turns_thread_state and ::test_a_reused_worker_does_not_log_as_the_previous_turns_session
 
-## Tail-folded requirements (commits after 2026-10-27, bundle TAIL APPEND G-01)
+## Sub-area: Tail fold (commits after 2026-10-27, bundle TAIL APPEND G-01)
 
 ### Requirement: Turns reload the routed profile's current .env
 A turn SHALL reload the serving profile's current `.env` on every execution path — messaging turns, local turns, and bypass sessions alike — so `${VAR}` references resolve against the profile's live values rather than values frozen at boot.
