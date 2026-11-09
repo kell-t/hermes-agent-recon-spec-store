@@ -1,0 +1,11 @@
+schema: spec-driven
+
+context: |
+  Private working-model specs of NousResearch/hermes-agent (MIT) reconstructed
+  from code+history. NEVER committed upstream unless the repo gains an
+  openspec/ folder (it has none at the pin; CONTRIBUTING.md governs PRs).
+  PIN: main @ 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19 (tag v0.23.0, 2026-11-05).
+  Validation and drift checks start at this pin until the pin moves.
+  License firewall: content never crosses repo boundaries without the owner's
+  explicit per-instance approval (container WORKFLOW.md #4).
+  changes/archive holds only the agent's own landed PRs and drift corrections.
