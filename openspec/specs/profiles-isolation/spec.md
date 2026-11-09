@@ -63,9 +63,9 @@ Secret reads SHALL go through `get_secret()` in the caller's profile scope; afte
 
 ### Requirement: Out-of-turn code binds the owning profile explicitly
 Code that runs outside a turn (boot probes, eviction, tickers, deferred callbacks, RPC methods, thread hops, child spawns) SHALL bind the owning profile's scope explicitly, because `os.environ`, module globals and import-time values hold the launch profile's — an unbound read is a silent default-profile leak.
-**Status**: INFERRED
-**Evidence**: doc: AGENTS.md (root) § Rules that apply everywhere (HX002/HX004/HX005/HX012, PS-P05/P06); [PR #125974](https://github.com/NousResearch/hermes-agent/pull/125974) — "log to the active profile home, not the import-time freeze"
-**Anchor**: `scripts/code_health/config.py:110` (HX rule machinery) — the per-seam binding list lives in gateway/AGENTS.md § Profile scope
+**Status**: VERIFIED
+**Evidence**: doc: AGENTS.md (root) § Rules that apply everywhere (HX002/HX004/HX005/HX012, PS-P05/P06); [PR #125974](https://github.com/NousResearch/hermes-agent/pull/125974) — "log to the active profile home, not the import-time freeze" — code: eviction/release threads enter the owner's scope via _run_release_in_profile_scope (run_agent_cache.py:901-928)
+**Anchor**: `gateway/run_agent_cache.py:901` (`_run_release_in_profile_scope`) — release/eviction with no turn on the stack re-enters the OWNING profile's scope; owner resolved from the session key via `store._profile_home_for_key` (line 920), default root otherwise; `gateway/run_agent_cache.py:926` (`scope = _profile_runtime_scope(owner_home)`) — the owner's scope is entered unless the current scope already is the owner's; `gateway/run_shutdown.py:1242` (`_run_release_in_profile_scope` call site) — shutdown finalization routes the session tail through the same owning-scope wrapper
 
 #### Scenario: Out-of-turn code binds the owning scope explicitly
 - **WHEN** code runs outside a turn (boot probes, eviction, tickers, deferred callbacks, RPC methods, thread hops, child spawns)
@@ -97,9 +97,9 @@ The gateway SHALL resolve "which bot received it / who may admit it / where does
 
 ### Requirement: Unroutable events are dropped, never mis-keyed
 Under multiplexing, an event whose identity resolves to an unserved profile SHALL be dropped with a single WARNING at the first seam and SHALL never be keyed into `agent:main`; a route to a parked profile SHALL tell the sender in-channel to resend, and unacknowledged transport dispatch SHALL answer a retryable 503 instead.
-**Status**: INFERRED
-**Evidence**: doc: gateway/AGENTS.md § Profile scope (`parked_route_refusal.drop_rejected_route`, `ParkedProfileRefusal`, `retryable_ingress()`)
-**Anchor**: `gateway/session_identity.py` (refusal machinery — named in doc, lines not opened)
+**Status**: VERIFIED
+**Evidence**: doc: gateway/AGENTS.md § Profile scope (`parked_route_refusal.drop_rejected_route`, `ParkedProfileRefusal`, `retryable_ingress()`) — code: gateway/parked_route_refusal.py implements the whole contract — drop-with-WARNING, in-channel resend notice, retryable_ingress/ParkedRouteRefused 503
+**Anchor**: `gateway/parked_route_refusal.py:98` (`drop_rejected_route`) — drops an inbound event whose route targets an unserved profile with one `logger.warning` (line 106) and admits nothing; parked routes go to `refuse_parked_route` (line 109); `gateway/parked_route_refusal.py:31` (`class ParkedRouteRefused`) — `code, status, headers = 'profile_parked', 503, {'Retry-After': '30'}` — the retryable 503 for unacknowledged transports; `gateway/parked_route_refusal.py:58` (`retryable_ingress`) — contextmanager scoping an awaited unacknowledged dispatch so a parked route is recorded (`scope.refused`) instead of notified in-channel
 
 #### Scenario: A route to an unserved profile is dropped, never mis-keyed
 - **WHEN** an unresolved identity under multiplexing routes to an unserved profile
@@ -113,9 +113,9 @@ Under multiplexing, an event whose identity resolves to an unserved profile SHAL
 
 ### Requirement: Launch home .env stays loaded under multiplex routing
 Multiplex routing SHALL still load the launch home's `.env` (host-level secrets remain available) while per-profile secrets route to the resolved profile.
-**Status**: INFERRED
-**Evidence**: [PR #125530](https://github.com/NousResearch/hermes-agent/pull/125530) — "still load the launch home's .env under multiplex routing"
-**Anchor**: not located
+**Status**: VERIFIED
+**Evidence**: [PR #125530](https://github.com/NousResearch/hermes-agent/pull/125530) — "still load the launch home's .env under multiplex routing" — code: env_loader.load_hermes_dotenv skips the process-global load only for a foreign routed home; the launch home's .env still loads (env_loader.py:666-697)
+**Anchor**: `hermes_cli/env_loader.py:684` (`launch_home = _process_hermes_home().resolve()`) — the dotenv guard compares BOTH the load target and the active home against the launch home, so a load naming the launch home still proceeds; `hermes_cli/env_loader.py:685` (`if (is_multiplex_active() and get_hermes_home_override() is not None`) — the skip only fires for a routed FOREIGN home; the comment at 671-677 states 'The launch home's own .env is process configuration and still loads' (added for #125530); `hermes_cli/env_loader.py:669` (`home_path = Path(hermes_home) if hermes_home else get_process_hermes_home()`) — the startup load targets the process (launch) home on purpose, never the per-turn override
 
 
 #### Scenario: Conformance check (derived)
@@ -126,9 +126,9 @@ Multiplex routing SHALL still load the launch home's `.env` (host-level secrets 
 
 ### Requirement: Serve profiles created after boot
 A gateway that booted single-profile SHALL serve a newly created profile in place without a restart.
-**Status**: INFERRED
-**Evidence**: [PR #141623](https://github.com/NousResearch/hermes-agent/pull/141623) — "serve a profile created after a single-profile boot in place, without a restart"
-**Anchor**: not located
+**Status**: VERIFIED
+**Evidence**: [PR #141623](https://github.com/NousResearch/hermes-agent/pull/141623) — "serve a profile created after a single-profile boot in place, without a restart" — code: hot-serve reconcile flips a standalone boot to multiplex without restart (run_profile_reconcile.py:372-415); serve-profile/rescan-profiles control verbs drive it
+**Anchor**: `gateway/run_profile_reconcile.py:414` (`logger.info("[MULTIPLEX] A second profile exists; serving every profile from this process (no restart)")`) — a standalone-booted gateway activates multiplex in place when a second profile appears (guarded at 379 by `recorded_standalone_reason()`); `gateway/run_profile_reconcile.py:417` (`_serve_profile_runtime`) — grows the reservation and builds the session authority for a hot-added profile, parking it on ownership conflict or unusable store; `gateway/control_socket.py:546` (`request_serve_profile_hot`) — CLI asks the running multiplexer to serve a created profile now via the `serve-profile` verb (registered at gateway/run_bootstrap.py:360)
 
 
 #### Scenario: Conformance check (derived)
@@ -168,9 +168,9 @@ Behavioral settings SHALL NOT arrive as new `HERMES_*` environment variables (`.
 
 ### Requirement: Process identity via designated predicates
 Process identity SHALL never be inferred from argv substrings; code SHALL use the designated identity predicates (e.g. `gateway.status.looks_like_gateway_command_line`, `hermes_cli.update_cmd._hermes_holder_subcommand`) per lint rule HX003.
-**Status**: INFERRED
-**Evidence**: doc: AGENTS.md (root) § Rules that apply everywhere (HX003; details hermes_cli/AGENTS.md)
-**Anchor**: not located (predicates in gateway/status.py / hermes_cli/update_cmd.py — not opened)
+**Status**: VERIFIED
+**Evidence**: doc: AGENTS.md (root) § Rules that apply everywhere (HX003; details hermes_cli/AGENTS.md) — code: HX003 (config.py:131) names both predicates; both exist — update_cmd's predicate lives in the update_cmd_windows sibling, re-exported by the facade
+**Anchor**: `gateway/status.py:646` (`looks_like_gateway_command_line`) — 'True only for a real ``gateway run`` process command line'; returns `_gateway_command_subcommand(command) == "run"`; `hermes_cli/update_cmd_windows.py:245` (`_hermes_holder_subcommand`) — 'Token-based, never substring (``kanban --preserve-cache`` contains "serve")'; re-exported through the facade `hermes_cli/update_cmd.py:45`; `scripts/code_health/config.py:131` (`Rule("HX003", "process identity from argv substrings"...)`) — the lint rule names both predicates as the required alternative
 
 #### Scenario: Process identity comes from predicates, never argv text
 - **WHEN** code must decide what kind of process it is looking at (e.g. is this a gateway command line)
@@ -182,9 +182,9 @@ Process identity SHALL never be inferred from argv substrings; code SHALL use th
 
 ### Requirement: Legacy custom-home units are adopted
 The gateway SHALL adopt a bare legacy user systemd unit that pins a custom `HERMES_HOME` into the profile-routed lifecycle rather than running it unmanaged.
-**Status**: INFERRED
-**Evidence**: [PR #109476](https://github.com/NousResearch/hermes-agent/pull/109476) — "adopt a bare legacy user unit that pins this custom HERMES_HOME"
-**Anchor**: not located
+**Status**: VERIFIED
+**Evidence**: [PR #109476](https://github.com/NousResearch/hermes-agent/pull/109476) — "adopt a bare legacy user unit that pins this custom HERMES_HOME" — code: _bare_unit_pinned_home/_home_owns_bare_service_name (gateway.py:2230-2262) adopt a bare legacy unit pinning a custom HERMES_HOME into profile-routed naming
+**Anchor**: `hermes_cli/gateway.py:2230` (`_bare_unit_pinned_home`) — resolves the HERMES_HOME pinned by an installed bare hermes-gateway.service; the docstring records the #109476 incident where a bare legacy user unit pinning a custom root made lifecycle commands see 'no unit' and Restart=always looped; `hermes_cli/gateway.py:2262` (`return home in _native_service_homes() or home == _bare_unit_pinned_home()`) — the unit-pinned home owns the bare service name: 'A unit pinning THIS home is this home's service, whatever it is named'
 
 
 #### Scenario: Conformance check (derived)
@@ -195,9 +195,9 @@ The gateway SHALL adopt a bare legacy user systemd unit that pins a custom `HERM
 
 ### Requirement: Terminal session isolation keys qualify by profile
 Session-isolated container keys and cwd records SHALL be qualified under the routed profile scope so two profiles never share a container identity.
-**Status**: INFERRED
-**Evidence**: [PR #123989](https://github.com/NousResearch/hermes-agent/pull/123989) — "qualify session-isolated container keys and cwd records under a routed profile scope"
-**Anchor**: not located
+**Status**: VERIFIED
+**Evidence**: [PR #123989](https://github.com/NousResearch/hermes-agent/pull/123989) — "qualify session-isolated container keys and cwd records under a routed profile scope" — code: per-session container keys and cwd records qualify by routed profile (_qualify_task_key, terminal_tool.py:503); docker container identity is profile-labelled (docker.py:117-132)
+**Anchor**: `tools/terminal_tool.py:503` (`_qualify_task_key`) — returns `f"{scope}:{key}"` from `_routed_home_task_key(profile_scoped=True)`; raw session ids shared across profiles 'would hand profile B the sandbox and cwd profile A created'; `tools/terminal_tool.py:345` (`_task_env_overrides[_qualify_task_key(task_id)]`) — cwd/image override records are keyed the same routed-profile-qualified way; `tools/environments/docker.py:124` (`_container_identity`) — profile label for container reuse/orphan reaping; 'Profiles are isolated by default' with only an explicit shared key opting out
 
 **Sub-area: Tail fold (commits after 2026-10-27)**
 
@@ -210,9 +210,9 @@ Session-isolated container keys and cwd records SHALL be qualified under the rou
 
 ### Requirement: Force-install swap dirs stay out of skill discovery
 When a profile distribution force-install stages a swap, the staged/locked old-tree swap directories SHALL NOT be visible to skill discovery, and a copy or swap that fails part-way SHALL keep the old tree in place.
-**Status**: INFERRED
-**Evidence**: [commit f6e40b0105ff] — keep force-install swap dirs out of skill discovery; [commit b04acfce7f29] — keep the force-install swap inside `_replace_entry`
-**Anchor**: not located (hermes_cli profile-distribution swap path)
+**Status**: VERIFIED
+**Evidence**: [commit f6e40b0105ff] — keep force-install swap dirs out of skill discovery; [commit b04acfce7f29] — keep the force-install swap inside `_replace_entry` — code: _replace_entry stages/swaps under DIST_SWAP_DIR (.hermes-dist), which agent/skill_utils.py:29 excludes from discovery; part-way failure restores the old tree
+**Anchor**: `hermes_cli/profile_distribution.py:380` (`_replace_entry`) — staged copy and old-tree backup live under `holder = dest.parent / DIST_SWAP_DIR` (line 391); a failed `staging.rename(dest)` restores `backup.rename(dest)` (402-405); `agent/skill_utils.py:26` (`DIST_SWAP_DIR = ".hermes-dist"`) — and line 29 lists it among the directories skill scanners skip; `hermes_cli/profile_distribution.py:386` (docstring: 'Both the copy and the old tree sit in ``DIST_SWAP_DIR``, which skill scanners skip.') — the stated contract, matching the skip list
 
 #### Scenario: A locked old tree left by a force install is not a second profile copy
 - **WHEN** a force install swaps in a new tree and leaves the locked old tree staged
@@ -223,9 +223,9 @@ When a profile distribution force-install stages a swap, the staged/locked old-t
 
 ### Requirement: Same-named MCP stdio servers get one connection/child per profile
 Under multiplex, an MCP server defined in two profiles with different credentials/secret-source values SHALL get its own connection (and its own stdio child) per profile — a same-named server never shares one process across profiles.
-**Status**: INFERRED
-**Evidence**: [commit 8819d8830861] — a same-named stdio server gets its own child per profile; [commit ca14c438e486] — an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one
-**Anchor**: not located (MCP connection-key path)
+**Status**: VERIFIED
+**Evidence**: [commit 8819d8830861] — a same-named stdio server gets its own child per profile; [commit ca14c438e486] — an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one — code: cross-profile MCP adoption requires matching route fingerprint AND the profile-resolved identity digest (stdio executable/env/cwd), else each profile keeps its own connection and stdio child
+**Anchor**: `tools/mcp_tool_registration.py:461` (`_connection_identity`) — 'Two profiles pointing at the same URL with different headers/env/auth/client certificates/TLS policy are two identities' (465-466); `tools/mcp_tool_registration.py:487` (`_adopter_identity_digest`) — resolves in the CURRENT profile's scope 'a stdio child's executable... env (external secret-source values) and default cwd'; resolver failure 'refuses adoption' (504-507); `tools/mcp_tool_registration.py:511` (`_same_server_route`) — cross_profile reuse additionally requires `recorded == resolved_identity` (line 526), so a same-named server with different per-profile inputs never borrows one connection/child
 
 #### Scenario: Different credentials, separate connection
 - **WHEN** two profiles run a same-named MCP server with other credentials (or another secret-source-resolved value)
@@ -235,9 +235,9 @@ Under multiplex, an MCP server defined in two profiles with different credential
 
 ### Requirement: An older shared login never replaces a newer profile login
 A profile SHALL NOT adopt another account's newer shared Nous login: the profile keeps its own refresh token while the shared store keeps the other account's.
-**Status**: INFERRED
-**Evidence**: [commit b29bf60b3a32] — an older shared login never replaces a newer profile login
-**Anchor**: not located (auth_nous shared-store merge path)
+**Status**: VERIFIED
+**Evidence**: [commit b29bf60b3a32] — an older shared login never replaces a newer profile login — code: _merge_shared_nous_oauth_state merges only same-identity NEWER shared copies and never across identities ('profiles are islands', auth_nous.py:460); a newer profile login is pushed to the renewal slot, leaving the store's token untouched
+**Anchor**: `hermes_cli/auth_nous.py:437` (`_merge_shared_nous_oauth_state`) — 'An older shared copy... never overwrites the profile'; merge only when `same and order == 1` (line 461), otherwise returns False with the profile keeping its own refresh token; `hermes_cli/auth_nous.py:462` (`if order == -1 and refresh_changed and known_same:`) — when the profile is newer, `_write_shared_nous_state(state, renewal=True)` (467) pushes it beside the store's identity instead of replacing it; `hermes_cli/auth_nous.py:503` (`_shared_copy_is_newer`) — 'a renewal never rolls it back to an older, possibly already-redeemed refresh token'; only compares the same known identity (line 510)
 
 #### Scenario: Profiles are islands across the shared OAuth store
 - **WHEN** the shared store holds a newer login for a different account than the profile's
