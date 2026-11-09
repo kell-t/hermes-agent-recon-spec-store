@@ -216,27 +216,21 @@ A manual `hermes cron run` whose worker is lost SHALL be recorded as a lost run,
 **Evidence**: [PR #128509](https://github.com/NousResearch/hermes-agent/pull/128509) — "record a lost manual run instead of reporting a restart that never happened" — code: waiter path calls `terminalize_dead_owner` with `external_worker_exited_reason` cause (cron/scheduler.py:3551-3554, #128509)
 **Anchor**: `cron/executions.py:565` (`def terminalize_dead_owner`) — docstring: without it "a manual run whose worker dies is filed as 'Scheduler restarted ...' (a restart that never happened)"; records the attempt as `unknown` with an observed cause; `cron/scheduler_worker_failure.py:48` (`def external_worker_exited_reason`) — truthful cause: "Restart-safe cron worker exited with status {returncode} after adopting this execution" (#128509); `cron/scheduler.py:3554` (`if not terminalize_dead_owner(execution_id, reason=reason):`) — the waiter records the lost run instead of reporting a restart
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** A manual `hermes cron run` whose worker is lost SHALL be recorded as a lost run, not reported as a restart that never happened.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A dead worker's manual run files an observed cause
+- **WHEN** a manual run's restart-safe worker dies and the waiter terminalizes the attempt
+- **THEN** it is filed "as `unknown` with a cause this process actually observed" — never "_OWNER_GONE_REASON", "which asserts a scheduler restart"
+- Source: doc: cron/executions.py:567 (`terminalize_dead_owner` docstring) — "Record one attempt as ``unknown`` with a cause this process actually observed"
 ### Requirement: Kanban completion requires evidence
 Completing a Kanban task SHALL refuse empty result evidence (`complete_task` without evidence is rejected).
 **Status**: VERIFIED
 **Evidence**: [PR #117483](https://github.com/NousResearch/hermes-agent/pull/117483) — "refuse empty complete_task evidence"; [PR #91264](https://github.com/NousResearch/hermes-agent/pull/91264) — judge transport failure / worker failed stops (tests) — code: gate lives in hermes_cli/kanban_db.py (`_gate_empty_completion`, `EmptyCompletionError`), not plugins/kanban; test tests/hermes_cli/test_kanban_empty_completion.py pins it (#117483)
 **Anchor**: `hermes_cli/kanban_db.py:2808` (`raise EmptyCompletionError(task_id)`) — after an auditable `completion_blocked_empty_result` event, empty/whitespace-only evidence is refused; `hermes_cli/kanban_db.py:2777` (`def _gate_empty_completion`) — "Refuse a completion that would leave the card with no evidence"; requires substantive result/summary/stored text (review approval exempt); `hermes_cli/kanban_db.py:2669` (`_gate_empty_completion(conn, task_id, result=result, summary=summary)`) — called from `complete_task` (def at kanban_db.py:2640)
 
+#### Scenario: An empty completion is refused with an audit event
+- **WHEN** `complete_task` would "leave the card with no evidence"
+- **THEN** a `completion_blocked_empty_result` audit event is recorded and `EmptyCompletionError` is raised; "Review approvals are exempt: a human vouches for the card"
+- Source: doc: hermes_cli/kanban_db.py:2784 (`_gate_empty_completion` docstring) — "Refuse a completion that would leave the card with no evidence."; event at :2802, raise at :2808
 **Sub-area: Tail fold (commits after 2026-10-27)**
-
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** Completing a Kanban task SHALL refuse empty result evidence (`complete_task` without evidence is rejected).
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
 
 ### Requirement: Scheduled jobs get their actual run time in the prompt
 A fired job's prompt SHALL carry the actual fire time; scheduling cadence SHALL stay out of job prompts (the cadence clause is scoped and also applied on update).
@@ -280,6 +274,115 @@ Each job SHALL pick its own missed-run policy: the job's `catch_up` beats the gl
 - **THEN** occurrences past the explicit grace are still skipped unless the job opts into `catch_up`
 - Source: test: tests/cron/test_cron_stop_and_missed_policy.py::test_explicit_grace_skips_past_it_unless_the_job_opts_into_catch_up
 - Source: [relnote 0.23.0] "Each job picks its own missed-run policy (`--catch-up on|off`)."
+
+**Sub-area: Kanban (multi-agent work queue)**
+
+### Requirement: The dispatcher is a long-lived loop running inside the gateway
+The dispatcher SHALL be a long-lived loop (default 60s, `kanban.dispatch_interval_seconds`) that each tick reclaims stale claims, promotes ready tasks, atomically claims, and spawns assigned profiles. It SHALL run inside the gateway by default (`kanban.dispatch_in_gateway: true`), under a per-board single-writer tick lock, and one tick's failure SHALL never stop the next.
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (Dispatcher bullet); [PR #50331](https://github.com/NousResearch/hermes-agent/pull/50331) — single-writer dispatch lock; [PR #41448](https://github.com/NousResearch/hermes-agent/pull/41448) — machine-global singleton lock; [PR #17805](https://github.com/NousResearch/hermes-agent/pull/17805) — durable board
+**Anchor**: `gateway/kanban_watchers.py:257` (`_kanban_dispatcher_watcher`) — docstring: "one tick every `dispatch_interval_seconds`... Gated by `kanban.dispatch_in_gateway` (default True)"; the gate is at kanban_watchers.py:231 (`kanban_cfg.get("dispatch_in_gateway", True)`); `gateway/kanban_watchers_dispatcher.py:50` (`dispatch_interval_seconds`) — default 60 with a 1.0s sanity floor at :55; `hermes_cli/kanban_db_dispatch.py:2026` (`_dispatch_tick_lock`) — per-DB-path non-blocking lock; the loser returns `DispatchResult(skipped_locked=True)` and writes nothing (:1995-2001)
+
+#### Scenario: Two dispatchers tick one board
+- **WHEN** two dispatchers tick the same `kanban.db` concurrently
+- **THEN** "The loser returns an empty `DispatchResult` with `skipped_locked=True` and writes nothing; the lock is keyed on the resolved DB path so unrelated boards tick in parallel"
+- Source: doc: hermes_cli/kanban_db_dispatch.py:1995-2001 (`_dispatch_tick` docstring)
+### Requirement: Failure breaker stops spin loops; a terminal provider error trips it first attempt
+After `kanban.failure_limit` consecutive non-success attempts on a task (default 2) the dispatcher SHALL auto-block it. A worker exit of `KANBAN_TERMINAL_PROVIDER_EXIT_CODE` (78) SHALL force-trip the breaker on that first attempt, sticky — `recompute_ready` must not auto-resume it — because no retry can heal a revoked credential or a gone model (#114587).
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (isolation paragraph); [issue #114587](https://github.com/NousResearch/hermes-agent/pull/114587) — first-occurrence park; [issue #111306](https://github.com/NousResearch/hermes-agent/pull/111306) — every reclaim that releases a claim is booked as a failure (`release_stale_claims` docstring, kanban_db.py:2322-2325)
+**Anchor**: `hermes_cli/kanban_db.py:315` (`KANBAN_TERMINAL_PROVIDER_EXIT_CODE = 78`) — comment: "parks the card blocked on the FIRST occurrence instead of spending `failure_limit` identical spawns. 78 == BSD EX_CONFIG"; `hermes_cli/kanban_db_dispatch.py:37` (`DEFAULT_FAILURE_LIMIT = 2`); `hermes_cli/kanban_db_dispatch.py:1293` (`_record_task_failure(`) — inside `elif dead.terminal_provider:` (:1288) with `force_trip=True`, comment: "recompute_ready must not auto-resume it before the operator fixes the provider"
+
+#### Scenario: A worker exits 78 (credential revoked, model gone)
+- **WHEN** a worker exits `KANBAN_TERMINAL_PROVIDER_EXIT_CODE` (78 == EX_CONFIG)
+- **THEN** "``force_trip`` blocks now, sticky: ``recompute_ready`` must not auto-resume it before the operator fixes the provider" — "A retry cannot heal a revoked credential or a missing model"
+- Source: doc: hermes_cli/kanban_db_dispatch.py:1289-1292 (comment under `elif dead.terminal_provider:`)
+### Requirement: Board is the hard isolation boundary; tenant is a soft namespace
+A spawned worker's board SHALL be pinned in its environment (`HERMES_KANBAN_DB`, `HERMES_KANBAN_WORKSPACES_ROOT`, `HERMES_KANBAN_BOARD`) to the board the task was claimed from, so workers cannot see other boards; `tenant` SHALL stay a soft namespace within a board (`HERMES_TENANT`), giving workspace-path and memory-key isolation for one fleet serving several businesses.
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (Isolation paragraph); [PR #19653](https://github.com/NousResearch/hermes-agent/pull/19653) — multi-project boards; [PR #17805](https://github.com/NousResearch/hermes-agent/pull/17805) — durable multi-profile board
+**Anchor**: `hermes_cli/kanban_db_dispatch.py:2754` (`def _default_spawn`) — docstring: "board pins the child's `HERMES_KANBAN_DB` / `HERMES_KANBAN_BOARD` / workspaces_root to the board the task was claimed from, so workers cannot see other boards"; `hermes_cli/kanban_db_dispatch.py:2847` (`env["HERMES_KANBAN_DB"] = str(_kb.kanban_db_path(board=board))`) — with `HERMES_KANBAN_BOARD` pinned at :2851 as "defense-in-depth pin"; `hermes_cli/kanban_db_dispatch.py:2810` (`env["HERMES_TENANT"] = task.tenant`) — tenant travels as an env namespace, never a store pin
+
+
+#### Scenario: Conformance check (derived)
+- **WHEN** the behavior described by this requirement is exercised
+- **THEN** A spawned worker's board SHALL be pinned in its environment (`HERMES_KANBAN_DB`, `HERMES_KANBAN_WORKSPACES_ROOT`, `HERMES_KANBAN_BOARD`) to the board the task was claimed from, so workers cannot see other boards;
+- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
+  replace with evidence-backed scenarios on next recon pass.
+
+### Requirement: Worker liveness is a (pid, started_at) fingerprint, never bare PID
+Reclaim and stale-claim paths SHALL treat a worker as live only when its PID is alive AND matches the start-time fingerprint recorded at spawn (`_worker_alive`); bare PID existence SHALL never license extending a claim or signalling a process. A spawn whose fingerprint could not be captured SHALL be held but never signalled — missing process identity is refusal, not permission (#99558).
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (process-identity note — "never bare PID existence, or a recycled PID gets killed on reclaim"); [PR #99558](https://github.com/NousResearch/hermes-agent/pull/99558); [PR #50366](https://github.com/NousResearch/hermes-agent/pull/50366) — reclaim claim-lock-aware
+**Anchor**: `hermes_cli/kanban_db_dispatch.py:378` (`_worker_alive`) — "True when `pid` is live AND is still the worker we spawned... bare existence is never enough to extend a claim or to signal"; `hermes_cli/kanban_db_dispatch.py:393` (`_pid_recycled`) — fingerprint is `<instantiation epoch>|<start time>` (:364-375), survives no reboot; `hermes_cli/kanban_db_dispatch.py:361` (`UNVERIFIED_WORKER_FINGERPRINT = "unverified"`) — claim held, `_terminate_reclaimed_worker` refuses to signal it
+
+#### Scenario: A reclaim probe meets a live PID with the wrong fingerprint
+- **WHEN** a stale-claim reclaim sees the recorded PID alive but the start-time fingerprint no longer matches
+- **THEN** `_worker_alive` is False — after a reboot or PID recycle "bare existence is never enough to extend a claim or to signal"
+- Source: doc: hermes_cli/kanban_db_dispatch.py:378-380 (`_worker_alive` docstring)
+### Requirement: Kanban notifications leave through the owning profile's adapter
+Notification subscriptions SHALL carry a `notifier_profile`; a gateway notifier SHALL collect only the subs its served profiles own (`_notify_profile_filter`) and deliver via THAT profile's adapter, never the multiplexer's launch/primary adapter. A fail-closed skip SHALL log once per subscription row at WARNING with the remedy, never a bare `continue` (#110919).
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (Notifications bullet); [PR #110919](https://github.com/NousResearch/hermes-agent/pull/110919) — anchorless thread subscription warns once instead of vanishing; [issue #115460](https://github.com/NousResearch/hermes-agent/pull/115460)
+**Anchor**: `hermes_cli/kanban_db_notify.py:144` (`_notify_profile_filter`) — SQL predicate over `notifier_profile`; `list_notify_subs` docstring (:175): "Gateway notifiers pass the profiles they own so they cannot claim another gateway's events"; `gateway/kanban_watchers_notifier.py:162` (`_adapter_for_subscription`) — a profile holding its OWN adapter is a credential boundary "the primary never stands in"; `gateway/kanban_watchers_notifier.py:145` (`_warn_unroutable_sub_once`) — one WARNING naming the re-subscribe remedy
+
+
+#### Scenario: Conformance check (derived)
+- **WHEN** the behavior described by this requirement is exercised
+- **THEN** Notification subscriptions SHALL carry a `notifier_profile`;
+- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
+  replace with evidence-backed scenarios on next recon pass.
+
+### Requirement: Workers get the assignee's profile and board in a scrubbed child env
+Dispatch SHALL build the worker's env via `build_subprocess_env` under the assignee's secret scope, pin the assignee's `HERMES_HOME`, and then call `strip_launch_profile_env` — the worker SHALL never inherit the default/launch profile's `.env` settings, `TERMINAL_*` policy, or a previous conversation's routing vars.
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (Notifications bullet — "scrubbed child env (`build_subprocess_env` + `strip_launch_profile_env`); they never inherit the default profile's `.env`") — code comment kanban_db_dispatch.py:2780-2787 records the incident (a routed home's worker inheriting the dispatcher's own `OPENAI_API_KEY`)
+**Anchor**: `hermes_cli/kanban_db_dispatch.py:2790` (`env = build_subprocess_env(`) — built inside `_worker_profile_scope(profile_home...)` (:2788) so passthrough resolves B's secrets, not the launch profile's; `hermes_cli/kanban_db_dispatch.py:2808` (`strip_launch_profile_env(env, profile_home)`) — comment: must not hand another profile "the launch profile's .env settings / TERMINAL_* policy"; `hermes_cli/kanban_db_dispatch.py:2798` (`env.pop(key, None)`) — every `session_context._VAR_MAP` routing var dropped ("its worker must never inherit routing mirrored by a previous gateway turn")
+
+#### Scenario: A multiplexer dispatches for another profile
+- **WHEN** the dispatcher spawns a worker for a profile other than the launch profile
+- **THEN** `strip_launch_profile_env(env, profile_home)` runs — "A multiplexer dispatching for another profile must not hand it the launch profile's .env settings / TERMINAL_* policy — a standalone dispatcher never would."
+- Source: doc: hermes_cli/kanban_db_dispatch.py:2806-2808 (comment above `strip_launch_profile_env`)
+### Requirement: Kanban guidance and stop nudge gate on ownership, not tool access
+Every reader that turns `HERMES_KANBAN_TASK` into worker behaviour (KANBAN_GUIDANCE injection, the stop nudge, shell-hook task stamping) SHALL resolve it through `owned_kanban_task()`, which answers `""` for delegate children and non-dispatcher-owned in-process contexts; tool visibility via a profile's toolset and an inherited env var are NOT ownership.
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (Prompt injection sites bullet)
+**Anchor**: `agent/delegation_context.py:96` (`owned_kanban_task`) — docstring: "Tool access is not worker identity... every reader... goes through this one helper"; returns `""` unless `is_dispatcher_owned_worker_context()` (:71); `agent/agent_init.py:1045` (`KANBAN_GUIDANCE if owned_kanban_task() and "kanban_show" in agent.valid_tool_names`) — guidance needs BOTH ownership and tool access; `agent/kanban_stop.py:39` (`return bool(owned_kanban_task())`) — the stop nudge's gate
+
+#### Scenario: A delegate child inherits HERMES_KANBAN_TASK
+- **WHEN** a delegate child or cron run beside a worker reads `owned_kanban_task()`
+- **THEN** it answers `""` — "Tool access is not worker identity" — so no kanban guidance is injected and the stop nudge stays silent
+- Source: doc: agent/delegation_context.py:96-98 (`owned_kanban_task` docstring)
+### Requirement: Descendant fence is a path, not a flag
+A delegated child's Kanban marker (`DELEGATED_CHILD_ENV_MARKER`) SHALL carry the fenced board ROOT, and `kanban_path_is_fenced` SHALL deny mutations only at the dispatcher-pinned `HERMES_KANBAN_DB` or under that root — so a child working against a scratch `HERMES_HOME` keeps a writable board; a legacy `"1"` marker fences everything.
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (Descendant fence bullet)
+**Anchor**: `agent/delegation_context.py:144` (`kanban_path_is_fenced`) — pinned-DB equality at :158-160, `target.relative_to(Path(marker)...)` under-root check at :161-165, marker `"1"` fences all at :154; `agent/delegation_context.py:20` (`DELEGATED_CHILD_ENV_MARKER = "HERMES_DELEGATED_CHILD_CONTEXT"`); `agent/delegation_context.py:122` (`scrub_kanban_env`) — strips worker identity but keeps an inherited path-valued marker, docstring: "a child running a repro against a temp `HERMES_HOME` got a silently read-only board there"
+
+
+#### Scenario: Conformance check (derived)
+- **WHEN** the behavior described by this requirement is exercised
+- **THEN** A delegated child's Kanban marker (`DELEGATED_CHILD_ENV_MARKER`) SHALL carry the fenced board ROOT, and `kanban_path_is_fenced` SHALL deny mutations only at the dispatcher-pinned `HERMES_KANBAN_DB` or under that root — so a child working against a scratch `HERMES_HOME` keeps a writable board;
+- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
+  replace with evidence-backed scenarios on next recon pass.
+
+### Requirement: Owner recovery refuses to guess; a lost worker's exit is booked once
+The dispatcher SHALL not authorize another attempt on missing or ambiguous owner receipts
+("Missing/ambiguous owner receipts never authorize another attempt"), and SHALL treat missing
+evidence as never proof that an attempt is over; a lost worker's clean exit SHALL be booked as a
+crash exactly once — not additionally as a protocol violation — while transport loss resumes the
+same attempt bounded from the owner's last answer (d4283a9c9cdf post-commit block hook;
+e62c15e667e4; 89f13590e0e8).
+**Status**: VERIFIED
+**Evidence**: doc: cron/AGENTS.md § Kanban (worker-liveness/reclaim context); tail commits d4283a9c9cdf (dispatch dependency block hook post-commit), e62c15e667e4, c777ba429fc8, 89f13590e0e8, b2e0171c29e5; test commit 25e7f5fc21d8 (post-commit kanban_task_blocked pin)
+**Anchor**: `hermes_cli/kanban_owner_recovery.py:46` (`owner_reclaim_paused` docstring) — "Missing/ambiguous owner receipts never authorize another attempt"; `hermes_cli/kanban_owner_recovery.py:153` (`owner_attempt_provably_over`) — "Missing evidence is never proof"; `hermes_cli/kanban_worker_client.py:68` (comment) — "The wait is bounded from the owner's last answer"; `hermes_cli/kanban_db.py:3211` (`_fire_task_hook("kanban_task_blocked", ...)`) — fired outside the write transaction
+
+
+#### Scenario: Conformance check (derived)
+- **WHEN** the behavior described by this requirement is exercised
+- **THEN** The dispatcher SHALL not authorize another attempt on missing or ambiguous owner receipts
+- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
+  replace with evidence-backed scenarios on next recon pass.
 
 ## Known gaps / open questions
 - Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2.

@@ -1,6 +1,67 @@
 {
-  "112647": {"kind": "issue", "state": "closed", "title": "Every interrupt is reported as \"interrupted_by_user\": the actual issuer ...", "checked_via": "GET /repos/NousResearch/hermes-agent/issues/112647", "checked": "2026-11-08", "note": "cited in-code in tests/agent/test_interrupt_issuer_attribution.py; NOT a pull (pulls/112647 = 404)"},
-  "64611": {"kind": "pr", "state": "closed", "merged_at": null, "title": "fix(agent): never load the install-tree AGENTS.md as project context", "checked_via": "GET /repos/NousResearch/hermes-agent/pulls/64611", "checked": "2026-11-08", "note": "closed unmerged on GitHub; behavior present on main at the pin (VERIFIED via agent/prompt_builder.py anchors) — landed via salvage/cherry-pick path per repo rubric"},
-  "17309": {"kind": "issue", "state": "closed", "title": "[Bug]: WEB tools not being disabled even after disabling.", "checked_via": "GET /repos/NousResearch/hermes-agent/issues/17309", "checked": "2026-11-08", "note": "cited in model_tools.py _select_tool_names comment (disabled-subtracted-last)"},
-  "101367": {"kind": "pr", "state": "closed", "title": "fix(tools): tools[] stays frozen for the session — prefix preserved", "checked_via": "GET /repos/NousResearch/hermes-agent/pulls/101367", "checked": "2026-11-08", "note": "cited in tools/mcp_tool_agent.py _publish_tool_snapshot"}
+  "112647": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "Every interrupt is reported as \"interrupted_by_user\": the actual issuer ...",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/112647",
+    "checked": "2026-11-08",
+    "note": "cited in-code in tests/agent/test_interrupt_issuer_attribution.py; NOT a pull (pulls/112647 = 404)"
+  },
+  "64611": {
+    "kind": "pr",
+    "state": "closed",
+    "merged_at": null,
+    "title": "fix(agent): never load the install-tree AGENTS.md as project context",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/pulls/64611",
+    "checked": "2026-11-08",
+    "note": "closed unmerged on GitHub; behavior present on main at the pin (VERIFIED via agent/prompt_builder.py anchors) \u2014 landed via salvage/cherry-pick path per repo rubric"
+  },
+  "17309": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "[Bug]: WEB tools not being disabled even after disabling.",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/17309",
+    "checked": "2026-11-08",
+    "note": "cited in model_tools.py _select_tool_names comment (disabled-subtracted-last)"
+  },
+  "101367": {
+    "kind": "pr",
+    "state": "closed",
+    "title": "fix(tools): tools[] stays frozen for the session \u2014 prefix preserved",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/pulls/101367",
+    "checked": "2026-11-08",
+    "note": "cited in tools/mcp_tool_agent.py _publish_tool_snapshot"
+  },
+  "114587": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "kanban dispatcher: independent review-lane failure budget",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/114587",
+    "checked": "2026-11-08",
+    "note": "pass-3 kanban drafting child cite; API-verified by spec-writer"
+  },
+  "111306": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "kanban: an automatic stale-claim reclaim never advances consecutive failures",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/111306",
+    "checked": "2026-11-08",
+    "note": "pass-3 kanban drafting child cite; API-verified by spec-writer"
+  },
+  "99558": {
+    "kind": "pr",
+    "state": "closed",
+    "title": "fix(windows): fail-closed process-identity guard before ever signalling",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/99558",
+    "checked": "2026-11-08",
+    "note": "pass-3 kanban drafting child cite; API-verified by spec-writer"
+  },
+  "115460": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "[Bug]: Kanban notifications to a profile_routes-pinned chat",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/115460",
+    "checked": "2026-11-08",
+    "note": "pass-3 kanban drafting child cite; API-verified by spec-writer"
+  }
 }

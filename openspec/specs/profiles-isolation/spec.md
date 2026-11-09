@@ -117,26 +117,20 @@ Multiplex routing SHALL still load the launch home's `.env` (host-level secrets 
 **Evidence**: [PR #125530](https://github.com/NousResearch/hermes-agent/pull/125530) — "still load the launch home's .env under multiplex routing" — code: env_loader.load_hermes_dotenv skips the process-global load only for a foreign routed home; the launch home's .env still loads (env_loader.py:666-697)
 **Anchor**: `hermes_cli/env_loader.py:684` (`launch_home = _process_hermes_home().resolve()`) — the dotenv guard compares BOTH the load target and the active home against the launch home, so a load naming the launch home still proceeds; `hermes_cli/env_loader.py:685` (`if (is_multiplex_active() and get_hermes_home_override() is not None`) — the skip only fires for a routed FOREIGN home; the comment at 671-677 states 'The launch home's own .env is process configuration and still loads' (added for #125530); `hermes_cli/env_loader.py:669` (`home_path = Path(hermes_home) if hermes_home else get_process_hermes_home()`) — the startup load targets the process (launch) home on purpose, never the per-turn override
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** Multiplex routing SHALL still load the launch home's `.env` (host-level secrets remain available) while per-profile secrets route to the resolved profile.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A routed load naming the launch home still loads
+- **WHEN** multiplex is active and a dotenv load names the launch home
+- **THEN** it proceeds — "the launch home's own .env is process configuration and still loads" — and only a routed FOREIGN home skips the process-global load
+- Source: doc: hermes_cli/env_loader.py:673 (comment) — "home's own .env is process configuration and still loads"
 ### Requirement: Serve profiles created after boot
 A gateway that booted single-profile SHALL serve a newly created profile in place without a restart.
 **Status**: VERIFIED
 **Evidence**: [PR #141623](https://github.com/NousResearch/hermes-agent/pull/141623) — "serve a profile created after a single-profile boot in place, without a restart" — code: hot-serve reconcile flips a standalone boot to multiplex without restart (run_profile_reconcile.py:372-415); serve-profile/rescan-profiles control verbs drive it
 **Anchor**: `gateway/run_profile_reconcile.py:414` (`logger.info("[MULTIPLEX] A second profile exists; serving every profile from this process (no restart)")`) — a standalone-booted gateway activates multiplex in place when a second profile appears (guarded at 379 by `recorded_standalone_reason()`); `gateway/run_profile_reconcile.py:417` (`_serve_profile_runtime`) — grows the reservation and builds the session authority for a hot-added profile, parking it on ownership conflict or unusable store; `gateway/control_socket.py:546` (`request_serve_profile_hot`) — CLI asks the running multiplexer to serve a created profile now via the `serve-profile` verb (registered at gateway/run_bootstrap.py:360)
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** A gateway that booted single-profile SHALL serve a newly created profile in place without a restart.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A second profile appears on a standalone boot
+- **WHEN** the reconciler finds a second profile while the gateway booted standalone with no blocker
+- **THEN** it logs "[MULTIPLEX] A second profile exists; serving every profile from this process (no restart)" and serves hot
+- Source: code string: gateway/run_profile_reconcile.py:414
 ### Requirement: Delegated children carry a valued environment marker
 A delegated child process SHALL carry the `HERMES_DELEGATED_CHILD_CONTEXT` marker valued as the fenced Kanban board root (not a bare flag), so spawn-site fencing is provable in the child environment.
 **Status**: VERIFIED
@@ -186,27 +180,21 @@ The gateway SHALL adopt a bare legacy user systemd unit that pins a custom `HERM
 **Evidence**: [PR #109476](https://github.com/NousResearch/hermes-agent/pull/109476) — "adopt a bare legacy user unit that pins this custom HERMES_HOME" — code: _bare_unit_pinned_home/_home_owns_bare_service_name (gateway.py:2230-2262) adopt a bare legacy unit pinning a custom HERMES_HOME into profile-routed naming
 **Anchor**: `hermes_cli/gateway.py:2230` (`_bare_unit_pinned_home`) — resolves the HERMES_HOME pinned by an installed bare hermes-gateway.service; the docstring records the #109476 incident where a bare legacy user unit pinning a custom root made lifecycle commands see 'no unit' and Restart=always looped; `hermes_cli/gateway.py:2262` (`return home in _native_service_homes() or home == _bare_unit_pinned_home()`) — the unit-pinned home owns the bare service name: 'A unit pinning THIS home is this home's service, whatever it is named'
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** The gateway SHALL adopt a bare legacy user systemd unit that pins a custom `HERMES_HOME` into the profile-routed lifecycle rather than running it unmanaged.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A bare legacy unit pins a custom home
+- **WHEN** lifecycle commands resolve service ownership for a home whose bare `hermes-gateway.service` pins that custom `HERMES_HOME`
+- **THEN** the unit-pinned home owns the bare name — "A unit pinning THIS home is this home's service, whatever it is named" — instead of seeing "no unit" (#109476)
+- Source: doc: hermes_cli/gateway.py:2262 (`_home_owns_bare_service_name` comment) — "A unit pinning THIS home is this home's service, whatever it is named"
 ### Requirement: Terminal session isolation keys qualify by profile
 Session-isolated container keys and cwd records SHALL be qualified under the routed profile scope so two profiles never share a container identity.
 **Status**: VERIFIED
 **Evidence**: [PR #123989](https://github.com/NousResearch/hermes-agent/pull/123989) — "qualify session-isolated container keys and cwd records under a routed profile scope" — code: per-session container keys and cwd records qualify by routed profile (_qualify_task_key, terminal_tool.py:503); docker container identity is profile-labelled (docker.py:117-132)
 **Anchor**: `tools/terminal_tool.py:503` (`_qualify_task_key`) — returns `f"{scope}:{key}"` from `_routed_home_task_key(profile_scoped=True)`; raw session ids shared across profiles 'would hand profile B the sandbox and cwd profile A created'; `tools/terminal_tool.py:345` (`_task_env_overrides[_qualify_task_key(task_id)]`) — cwd/image override records are keyed the same routed-profile-qualified way; `tools/environments/docker.py:124` (`_container_identity`) — profile label for container reuse/orphan reaping; 'Profiles are isolated by default' with only an explicit shared key opting out
 
+#### Scenario: Two profiles share a session id
+- **WHEN** profile B reuses a task/session key profile A already opened a terminal for
+- **THEN** keys are routed-profile-qualified — otherwise it "would hand profile B the sandbox and cwd profile A created" (#123989)
+- Source: doc: tools/terminal_tool.py:509 (`_qualify_task_key` comment) — "would hand profile B the sandbox and cwd profile A created"
 **Sub-area: Tail fold (commits after 2026-10-27)**
-
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** Session-isolated container keys and cwd records SHALL be qualified under the routed profile scope so two profiles never share a container identity.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
 
 ### Requirement: Force-install swap dirs stay out of skill discovery
 When a profile distribution force-install stages a swap, the staged/locked old-tree swap directories SHALL NOT be visible to skill discovery, and a copy or swap that fails part-way SHALL keep the old tree in place.
