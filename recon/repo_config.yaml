@@ -75,6 +75,16 @@ scope:
     - memory-system     # small scope (286); folded into sessions-state gaps for now
     - skins-themes, pets, locales-translations, tests-e2e, website-docs, evals
   owner_note: "Owner mission 2026-11-08: cap ambition deliberately; converging beats exhaustive."
+  ownership_decisions:  # G-03, pass 2 — boundary calls per PLAYBOOK (repo's own routing is decisive)
+    - question: "kanban: cron-background vs plugins-mcp?"
+      decision: cron-background
+      basis: "root AGENTS.md routing table row: '`cron/`, kanban -> cron/AGENTS.md' covers 'kanban dispatcher'; cron/AGENTS.md § Kanban owns CLI facade hermes_cli/kanban.py + siblings, tools/kanban_tools.py toolset, dispatcher invariants. plugins/kanban/ holds only dashboard + systemd assets (deferred surface)."
+    - question: "compression display: sessions-state vs agent-turn-loop?"
+      decision: sessions-state
+      basis: "the display contract lives in the SessionDB read layer (hermes_state_compaction_display.py — 'display reads paint a compacted tool result once, as its archived original', identity-only rule, changes no stored row). agent-turn-loop keeps the compression behavior itself (agent/context_compressor.py); sessions-state owns how compacted/stubbed rows are served on reads."
+    - question: "fleet reconciliation (#103679, #93406 'fleet probe') in delegation-orchestration?"
+      decision: excluded-confirmed (deferred update-packaging)
+      basis: "reconciles gateway/update host processes (hermes_cli/update_*), not subagent fleets. Kept as exclusion note in the draft's Known gaps. Tail clustering already dropped bare 'fleet' from the delegation regex (scripts/mine_tail.py SUBJ)."
 
 clustering:  # regex applied to commit subject; a commit may land in <=2 buckets
   # G-04 (pass 2): tools-toolsets and cli-surface regexes tightened (pass-1 \btools?\b /
