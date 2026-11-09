@@ -10,7 +10,7 @@ Method law: recon/PLAYBOOK.md → recon/DRAFT_TEMPLATE.md → your RECON_LEDGER.
 3. specs_draft/<capability>.md — 8-20 requirements each, OpenSpec-flavored per DRAFT_TEMPLATE.md. You may run drafting waves via delegate_task (you are a full Hermes instance). Every requirement: PR/doc citation + status VERIFIED/INFERRED/UNVERIFIED + anchor file:line at the pin. VERIFIED = you opened the file. Blanks over guesses; never invent PR numbers or paths.
 4. Conversion + validation: run  python3 /opt/data/agent-github-spec-store/tools/draft_to_spec.py specs_draft openspec/specs ""   (empty prefix — the store folder IS the namespace; capability dirs named after capabilities). Then  openspec validate --all --strict --store hermes-agent  (PATH needs /opt/data/home/.npm-global/bin) must reach 0 errors. Requirements without scenario evidence will get SCENARIO-DEBT derived scenarios from the converter — that is acceptable in pass 1; count and record them.
 5. recon/RECON_LEDGER.md — CURRENT STATE, capability coverage table (scripted tallies govern, self-reports are hypotheses), open gap register, pass history incl. the pin.
-6. git commit the store at each milestone (scaffold commit exists: e785176). Commit message per milestone.
+6. git commit the store at each milestone (scaffold commit exists: 7520356). Commit message per milestone.
 
 ## Capability starting points (decide the real scope yourself in Phase 0)
 gateway-messaging (platforms incl. telegram/multiplexer), sessions-state, skills-system, tools-toolsets, profiles-isolation, cron-background, delegation-orchestration, config-provider-models, cli-surface, plugins-mcp, desktop-ui... deferred candidates: skins/themes, pets, docs/translations, tests, packaging.

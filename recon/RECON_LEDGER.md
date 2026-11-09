@@ -79,7 +79,7 @@ Deferred buckets (not reconstructed — deliberate): desktop-ui (7,059 scope com
 | 2026-11-08 | 2 (fleet: 2 waves × 3 children + inline audit gate; owner steering mid-pass) | v0.23.0 @ 2bd378ed | 158 reqs / 59.5% VERIFIED / 23 debt / 213 grounded scenarios; G-01/03(3of4)/04/05 closed; D-01 closed; strict green |
 | 2026-11-08 | 3 (fleet: W1 3 + W2 3 + W3 1 children, scripted audit_gate.py between waves; 2 approvals blocked on owner non-response, retried per standing instruction) | v0.23.0 @ 2bd378ed | 166 reqs / 156 VERIFIED (94.0%) / 10 INFERRED / 234 scenarios / 10 debt; G-06/G-07/G-08 closed; D-05 found+fixed; audit_gate.py + verified_numbers.json; D-03/D-04 upstream drafts staged (unposted); strict green at every commit |
 
-Commits — pass 3: aaf6e08 (gate + baseline triage) → afa4123 (W1) → 20764e7 (D-03/D-04 drafts) → 24f9f7b (W2) → 6689081 (W3 kanban + debt sweep) → (ledger + gap lines, this commit).
+Commits — pass 3: 3da230f (gate + baseline triage) → 8140d9e (W1) → 41e7630 (D-03/D-04 drafts) → 6deba21 (W2) → 41a0e79 (W3 kanban + debt sweep) → (ledger + gap lines, this commit).
 
 ## NEXT-PASS instructions (pass 4)
 1. Baseline: stay at v0.23.0 @ 2bd378ed until owner re-pins. On re-pin: `scripts/mine_evidence.py` (full corpus) then `scripts/mine_tail.py` (window = > newest PR-ref date); re-verify anchors touched by the diff; RE-CHECK removal commits for every PR-cited requirement (D-05 law).
