@@ -108,6 +108,10 @@ Only free-tier accounts SHALL end a live turn on a long cooldown; paid providers
 - Evidence: [PR #129410](https://github.com/NousResearch/hermes-agent/pull/129410) — "only the free tier ends a live turn on a long cooldown; paid providers wait out Retry-After again" — implementation at `agent/turn_recovery.py::free_tier_cooldown_ends_turn`; the same resolver honors Retry-After (capped at RETRY_AFTER_CAP_S) for every retryable provider error
 - Anchor: `agent/turn_recovery.py:1519` (`free_tier_cooldown_ends_turn`) — returns True only when `on_free_model(agent, base_url) and is_attended(agent)` (line 1529) and the cooldown exceeds `LIVE_RETRY_WAIT_CAP_S` (1531-1532); `agent/turn_recovery.py:1524` (`free_tier_cooldown_ends_turn` docstring) — "Every other provider, and every unattended run (cron, messaging, `hermes chat -q`), waits out its `Retry-After`: a paid bucket reopens on time"
 
+#### Scenario: An attended free-tier cooldown exceeds the sit-through cap
+- **WHEN** an attended session on the free model meets a cooldown longer than `LIVE_RETRY_WAIT_CAP_S`
+- **THEN** the attempt cycle ends now; "Every other provider, and every unattended run (cron, messaging, `hermes chat -q`), waits out its `Retry-After`: a paid bucket reopens on time"
+- Source: doc: agent/turn_recovery.py:1520-1524 (`free_tier_cooldown_ends_turn` docstring)
 ### Requirement: Nous sign-in is a plain device login
 Every Nous sign-in path SHALL use the plain device login flow, and a free-tier guest account SHALL be handed to the real account after sign-in (identity continuity).
 - Status: VERIFIED
@@ -137,30 +141,50 @@ Capability notes injected to the model SHALL reflect the actually-resolved model
 - Evidence: [PR #131568](https://github.com/NousResearch/hermes-agent/pull/131568) — text-only header no longer tells vision models they cannot see images; [PR #54509](https://github.com/NousResearch/hermes-agent/pull/54509) — badge follows the PTY runtime model, not config, during fallback
 - Anchor: `tools/browser_use_cli.py:925-928` (`SCREENSHOTS_DETACHED` comment) — the non-native header "states a transport fact ... never a verdict on the model's own vision: models quote 'your model cannot view images' against themselves and skip user images (#131568)"; `tools/browser_use_cli.py:961` (`_description_header`) — picks `_HEADER_VISION` vs `_HEADER_TEXT_ONLY` (933) based on whether the active route attaches screenshots natively, not on a config guess; `web/src/components/ChatSidebar.tsx:161-167` (`runtimeModel`) — badge model identity comes from the PTY session's `session.info`: "when a provider fallback replaces the configured primary mid-turn (#54509) ... the badge must follow it"; config is only the fallback source (gateway persists the runtime model + `fallback_active` at gateway/run_turn_prepare.py:275)
 
+#### Scenario: A non-native vision route labels its header
+- **WHEN** screenshots cannot ride back in the tool result (non-native route / vision pin / media-rejecting route)
+- **THEN** the header "states a transport fact ..., never a verdict on the model's own vision: models quote 'your model cannot view images' against themselves and skip user images" (#131568)
+- Source: doc: tools/browser_use_cli.py:925-928 (`SCREENSHOTS_DETACHED` comment)
 ### Requirement: Context lengths and model capabilities are centralized
 Per-model context lengths and capabilities SHALL live in `agent/model_metadata.py` (single source for sizing decisions such as window-derived thresholds).
 - Status: VERIFIED
 - Evidence: doc: agent/AGENTS.md § Model and provider resolution ("agent/model_metadata.py holds context lengths and capabilities") — module read at the pin: DEFAULT_CONTEXT_LENGTHS family table, MINIMUM_CONTEXT_LENGTH threshold and probe/cache plumbing all in this one module
 - Anchor: `agent/model_metadata.py:1` (module docstring) — "Model metadata, context lengths, and token estimation utilities."; `agent/model_metadata.py:295` (`DEFAULT_CONTEXT_LENGTHS`) — the central per-model/family window table, commented at 292 "Family-pattern fallbacks, used only when provider-aware sources all miss"; `agent/model_metadata.py:277` (`MINIMUM_CONTEXT_LENGTH`) — the window-derived sizing threshold; Ollama vision-capability resolution also lives here (:1448)
 
+#### Scenario: No provider-aware window source answers
+- **WHEN** provider-aware context-length sources all miss for a model
+- **THEN** `DEFAULT_CONTEXT_LENGTHS` family-pattern fallbacks apply — "used only when provider-aware sources all miss" — inside the single model-metadata module
+- Source: doc: agent/model_metadata.py:292 (comment) + :1 (module docstring)
 ### Requirement: Bedrock sizes context windows from catalog family fallback
 Bedrock model calls SHALL size context windows by falling through to the catalog family window for models without their own entry (Anthropic, OpenAI, xAI families), and SHALL size listed third-party models from their AWS cards.
 - Status: VERIFIED
 - Evidence: [commit 9625c34f5258] — "fall through to the catalog family window for Anthropic, OpenAI and xAI"; [commit 4b3fba6942d5] — "size GPT-6.1 Terra, GPT-5.4 and third-party models from their AWS cards"
 - Anchor: `agent/bedrock_adapter.py:1537` (`_CATALOG_FAMILY_ID_RE`) — `r"(?:^|[./])(?:anthropic|openai|xai)\.([a-z0-9][a-z0-9.:-]*)$"` — exactly the Anthropic/OpenAI/xAI issuers whose catalog family rows match Bedrock cards (issuer comment 1531-1536); `agent/bedrock_adapter.py:1575` (`bedrock_static_context_length`) — static table row first, else falls through to the catalog family window via `_longest_key_match(DEFAULT_CONTEXT_LENGTHS, family.group(1))` (1585-1590); `get_bedrock_context_length` (1593-1594) documents "live probe → static table → catalog family → default"; `agent/bedrock_adapter.py:1507` (BEDROCK_CONTEXT_LENGTHS comment) — third-party rows are "the 'Context window' field of each AWS card (docs.aws.amazon.com/bedrock/latest/userguide/model-card-<vendor>-<model>.html ...)"
 
+#### Scenario: An unlisted Bedrock model needs a window
+- **WHEN** the live probe is unavailable and the static table has no row for the model
+- **THEN** sizing falls through "live probe → static table → catalog family → default" (Anthropic/OpenAI/xAI family rows)
+- Source: doc: agent/bedrock_adapter.py:1594 (`get_bedrock_context_length` docstring)
 ### Requirement: Mandatory-thinking Anthropic families keep thinking on the wire
 Provider handling SHALL treat mandatory-thinking Claude families (including Claude Mythos) as requiring thinking, so requests for those models are shaped accordingly.
 - Status: VERIFIED
 - Evidence: [commit ad25cdd478ed] — "treat Claude Mythos as mandatory-thinking"; [commit b27f6ee57c8f] — "name every mandatory-thinking family in the module docstring"
 - Anchor: `agent/anthropic_adapter.py:103` (`_MANDATORY_THINKING_CLAUDE_SUBSTRINGS`) — `("claude-fable", "claude-mythos", "claude-opus-5-5", "claude-opus-5.5")`, commented 100-102: thinking is mandatory, `thinking: {"type": "disabled"}` answers HTTP 400, "when in doubt, add the family"; `agent/anthropic_adapter.py:187` (`_accepts_thinking_disable`) — returns False for mandatory-thinking families: they "400 on it and keep the omit behavior" (line 196 excludes them via `_model_matches`); `agent/voice_turn_route.py:94` — "Mandatory-thinking Claude omits the disable and thinks at its default effort" (routes them to the reasoning floor instead of a disable)
 
+#### Scenario: A mandatory-thinking family meets the thinking-disable knob
+- **WHEN** code would send `thinking: disabled` to a mandatory-thinking Claude family
+- **THEN** the disable is omitted — "a missing entry 400s the turn, a spurious one only leaves thinking on — so when in doubt, add the family"
+- Source: doc: agent/anthropic_adapter.py:101-102 (comment above `_MANDATORY_THINKING_CLAUDE_SUBSTRINGS`)
 ### Requirement: Same-issued-second token rotations order by obtained_at
 When two credential rotations share one issued-at (`iat`) second, ordering SHALL use `obtained_at`, never expiry, so rotation order stays deterministic.
 - Status: VERIFIED
 - Evidence: [commit b5bce5c622c5] — "two rotations in one iat second order by obtained_at, never expiry"
 - Anchor: `hermes_cli/auth_oauth_grants.py:434` (`oauth_pair_order`) — docstring 437-440: "ISSUE time decides ... Equal whole-second `iat` claims (two rotations in one second) fall to the sub-second local issue stamp" and expiry "only orders pairs lacking an issue stamp"; `hermes_cli/auth_oauth_grants.py:444` — `_sign(ia, ib) or _sign(la, lb) or 0`: iat first, then the local `obtained_at` stamp; expiry is consulted only at 445-449 when neither side carries an issue stamp; `hermes_cli/auth_oauth_grants.py:417` (`_oauth_stamps`) — the local issue stamp is `last_refresh`/`obtained_at` (425); consumed by `hermes_cli/auth_nous.py:417` (`_nous_state_order`) for shared-store merge ordering
 
+#### Scenario: Two rotations land in the same whole second
+- **WHEN** shared-store merge orders two token pairs whose `iat` claims are equal to the second
+- **THEN** they "fall to the sub-second local issue stamp" (`obtained_at`); expiry "only orders pairs lacking an issue stamp"
+- Source: doc: hermes_cli/auth_oauth_grants.py:437-440 (`oauth_pair_order` docstring)
 ## Scenario-ification notes
 - REQ "Rate-limit waiting distinguishes free tier from paid": no doc-grounded trigger; kept as invariant. PR #129410 quote is bundle-only; no release-note/doc text covers free-tier-vs-paid cooldown.
 - REQ "Model-visible capability claims match the active model": no doc-grounded trigger; PR #131568/#54509 quotes are bundle-only; the v0.23.0 "text-only" note ("Text-only vLLM servers that reject images recover") is a different behavior and was not used.

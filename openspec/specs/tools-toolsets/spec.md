@@ -194,14 +194,11 @@ Tool rows SHALL be keyed on stable tool identity rather than payload bytes for d
 **Evidence**: [PR #117750](https://github.com/NousResearch/hermes-agent/pull/117750) — "key display identity of tool rows on stable tool identity, not payload bytes"; related desktop-side #128009/#128003 (desktop capability excluded) — code: _stable_tool_key keys display dedupe on tool_call ids; payload-content key only as the id-less fallback
 **Anchor**: `hermes_state_identity.py:99-111` (`_stable_tool_key`) — display-dedupe key of a tool-calling assistant row built from stable call ids 'instead of the arguments a prune rewrites' (#117750); None when the id set is incomplete; `hermes_state_messages.py:1106-1117` (`_display_dedupe_key`) — `return _stable_tool_key(row) or (role, dedupe_content, …)`: identity rows never fall back to payload bytes; id-less rows keep the full content key so distinct calls never merge
 
+#### Scenario: A pruned copy is displayed next to its original
+- **WHEN** the display layer dedupes a pruned carried-forward tool row against its durable original
+- **THEN** the key is built "from its stable call ids instead of the arguments a prune rewrites", so the pair collapses (#117750)
+- Source: doc: hermes_state_identity.py:100 (`_stable_tool_key` docstring) — "instead of the arguments a prune rewrites"
 **Sub-area: Tail fold (commits after 2026-10-27)**
-
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** Tool rows SHALL be keyed on stable tool identity rather than payload bytes for display identity, so providers reusing tool-call ids do not overwrite finished rows.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
 
 ### Requirement: The live session's tool surface stays frozen; the definitions memo expires with its verdicts
 The tool list presented to a session SHALL stay frozen for that session even when a `check_fn` verdict flips back or a pin is restored; the memoized tool-definitions cache SHALL expire with its `check_fn` verdicts (and a grace/reuse window for a verdict starts when the probe returns).
@@ -236,13 +233,10 @@ A tool result nested beyond the normal depth SHALL still deliver its `tool.compl
 **Evidence**: [commit 9aea04c329fd] — a too-deeply nested tool result no longer drops tool.complete — code: safe_json_loads now swallows RecursionError, fixing every tool-event parse caller
 **Anchor**: `utils.py:679-684` (`safe_json_loads`) — catches RecursionError alongside JSONDecodeError/TypeError/ValueError, docstring: 'returning *default* on any parse error (a too-deeply nested body included)' (9aea04c329fd); `agent/terminal_image.py:374-377` (`tool_image_path`) — a tool event's result-parse site routes through safe_json_loads, so a deep-nest result degrades to no-image instead of raising out of the tool.complete handler
 
-
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** A tool result nested beyond the normal depth SHALL still deliver its `tool.complete` event instead of being dropped.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
-
+#### Scenario: A pathologically nested result reaches a display parser
+- **WHEN** a tool-event parse site feeds `safe_json_loads` a body nested too deeply for the JSON parser
+- **THEN** it returns the default ("a too-deeply nested body included") — RecursionError is caught — so the tool event completes degraded instead of raising
+- Source: doc: utils.py:680 (`safe_json_loads` docstring) — "returning *default* on any parse error (a too-deeply nested body included)"
 ## Known gaps / open questions
 - `registry.register()` signature/behavior at line level not opened (grep showed `register_toolset_alias` at :595 and the class region only); VERIFIED claims lean on AGENTS.md + the opened cache/normalizer/discovery lines.
 - MCP tool availability unification (#119644 "installed plugins' MCP tools ... live in every open chat", #119601 shared enabled-flag reader) is a plugins×tools contract owned by the deferred plugins-mcp capability — excluded here, boundary noted.
