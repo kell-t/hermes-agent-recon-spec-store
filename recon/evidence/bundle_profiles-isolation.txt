@@ -61,3 +61,45 @@
 2026-09-01 (#100339) [3038493ee629] fix(auth): never fork single-use OAuth grants across profiles (#100339)
 2026-08-31 (#89315) [d3e2ace1dde9] fix(profiles): profile delete refuses to kill another profile's gateway (#89315)
 2026-08-31 (#82871) [5742f6987d80] test(buzz): pin the single-profile config-only allowlist path (#82871)
+
+# ==== TAIL APPEND (G-01): 74 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [1e81ee57e326] fix(webapp): voice relays through the host, and a created profile is served right away
+2026-11-05 (no-ref) [201326cf5894] fix(checkpoints): never snapshot home's parents or Hermes browser profiles
+2026-11-05 (no-ref) [e090092285fa] feat(memory): profile lifecycle and config-storage seams for memory providers
+2026-11-04 (no-ref) [d063eefc6797] fix(plugins): review nits — caution wording, reload wording, per-profile Update all
+2026-11-04 (no-ref) [6b2895cacb85] fix(update): list --cpu-profile in the holder value-flag fallback
+2026-11-04 (no-ref) [ca14c438e486] fix(mcp): an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one
+2026-11-03 (no-ref) [c08c48530595] fix(docker): supervise profile gateways outside the root s6 scandir
+2026-11-03 (no-ref) [ae95c1caffae] test(desktop): profile overrides and never-ready parking through the real registry
+2026-11-03 (no-ref) [7019faa6c470] fix(desktop): a profile secondary records its wire under the backend it resolved
+2026-11-03 (no-ref) [56601f7c9a92] fix(desktop): room_plumbing maps to follow_profile_config only, as on serve
+2026-11-03 (no-ref) [fcdca2dbd4d8] fix(desktop): Team Gateway-managed platforms and profile-scoped link calls
+2026-11-02 (no-ref) [9b83f7cf858d] plugin-catalog: tinyfish 0.2.5 makes setup telemetry opt-in, adds profile tools
+2026-11-02 (no-ref) [6112c2adb9e1] test(profiles): share profile fixtures without shadowing imports
+2026-11-02 (no-ref) [3e0985d01719] test(profiles): move force-install swap tests to their own file
+2026-11-02 (no-ref) [f6e40b0105ff] fix(profiles): keep force-install swap dirs out of skill discovery
+2026-11-02 (no-ref) [b04acfce7f29] refactor(profiles): keep the force-install swap inside _replace_entry
+2026-11-02 (no-ref) [8819d8830861] test(mcp): a same-named stdio server gets its own child per profile
+2026-11-01 (no-ref) [d3e415edb98c] fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default
+2026-11-01 (no-ref) [1345680261f5] fix(desktop): judge each profile liveness path on its own, like the CLI
+2026-11-01 (no-ref) [75cbc7d057e0] fix(desktop): forget remembered local profiles the CLI would refuse
+2026-11-01 (no-ref) [ef989024880c] fix(desktop): decide remote profile repair from the default profile's effective route
+2026-11-01 (no-ref) [5f60d72b65dd] fix(desktop): import the per-gateway profile record at boot, not at module load
+2026-11-01 (no-ref) [c5240e37a481] fix(desktop): restore a remote primary only onto a profile its gateway serves
+2026-11-01 (no-ref) [3c42c4b7a0da] fix(desktop): windows send main single per-gateway profile changes, never their whole map
+2026-11-01 (no-ref) [9acd625c8f7d] fix(desktop): a profile-less primary dial follows the profile a remote boot re-pins
+2026-11-01 (no-ref) [e29791ceb419] fix(desktop): push the per-gateway profile memory to main only on a real change
+2026-11-01 (no-ref) [c193f62e4131] fix(desktop): boot the primary on a profile its gateway serves
+2026-11-01 (no-ref) [527bbf3d9a71] fix(desktop): display and voice writes name their profile, so a shared remote backend applies them there
+2026-11-01 (no-ref) [a475de488396] fix(desktop): a cached down roster row never cancels a same-gateway profile repair
+2026-11-01 (no-ref) [c40d5c001442] fix(desktop): a Settings re-home publishes the new gateway with its own profile
+2026-11-01 (no-ref) [5a4ecb0b41c4] fix(desktop): socket listeners see the whole new route, not the new socket with the old profile
+2026-11-01 (no-ref) [7e907a9ad0cc] fix(desktop): publish the request connection and its profile in one frame
+2026-11-01 (no-ref) [21a6921167b4] fix(desktop): keep every gateway in All profiles when the SSH primary serves the selected profile
+2026-11-01 (no-ref) [9fe3d20f68dd] fix(desktop): SSH shared profiles fail fast on a missing profile, keep older-runtime and pinned session reads
+2026-11-01 (no-ref) [8ef28ee7013a] fix(desktop): serve SSH named profiles from the connection's one remote backend
+2026-11-01 (no-ref) [a8b5fab1c165] fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default
+2026-11-01 (no-ref) [2ca1aa6ca649] fix(desktop): the startup profile restore keeps only a profile the gateway serves
+2026-11-01 (no-ref) [b5182f334298] test(desktop): give the boot harness's fake bridge a profile roster
+2026-11-01 (no-ref) [fc6d8029fcf3] fix(desktop): validate the startup profile on the selected gateway
+2026-11-01 (no-ref) [b29bf60b3a32] fix(nous): an older shared login never replaces a newer profile login

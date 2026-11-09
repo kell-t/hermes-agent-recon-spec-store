@@ -61,3 +61,45 @@
 2026-08-10 (#83340) [2d81236f7f07] fix(cli): report background-dispatch cron runs without false 'failed' (#83340)
 2026-08-07 (#79768) [11ce6419c3ba] fix(cron): fail closed when the TERMINAL_CWD lock times out (#79768)
 2026-08-06 (#79768) [a1e5ccb325e2] fix(cron): bound TERMINAL_CWD lock acquire with timeout (#79768)
+
+# ==== TAIL APPEND (G-01): 58 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [bb719c349235] chore(catalog): review disclosure for cron-consolidator
+2026-11-05 (no-ref) [3a9c3d46d522] Add community entry: cron-consolidator
+2026-11-04 (no-ref) [0f29a7d98917] chore(catalog): pin kanban-gantt to 1.9.0
+2026-11-04 (no-ref) [3093bc3117d4] fix(plugin-catalog): update print-job-watch to 61cf86e
+2026-11-04 (no-ref) [ce1370430ef8] fix(cron): scope prompt clause to cadence and cover update
+2026-11-04 (no-ref) [8a900e67159d] fix(cron): keep scheduling cadence out of cron job prompts
+2026-11-03 (no-ref) [083772b37465] plugin-catalog: pin kanban-empowered 0.3.0 to 31cb914404ee1295d565b14a0ab1e440d7d22fdc
+2026-11-03 (no-ref) [fb5a2b140371] plugin-catalog: update kanban-empowered to 0.3.0
+2026-11-03 (no-ref) [9dd1ea34f23e] refactor(desktop): one retry schedule and one timeout fixture
+2026-11-03 (no-ref) [e86597e2605e] test(bots): room settings sit in Group details; only cron posts read Scheduled
+2026-11-03 (no-ref) [2e1c0291b881] fix(cron): scheduled posts reach a room the root gateway imported
+2026-11-03 (no-ref) [fbe94827167a] fix(cron): room delivery errors name the @profile remedy
+2026-11-03 (no-ref) [f7065f26d76f] fix(rooms): scheduled posts are relabelled, addressed and retried honestly
+2026-11-03 (no-ref) [32f95b873f52] docs(cron): `hermes cron create --deliver` help names the room:<id>[@profile] target
+2026-11-02 (no-ref) [e03222879c39] feat(desktop): pin Kanban boards as quick-switch tabs
+2026-11-02 (no-ref) [deea569ef62d] test(webhooks): guard owned kanban_task_id in outbound payload
+2026-11-02 (no-ref) [40bbdd2e3274] chore(catalog): review disclosure for kanban-empowered
+2026-11-02 (no-ref) [8aaa8af075f8] plugin-catalog: kanban-empowered 0.2.0
+2026-11-02 (no-ref) [fef61fbc7fd5] plugin-catalog: kanban-empowered 0.1.1
+2026-11-02 (no-ref) [f6e0ffe53529] plugin-catalog: add kanban-empowered
+2026-11-02 (no-ref) [b425edd28617] fix(cron): a failed write mid-drain no longer restarts the hold window
+2026-11-02 (no-ref) [b7798657a008] fix(cron): the drain-hold grace extension is capped and never re-fires a claimed one-shot
+2026-11-02 (no-ref) [c7b72e1fe4a7] fix(cron): a one-shot due while a gateway drain holds dispatch fires once afterwards
+2026-11-02 (no-ref) [30ee54ee013d] test(cron): the virtual-clock soak models run-now as an extra fire and admits 'missed' rows
+2026-11-01 (no-ref) [e534ed0b08cc] ci(install-e2e): the bundle-inputs job installs the locked Node before npm ci
+2026-11-01 (no-ref) [edf1495a314f] fix: warm reopen keeps totals for cron and messaging sessions too
+2026-10-31 (no-ref) [d8232c0eb889] plugin-catalog: bump hermes-cron to 1.5.4
+2026-10-31 (no-ref) [3166c4a4b149] feat(cron): give scheduled jobs their actual run time in the prompt
+2026-10-31 (no-ref) [25e7f5fc21d8] test(kanban): pin post-commit kanban_task_blocked for dependency waits
+2026-10-31 (no-ref) [d4283a9c9cdf] fix(kanban): dispatch dependency block hook post-commit
+2026-10-31 (no-ref) [f7a018a77cbd] test(cron): profile-timezone test no longer fails the day before a DST change
+2026-10-30 (no-ref) [ad98ff37f0e5] plugin-catalog: bump hermes-cron to 1.5.3
+2026-10-30 (no-ref) [d4865574e474] fix(cron): review round 3: Stop settles by its own run, missed counts use the pinned zone, distributions keep catch_up
+2026-10-30 (no-ref) [e9f01737aae3] docs(cron): how a job's catch_up composes with grace_minutes
+2026-10-30 (no-ref) [3f435147912f] fix(cron): a Run-now stopped by cancel reports "cancelled", not "failed"
+2026-10-30 (no-ref) [bb8c685c8981] test(cron): an explicit grace_minutes still skips past it unless the job opts into catch_up
+2026-10-28 (no-ref) [5166f83bb824] chore(catalog): review disclosure for kanban-gantt
+2026-10-28 (no-ref) [df128c13bb9d] ci: run the WhatsApp bridge node tests in the JS & TS job
+2026-10-28 (no-ref) [dbde5a991ae0] fix(kanban): the owner refuses a worker that dials into a restart wait opened after discovery
+2026-10-28 (no-ref) [eace3e056e8b] fix(kanban): a worker cut by a restart's after-turn wait waits for the next owner outside it

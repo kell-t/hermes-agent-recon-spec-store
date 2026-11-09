@@ -1,0 +1,6054 @@
+{
+ "config-provider-models": [
+  {
+   "sha": "a2d566c6ba52",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "plugin-catalog: bump wallaby-provider to 1.1.0",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "002c20612a9b",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add upstash memory provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "48438d0b5cd1",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(desktop): list shared/src/hermes-cloud.ts in the electron tsconfig",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e090092285fa",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "feat(memory): profile lifecycle and config-storage seams for memory providers",
+   "type": "feat",
+   "scope": "memory"
+  },
+  {
+   "sha": "a285c4f4ba72",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "chore(config): finish the auxiliary.skills_hub removal",
+   "type": "chore",
+   "scope": "config"
+  },
+  {
+   "sha": "84a0301415ed",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(review): the background review never asks the user for a skill's API key",
+   "type": "fix",
+   "scope": "review"
+  },
+  {
+   "sha": "ff09cead02e9",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(stt): name stt.<provider>.language in prose so every provider key stays documented",
+   "type": "docs",
+   "scope": "stt"
+  },
+  {
+   "sha": "c10474fbb630",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(stt): blank per-provider language inherits stt.language, not auto-detect",
+   "type": "docs",
+   "scope": "stt"
+  },
+  {
+   "sha": "b411560709ca",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "chore(groups): router thread keeps the caller's context; config_defaults stays at its main size",
+   "type": "chore",
+   "scope": "groups"
+  },
+  {
+   "sha": "75eef50b8601",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): image.render caps any caller's preview budget; config-backed test",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "27781df22a74",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(desktop): match busy-control authority generation checks",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9625c34f5258",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(bedrock): fall through to the catalog family window for Anthropic, OpenAI and xAI",
+   "type": "fix",
+   "scope": "bedrock"
+  },
+  {
+   "sha": "4b3fba6942d5",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(bedrock): size GPT-6.1 Terra, GPT-5.4 and third-party models from their AWS cards",
+   "type": "fix",
+   "scope": "bedrock"
+  },
+  {
+   "sha": "a44e24065a6a",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add otari model provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "d8c25927c6ae",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "Link native connector transition guide and OAuth verification",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "c60840e64e90",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "plugin-catalog: clarify required FilmEase OAuth setup",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "9e8eddb4309c",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add scaleway-provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "69c5d4baed88",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(plugin-catalog): re-pin scaleway-provider at 1.1.0 (subdir, requires_hermes)",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "c2ef9764d054",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add crowbot provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "56601f7c9a92",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): room_plumbing maps to follow_profile_config only, as on serve",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "fd267bb3242a",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): MCP health sweep reads config and status from one source",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "446a54d539c9",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test: model data these assertions depend on comes from fixtures",
+   "type": "test",
+   "scope": ""
+  },
+  {
+   "sha": "21aa2ac26f5c",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "docs(tests): name the helper get_config actually uses in the #147036 regressions",
+   "type": "docs",
+   "scope": "tests"
+  },
+  {
+   "sha": "e7ba4fe1ddf9",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(web): pin /api/config/schema loop responsiveness through the ASGI route",
+   "type": "test",
+   "scope": "web"
+  },
+  {
+   "sha": "b27f6ee57c8f",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(anthropic): name every mandatory-thinking family in the module docstring",
+   "type": "test",
+   "scope": "anthropic"
+  },
+  {
+   "sha": "f135a9ede721",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): bump model-fallback-heuristic to ce150572ea10de682a2c67902b314590b55683b3",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "23fcab925e9b",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add scaleway-provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "cf07d2a100b7",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "docs(configuring-models): drop the dead Web Extract auxiliary task",
+   "type": "docs",
+   "scope": "configuring-models"
+  },
+  {
+   "sha": "40ca63428b27",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(pm): let the cmake floor test answer the pinned-python sysconfig probe",
+   "type": "test",
+   "scope": "pm"
+  },
+  {
+   "sha": "ad25cdd478ed",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(anthropic): treat Claude Mythos as mandatory-thinking",
+   "type": "fix",
+   "scope": "anthropic"
+  },
+  {
+   "sha": "5a1b40862233",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for hashference-provider",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "43b5bde2b968",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(plugin-catalog): pin hashference-provider to 82700f5 (CI installs Hermes's dev group on v0.22.5)",
+   "type": "chore",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "bd375d9a1587",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add hashference-provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "a31d7a2ef34c",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for fortytwo-provider",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "36bf5fb3e24a",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "feat(catalog): add Fortytwo model provider",
+   "type": "feat",
+   "scope": "catalog"
+  },
+  {
+   "sha": "45ad6ede6be8",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "Add Postroom portable plugin catalog entry with OAuth and data disclosures",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "75d8914a2dc0",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for hermes-kame-api-rotation, hermes-kame-provider",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "60f502939461",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "feat: Daybreak switch for catalog-listed ChatGPT subscription models",
+   "type": "feat",
+   "scope": ""
+  },
+  {
+   "sha": "b5bce5c622c5",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(auth): two rotations in one iat second order by obtained_at, never expiry",
+   "type": "fix",
+   "scope": "auth"
+  },
+  {
+   "sha": "a0a6a070928d",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "chore(plugin-catalog): bump provider-status to 1.6.8",
+   "type": "chore",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "ea0cfc524e5f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "refactor(desktop): the gateway registry's host hooks live in gateway-registry-config",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "8c792c16013c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(auth): a quarantined profile still recovers from a sibling's re-login",
+   "type": "fix",
+   "scope": "auth"
+  },
+  {
+   "sha": "30375b51bcb1",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(providers): refuse only a synthesized placeholder for the selected entry",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "139716ae6344",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(providers): refuse the placeholder only for a routed profile",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "894859c9fc0e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(providers): a profile missing its declared key says so instead of a 401",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "5351ed71d4e6",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(mem): cap malloc arenas before any server thread exists; honour .env MALLOC_ARENA_MAX",
+   "type": "fix",
+   "scope": "mem"
+  },
+  {
+   "sha": "36708d1efa29",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "perf(memory): one lazy models.dev parse and bounded long-lived caches",
+   "type": "perf",
+   "scope": "memory"
+  },
+  {
+   "sha": "eabe837133f0",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(web): run config schema build and egress status read off the event loop",
+   "type": "fix",
+   "scope": "web"
+  },
+  {
+   "sha": "c8bdee6f88b9",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add statejar memory provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "17fbb7c1dd79",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(catalog): add breeze-tts, a Breeze Blue TTS provider",
+   "type": "feat",
+   "scope": "catalog"
+  },
+  {
+   "sha": "7243311cf827",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "plugin-catalog: hermes-kame-provider 1.8.3.1",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "9de348d8248e",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "test(update): zip-update backfill expects the placeholder, not a copied .env",
+   "type": "test",
+   "scope": "update"
+  },
+  {
+   "sha": "65effb1e9fcc",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix: /model reset on the session owner (canonical TUI, Desktop, attached CLI)",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "5bb7bdc7c4e1",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat: /model reset \u2014 clear a session's model pin without losing history (NS-563)",
+   "type": "feat",
+   "scope": ""
+  },
+  {
+   "sha": "4d77db47f1b0",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "plugin-catalog: hermes-tabs 0.4.0 (configurable safety level, loosening confirmed in the browser)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "2605a8cbfe99",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "plugin-catalog: add model-usage",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "573fd5954229",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "feat(catalog): add model-presets plugin",
+   "type": "feat",
+   "scope": "catalog"
+  },
+  {
+   "sha": "361e201dda00",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(catalog): disclose hermes-ledgerline's gateway, model and messaging use",
+   "type": "fix",
+   "scope": "catalog"
+  },
+  {
+   "sha": "5057eaa3a4d0",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(config): the provider-env completion hook reads the process-wide source record",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "7b62fb095d29",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix: a switched-off local model server never suggests /retry, and names both ways to start it",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "8d8a4a0365cb",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): back off re-checking a local model server that stays down",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "dc1531621973",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): the chat card names the local model server, with no Desktop-only pane",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "6c625765d69e",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix: a down local model server reads as itself in the TUI, dashboard and chat replies",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "efb8ded70d48",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): the local-model notice clears when the server comes back",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "d17e4a34a430",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(webapp): offer another model when the Local models pane is absent",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "881a58287fe5",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "test: a down local model server is reported as itself, not as setup or a bad key",
+   "type": "test",
+   "scope": ""
+  },
+  {
+   "sha": "8a8d453ad12e",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): a down local model server no longer sends the Webapp to provider sign-in",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "b1d7c5b296d4",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): re-queued external sends keep their identity and land in the created session; billing card matches its provider",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "2f5a5a7615de",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(config): recognize MoA aggregator slot fields under any preset name",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "0217c5f6bbff",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(config): keep the notice for padded MoA preset names; move the path rule into moa_config",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "d7f296079af4",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "test(config): fold MoA preset key cases into the runtime-keys suite",
+   "type": "test",
+   "scope": "config"
+  },
+  {
+   "sha": "e6e1d61e0675",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "chore(catalog): bump model-fallback-heuristic to 87e28897f6d41760cf6a40b39f06a0fa6fab86e9 after review fixes",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "940070b71bc6",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "plugin-catalog: hermes-kame-provider 1.8.3.0",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "264516fe8df8",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "catalog(mediarag): v0.1.6 \u2014 banner in README, corrected model download size to ~285MB",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "ca7a859027d7",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "feat(catalog): add AgentMemory memory provider",
+   "type": "feat",
+   "scope": "catalog"
+  },
+  {
+   "sha": "9d1cf25f00df",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(providers): bundled_profiles loads no plugin code in a safe worker",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "e924f7517661",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(redact): the log formatter reads no config",
+   "type": "fix",
+   "scope": "redact"
+  },
+  {
+   "sha": "b4d8e4c3322e",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(config): the provider env catalog reads no config",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "5aaf0fdb5d95",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(auth): mirror plugin providers lock-free and never mid-discovery",
+   "type": "fix",
+   "scope": "auth"
+  },
+  {
+   "sha": "8ae88edc8ab7",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(redact): the log formatter never waits for config",
+   "type": "fix",
+   "scope": "redact"
+  },
+  {
+   "sha": "4905b9f9ffd8",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(config): the provider env fill runs holding no lock",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "e77bb162b474",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "test(update): secure the profile home before the config-ro chmod",
+   "type": "test",
+   "scope": "update"
+  },
+  {
+   "sha": "96c029315b10",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "test(remote-config): cold-process Nous boot, config-free auth import, lock-order regressions",
+   "type": "test",
+   "scope": "remote-config"
+  },
+  {
+   "sha": "3c88843c81c2",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(remote-config): resolve the credential before the fetch lock, never log under a backend lock",
+   "type": "fix",
+   "scope": "remote-config"
+  },
+  {
+   "sha": "7e037e8b6247",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(config): importing hermes_cli.config or hermes_cli.auth reads no config",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "e34d84897abc",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(bedrock): Claude never gets a GPT turn's sealed reasoning on the Anthropic Messages path",
+   "type": "fix",
+   "scope": "bedrock"
+  },
+  {
+   "sha": "00b639741822",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): recognize supported MoA preset settings",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "6dcf8d2fb3b2",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "docs(providers): pin the Modular plugin to 6a80b25",
+   "type": "docs",
+   "scope": "providers"
+  },
+  {
+   "sha": "7d6877ddb954",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "docs(providers): add Modular model-provider plugin to catalog",
+   "type": "docs",
+   "scope": "providers"
+  },
+  {
+   "sha": "49f4ab79c02c",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add obscurify-provider",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "ab39f12c43e6",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for cloudgpu-provider",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "fc943c7029ae",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "catalog: add cloudgpu-provider",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "c73b595460e8",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: register approvals.discord_prompt_timeout in the default config",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "0a53d2c08688",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "chore: map the #146132 author's commit email to DECRUX9812",
+   "type": "chore",
+   "scope": ""
+  },
+  {
+   "sha": "5c5db1a061f5",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(web): re-gate every provider's redirect target in the shared extract dispatch",
+   "type": "fix",
+   "scope": "web"
+  },
+  {
+   "sha": "f7dde7f56da8",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(web): web_extract reports a target's HTTP 4xx/5xx as an error on every extract provider",
+   "type": "fix",
+   "scope": "web"
+  },
+  {
+   "sha": "8e0b489266c2",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): exempt only known platforms' own bundles from the toolset warning",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "06662ba995ac",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): stop seeding and flagging plugin-platform toolset rows (teams, google_chat)",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "35a7d34036e7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): a selected memory provider parked in plugins.disabled declares no live keys",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "e1be6fcfe02e",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): config_keys come from the loader's discovery, count only for active plugins, never widen a section",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "6df187b4f8fd",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): an enabled project plugin's config_keys are recognized too",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "1a74bb8d18b4",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(config): the unseeded-live-key examples use gateway.proxy_url",
+   "type": "test",
+   "scope": "config"
+  },
+  {
+   "sha": "fb8b9bf4b0a3",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): catch only manifest read/parse errors in config_keys scan",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "e402afa78325",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config): recognize runtime-read selection and plugin-declared keys in config get/set",
+   "type": "fix",
+   "scope": "config"
+  },
+  {
+   "sha": "780d5a3313d7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(auth): login surfaces share one interactive-provider query",
+   "type": "fix",
+   "scope": "auth"
+  },
+  {
+   "sha": "2edfd0d369d5",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(auth): the deployment session token authorizes the gated dashboard",
+   "type": "feat",
+   "scope": "auth"
+  },
+  {
+   "sha": "72ffcb978862",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(providers): look up an alias owner only when a loaded profile claims the alias",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "5dca2def3a36",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(providers): resolve a plugin alias through the home-aware registry lookup",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "72bb27236bc3",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(providers): a plugin alias names the same provider whether or not models.dev loads",
+   "type": "fix",
+   "scope": "providers"
+  },
+  {
+   "sha": "3f3e0e4850af",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(desktop): Web Access settings notice config changes made elsewhere",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "26f6f63579a9",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(env): load an unreadable profile .env as absent, with a warning",
+   "type": "fix",
+   "scope": "env"
+  },
+  {
+   "sha": "b96ef99bdb65",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "docs(agents): catch ConfigBackendUnavailable explicitly in daemon, RPC and tick code",
+   "type": "docs",
+   "scope": "agents"
+  },
+  {
+   "sha": "fd44f481efeb",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config-remote): hermes config edit exits 1 when the backend has no config file",
+   "type": "fix",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "748b71cef764",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config-remote): a configured URL's user info is never echoed in messages",
+   "type": "fix",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "5da4eeb03cb2",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor(config-remote): backend.py uses diff.py's path helpers instead of its own copies",
+   "type": "refactor",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "f292c4c35742",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config-remote): the poll interval is a constant, not a HERMES_* env var",
+   "type": "fix",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "3f903abeed68",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor(config-remote): core resolves a backend kind generically and asks it through the protocol",
+   "type": "refactor",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "a8c44982a3a5",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(config-remote): the served-profile signature's fake remote backend reports no file tooling",
+   "type": "test",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "c0c74d20e485",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config-remote): serve main's ConfigBackend.cache_version from the remote backend",
+   "type": "fix",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "ac7e758c3d1b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(config-remote): the TUI outage test injects through hermes_cli.config_backend",
+   "type": "test",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "afb8c9a1a740",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config-remote): PM asks whether it is its own runtime only in a remote deployment; the TUI raw-config read keeps main's patchable backend lookups",
+   "type": "fix",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "e4374020bd7f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(config-remote): adapt the remote backend to the seam as merged in #134362",
+   "type": "fix",
+   "scope": "config-remote"
+  }
+ ],
+ "skills-system": [
+  {
+   "sha": "6dcdb81f5e8b",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(plugin-catalog): pethost 1.9.1, the skill writes its own transfer commands and the package holds no token",
+   "type": "fix",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "a53912d2888f",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "test(aux): pin the skills_hub removal by behaviour, not source text",
+   "type": "test",
+   "scope": "aux"
+  },
+  {
+   "sha": "84a0301415ed",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(review): the background review never asks the user for a skill's API key",
+   "type": "fix",
+   "scope": "review"
+  },
+  {
+   "sha": "7c6fc00f8028",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(skills): regenerate the s6 supervision skill page",
+   "type": "docs",
+   "scope": "skills"
+  },
+  {
+   "sha": "29a61cb7ab50",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(skills): a cached scan re-scans when the source's trust level changed",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "8112254f8a93",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "chore(skills): drop optional skills that catalog MCPs, plugins and vendor repos cover",
+   "type": "chore",
+   "scope": "skills"
+  },
+  {
+   "sha": "c2744d98bd63",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "docs(skills): regenerate skill pages for the pypdf 6.21.4 pin",
+   "type": "docs",
+   "scope": "skills"
+  },
+  {
+   "sha": "7c9b99583cc8",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(catalog): correct skill count 27\u219222 (matches v0.8.12 pin)",
+   "type": "fix",
+   "scope": "catalog"
+  },
+  {
+   "sha": "0aab6dcf8b78",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "docs(skills): correct the projects reference against the live CLI",
+   "type": "docs",
+   "scope": "skills"
+  },
+  {
+   "sha": "c9577b67224b",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(cache-bounds): atomic expiry vs refresh; one LRU order for skill scopes",
+   "type": "fix",
+   "scope": "cache-bounds"
+  },
+  {
+   "sha": "557254faa24e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(skills): lock guard resolves variables and relative inline code, lets reads through",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "a639ed0ae491",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(skills): close terminal lock bypasses; curator honours locks by display name",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "722d4fac961f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "feat(desktop): lock a skill from the Capabilities pane",
+   "type": "feat",
+   "scope": "desktop"
+  },
+  {
+   "sha": "91c51e04f457",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "feat(skills): a locked skill can't be changed by the agent through any write path",
+   "type": "feat",
+   "scope": "skills"
+  },
+  {
+   "sha": "18d6877f4b00",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "feat(plugin-catalog): update DSers to v0.1.2 with bundled skills",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "f282c57b7897",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(skills): hermes-agent skill describes one-call text+Enter truthfully",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "a53acf8d3a5d",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(skills): document env setup never deletes a working env another agent published",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "b544b82db163",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(skills): OCR side env stays selected in the next terminal call",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "395e89060fe3",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(skills): keep nested-table order and table column names intact",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "c4f72bc69b57",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor(skills): move xlsx_restructure formula and freeze-pane steps out of main",
+   "type": "refactor",
+   "scope": "skills"
+  },
+  {
+   "sha": "cfabecfa797a",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(skills): pdf --flatten keeps form fields the JSON leaves out",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "888664fda483",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(website): the skills catalog can filter by the new vendor taps",
+   "type": "fix",
+   "scope": "website"
+  },
+  {
+   "sha": "08a7c25eecb6",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "docs(skills): regenerate skill pages and the prompt-surface snapshot",
+   "type": "docs",
+   "scope": "skills"
+  },
+  {
+   "sha": "6fdc365d4bf9",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor(skills): fold docx, powerpoint and xlsx into one microsoft-office skill",
+   "type": "refactor",
+   "scope": "skills"
+  },
+  {
+   "sha": "183b5ddd5fbc",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "chore(skills): move niche built-in skills to optional",
+   "type": "chore",
+   "scope": "skills"
+  },
+  {
+   "sha": "9347107cdbc0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "chore(skills): drop optional skills that official sources now cover",
+   "type": "chore",
+   "scope": "skills"
+  },
+  {
+   "sha": "dc82bec3bd4d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(skills): the sandbox document venv is built privately and published atomically",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "d202ddfda225",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(skills): the tmux prompt wait needs no coreutils timeout",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "30a8c50a6ff1",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(skills): document-skill setup works in the Docker sandbox; wait for the prompt before driving Hermes",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "4a8c01790a03",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(skills): document skills share one PM-built side environment; pause before Enter in the no-tmux recipe",
+   "type": "fix",
+   "scope": "skills"
+  },
+  {
+   "sha": "ad09ca5b4421",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "docs(skills): regenerate skill pages for the document-skill and tmux recipe edits",
+   "type": "docs",
+   "scope": "skills"
+  },
+  {
+   "sha": "b357ebbfc4dc",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(docker): ship tmux and the Office/PDF libraries; document skills keep a persistent side env",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "5c668bbe4daa",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp-access): status poll queries the gateway outside the skills lock",
+   "type": "fix",
+   "scope": "webapp-access"
+  }
+ ],
+ "cron-background": [
+  {
+   "sha": "bb719c349235",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for cron-consolidator",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "3a9c3d46d522",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "Add community entry: cron-consolidator",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "0f29a7d98917",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "chore(catalog): pin kanban-gantt to 1.9.0",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "3093bc3117d4",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(plugin-catalog): update print-job-watch to 61cf86e",
+   "type": "fix",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "ce1370430ef8",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cron): scope prompt clause to cadence and cover update",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "8a900e67159d",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cron): keep scheduling cadence out of cron job prompts",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "083772b37465",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "plugin-catalog: pin kanban-empowered 0.3.0 to 31cb914404ee1295d565b14a0ab1e440d7d22fdc",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "fb5a2b140371",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "plugin-catalog: update kanban-empowered to 0.3.0",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "9dd1ea34f23e",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "refactor(desktop): one retry schedule and one timeout fixture",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e86597e2605e",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(bots): room settings sit in Group details; only cron posts read Scheduled",
+   "type": "test",
+   "scope": "bots"
+  },
+  {
+   "sha": "2e1c0291b881",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(cron): scheduled posts reach a room the root gateway imported",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "fbe94827167a",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(cron): room delivery errors name the @profile remedy",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "f7065f26d76f",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(rooms): scheduled posts are relabelled, addressed and retried honestly",
+   "type": "fix",
+   "scope": "rooms"
+  },
+  {
+   "sha": "32f95b873f52",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "docs(cron): `hermes cron create --deliver` help names the room:<id>[@profile] target",
+   "type": "docs",
+   "scope": "cron"
+  },
+  {
+   "sha": "e03222879c39",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "feat(desktop): pin Kanban boards as quick-switch tabs",
+   "type": "feat",
+   "scope": "desktop"
+  },
+  {
+   "sha": "deea569ef62d",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(webhooks): guard owned kanban_task_id in outbound payload",
+   "type": "test",
+   "scope": "webhooks"
+  },
+  {
+   "sha": "40bbdd2e3274",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for kanban-empowered",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "8aaa8af075f8",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "plugin-catalog: kanban-empowered 0.2.0",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "fef61fbc7fd5",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "plugin-catalog: kanban-empowered 0.1.1",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "f6e0ffe53529",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "plugin-catalog: add kanban-empowered",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "b425edd28617",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(cron): a failed write mid-drain no longer restarts the hold window",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "b7798657a008",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(cron): the drain-hold grace extension is capped and never re-fires a claimed one-shot",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "c7b72e1fe4a7",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(cron): a one-shot due while a gateway drain holds dispatch fires once afterwards",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "30ee54ee013d",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(cron): the virtual-clock soak models run-now as an extra fire and admits 'missed' rows",
+   "type": "test",
+   "scope": "cron"
+  },
+  {
+   "sha": "e534ed0b08cc",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "ci(install-e2e): the bundle-inputs job installs the locked Node before npm ci",
+   "type": "ci",
+   "scope": "install-e2e"
+  },
+  {
+   "sha": "edf1495a314f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix: warm reopen keeps totals for cron and messaging sessions too",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "d8232c0eb889",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "plugin-catalog: bump hermes-cron to 1.5.4",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "3166c4a4b149",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(cron): give scheduled jobs their actual run time in the prompt",
+   "type": "feat",
+   "scope": "cron"
+  },
+  {
+   "sha": "25e7f5fc21d8",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "test(kanban): pin post-commit kanban_task_blocked for dependency waits",
+   "type": "test",
+   "scope": "kanban"
+  },
+  {
+   "sha": "d4283a9c9cdf",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(kanban): dispatch dependency block hook post-commit",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "f7a018a77cbd",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "test(cron): profile-timezone test no longer fails the day before a DST change",
+   "type": "test",
+   "scope": "cron"
+  },
+  {
+   "sha": "ad98ff37f0e5",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "plugin-catalog: bump hermes-cron to 1.5.3",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "d4865574e474",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(cron): review round 3: Stop settles by its own run, missed counts use the pinned zone, distributions keep catch_up",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "e9f01737aae3",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "docs(cron): how a job's catch_up composes with grace_minutes",
+   "type": "docs",
+   "scope": "cron"
+  },
+  {
+   "sha": "3f435147912f",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(cron): a Run-now stopped by cancel reports \"cancelled\", not \"failed\"",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "bb8c685c8981",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "test(cron): an explicit grace_minutes still skips past it unless the job opts into catch_up",
+   "type": "test",
+   "scope": "cron"
+  },
+  {
+   "sha": "5166f83bb824",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for kanban-gantt",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "df128c13bb9d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "ci: run the WhatsApp bridge node tests in the JS & TS job",
+   "type": "ci",
+   "scope": ""
+  },
+  {
+   "sha": "dbde5a991ae0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): the owner refuses a worker that dials into a restart wait opened after discovery",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "eace3e056e8b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): a worker cut by a restart's after-turn wait waits for the next owner outside it",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "4e1a4df66339",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): keep the cronjob tool schema net-small for per-job timezone",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "c70876b9fe8f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(dashboard): cron create accepts timezone/grace_minutes",
+   "type": "fix",
+   "scope": "dashboard"
+  },
+  {
+   "sha": "3035c0c0ec5d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): grace_minutes=0 skips real misses instead of every run",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "3dbe3ec4d87d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): every slot move honours a job's pinned timezone",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "f101b0f7b7c0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): a quota hold on a manual run delays a queued run-now instead of desyncing it",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "af0d245b3a74",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): a run-now queued during a manual run survives its completion",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "481b6fe14498",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): queued run-now intent survives a second trigger and the tick advance",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "f799cf71d90b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): extra fires key on explicit run-now intent only",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "f656543e030e",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(cron): a manual run is an extra fire, never the scheduled one",
+   "type": "fix",
+   "scope": "cron"
+  },
+  {
+   "sha": "0431192d69d4",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): the protocol-violation streak never matches a worker's quoted output; docs match the release rule",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "c777ba429fc8",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): keep the worker's last output when a lost worker's clean exit is rebooked",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "a0712a5db1bd",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor(kanban): keep the lost-worker folds in kanban_owner_recovery, drop the FILE_LINES waivers",
+   "type": "refactor",
+   "scope": "kanban"
+  },
+  {
+   "sha": "e62c15e667e4",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): a lost worker's clean exit is a crash, not also a protocol violation",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "f10386a58f17",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): a bound run stays the crash sweep's; no recorded pid is no proof inside the claim TTL",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "c91bd232c0d7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): drop the worker.adopt handshake retry from the lost-worker salvage",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "b2e0171c29e5",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): one owner-refusal rule and one give-up message for a recovering worker",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "f4e042e944df",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): a restarting owner's control socket or handshake failure during a redial also retries",
+   "type": "fix",
+   "scope": "kanban"
+  },
+  {
+   "sha": "89f13590e0e8",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(kanban): any transport loss resumes the same attempt, bounded from the owner's last answer",
+   "type": "fix",
+   "scope": "kanban"
+  }
+ ],
+ "gateway-messaging": [
+  {
+   "sha": "6b5f6ee269c5",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "docs(voice): the Webapp always relays voice",
+   "type": "docs",
+   "scope": "voice"
+  },
+  {
+   "sha": "1e81ee57e326",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(webapp): voice relays through the host, and a created profile is served right away",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "e27c38006a67",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(gateway): Bot Mode shows every bot's saved description, not just the main bot's",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "1fcc57e6d230",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "refactor(bot-mode): drop comments and test scaffolding that still describe the removed helpers",
+   "type": "refactor",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "e9f8551c2398",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "refactor(bot-mode): delete Bot Chat mailbox helpers left unreachable by the authority FIFO",
+   "type": "refactor",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "f87c5412983a",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "catalog(pass-secrets): declare the real platform matrix",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "af6c5a72d688",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(desktop): keep group chat Stop and Deny while the gateway's methods are unknown",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "7c00c01c9852",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): bypass sessions keep the built-in side-task defaults",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "6e7567be260b",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): a bypass session's turn never reloads the profile's .env",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "8bc8980657bd",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): a local turn reloads the profile's .env, as a messaging turn does",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "2afffc46ba15",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): side tasks read the profile's config.yaml, like every other side-task reader",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "9767033cada0",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): /save refusal names the missing capability (older gateway or sidecar without the session authority), not just an outdated gateway",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "2ac12f6c92bd",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): /save on a gateway without session.export refuses options it cannot honour",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "7ab170ea6d36",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(matrix): a reaction on a settled approval card reports that it expired",
+   "type": "fix",
+   "scope": "matrix"
+  },
+  {
+   "sha": "8ebc4ef6ccab",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(gateway): stale-card binding covers Matrix, WhatsApp Cloud, Teams and relay",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "79f28901db7f",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(gateway): adapter guides and plugin allowlist name resolve_gateway_approval_card",
+   "type": "docs",
+   "scope": "gateway"
+  },
+  {
+   "sha": "5ab58da1f63a",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): a stale approval card no longer approves the next request",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "7f4c4882429e",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(/save): note the older-gateway fallback",
+   "type": "docs",
+   "scope": "/save"
+  },
+  {
+   "sha": "a3e24a4de985",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): --cpu-profile writes the profile on gateway exit",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "ca14c438e486",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(mcp): an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one",
+   "type": "fix",
+   "scope": "mcp"
+  },
+  {
+   "sha": "4c466d86f25a",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): no runtime footer to a bot peer (a streamed reply sends it as its own message)",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "17c2065b2bd8",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): only a real is_bot=True source is a bot peer; approval timeout reads the ctx source safely",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "04d7a37baf5d",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(bot-mode): exchanges end on every route; offline no-sends do not count; enabled honoured",
+   "type": "docs",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "8180676731e4",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): judge a bot message once, at ingress, not again when its admission executes",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "452d8f98bf90",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test+docs: bot-to-bot exchanges end; bot_replies_expect_reply honoured in Bot Mode",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "4e93f80e4720",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): end bot-to-bot exchanges: no runtime notices to bots, a runtime hop cap, replies need no answer",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "d53973afa97d",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(gateway): pin the unreadable-cmdline path in the runtime-status PID test",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "787954a49f58",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): session.active_list reads waiting while a viewer request holds the turn",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "7ae16ae9a0fc",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): announce a background session waiting on an approval on the shared gateway",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "8ade0ed43e93",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(docker): park and wait on gateway slots without following symlinks",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "3b9539fcdf70",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(docker): keep root out of the hermes-owned gateway scandir",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "fb98be0dbe0c",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(webapp): end a Start's restart only on the gateway that replaced the old one",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "cad0aaaf0d77",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(slack): tag thread-context senders against the live message's allowlist",
+   "type": "fix",
+   "scope": "slack"
+  },
+  {
+   "sha": "3a1e9ef50a57",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(bot-mode): a running request is not \"busy with an earlier turn\"; trim the message_agent schema",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "160339e0dd5c",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(bot-mode): typed request envelope, a forgotten reply relayed once, and one \"never answered\" sentence per dead request",
+   "type": "feat",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "9156c854e368",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(gateway): use followed routes for service-tier choices",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "6771d29e96fa",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(gateway): import SessionActor in the local retirement and post-delivery tests",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "9bbe8e880f44",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(gateway): a resume expands ${VAR} from the profile's current .env",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c08c48530595",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(docker): supervise profile gateways outside the root s6 scandir",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "cf53dd8b99e8",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(webapp): a Web Access Start lasts until the restarted gateway serves it",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "71736c9f3259",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "docs(bot-mode): canonical-groups doc describes the roster rows, not the Refresh button",
+   "type": "docs",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "6d765b570558",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): gateway rooms survive a failed bot list and never resurrect",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "e98b60f8b80e",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): gateway Group Chats sit in the roster, with no Refresh button or raw errors",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "657e2c0e4f51",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(gateway): restore a retired conversation before publishing a resolved answer",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "0f34c46059f5",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(gateway): a resolution the drain owned keeps its media collection",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "676315b054db",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(gateway): resolving a retired conversation's unknown turn no longer crashes",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "46bbba0ae415",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(gateway): wait for the off-loop media collector before asserting reclamation",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "f3016c246772",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(gateway): queue admission ids, not rows, for terminal media collection",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "7bc10408da77",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "refactor(desktop): dial readiness moves out of the gateway client",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "1aedc0d528f0",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(desktop): routing test skips only gateway.ready; protocol header names remote owners",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "58637c220da0",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(desktop): fake gateway sockets send gateway.ready like a real gateway",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ef7984f056b4",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(groups): a gateway-owned room says which tool a working member is in",
+   "type": "fix",
+   "scope": "groups"
+  },
+  {
+   "sha": "308f31770723",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(e2e): live gateway-owned room spec with scripted tool calls and failures",
+   "type": "test",
+   "scope": "e2e"
+  },
+  {
+   "sha": "0f7001588861",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): membership edits report only what each machine kept",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "5497c659381e",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): Manage groups refuses a change its offline machine would undo",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "fd938d96b314",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): the legacy room view subscribes to the roster its speaker labels read",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "264c435d8449",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): removing a member whose machine is offline fails instead of coming back",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "5ac71c262ca6",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): a former remote member's room lines keep their own machine's name",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "65dda7991f38",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): the canonical adapter keeps room_plumbing's meaning for every caller",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c2ecb9779984",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(desktop): live two-gateway proof for a cross-machine group chat",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ed7b042f12d5",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): Desktop-driven room members can start a session on the owning gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f291572e841c",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(bot-mode): relaunch no longer pins \"Hermes gateway is not connected\" in the Bots pane",
+   "type": "fix",
+   "scope": "bot-mode"
+  },
+  {
+   "sha": "065ec46234aa",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(relay-link): re-review folds: list survives a failed managed check, fresh snapshot before minting, Portal URL from the login",
+   "type": "fix",
+   "scope": "relay-link"
+  },
+  {
+   "sha": "a5d7d0aa690e",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "docs(telegram): Portal-managed Cloud agents link accounts from the Portal",
+   "type": "docs",
+   "scope": "telegram"
+  },
+  {
+   "sha": "f61682590b15",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(relay-link): Portal-managed agents link from the Portal; only a new account reads as linked",
+   "type": "fix",
+   "scope": "relay-link"
+  },
+  {
+   "sha": "fcdca2dbd4d8",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): Team Gateway-managed platforms and profile-scoped link calls",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "7998a043e462",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): Team Gateway card shows the backend's refusal sentence, not the IPC envelope",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "77d2c9cea7fe",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(relay-link): the linked toast fires; reload accounts before closing the code",
+   "type": "fix",
+   "scope": "relay-link"
+  },
+  {
+   "sha": "ca221796e657",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(relay-link): review fixes: per-platform panel state, re-link reads as linked, bounded poll, named connector refusals",
+   "type": "fix",
+   "scope": "relay-link"
+  },
+  {
+   "sha": "1fafc85d6c1c",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(discord): give the opus off-loop test 2 s+ wait bounds",
+   "type": "test",
+   "scope": "discord"
+  },
+  {
+   "sha": "5ce74340f98c",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(discord): probe for libopus once, off the event loop",
+   "type": "fix",
+   "scope": "discord"
+  },
+  {
+   "sha": "179c90f54704",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(cloud): Telegram on Team Gateway is set up by linking an account to the shared bot",
+   "type": "fix",
+   "scope": "cloud"
+  },
+  {
+   "sha": "fb529a602573",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(desktop): move Quick Entry gateway test into its own file",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "2d3634363bb2",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(relay): anchor the queued follow-up and proxy-mode status on the turn's own message",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "2e9ba7b1d672",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(relay): keep gateway/run_turn.py at its main line count",
+   "type": "chore",
+   "scope": "relay"
+  },
+  {
+   "sha": "4e359b3623c6",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(slack): clear SLACK_THREAD_FOLLOWUP_SILENCE between tests",
+   "type": "test",
+   "scope": "slack"
+  },
+  {
+   "sha": "039ceee4d3fc",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(relay): mark a send_media request settled by reader exit as unconfirmed",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "4ff757efc455",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(relay): carry a lost media ack to send_message and cron as unconfirmed",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "25c0c644b5a5",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(relay): keep a lost media ack as possibly-delivered; redact diagnostic headers",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "5e7c2b254d41",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): keep the dev renderer origin out of the local gateway Desktop starts",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f301e86fe470",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(relay): upgrade to 0.11.0",
+   "type": "chore",
+   "scope": "relay"
+  },
+  {
+   "sha": "013bde4786db",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(gateway): a healed secondary platform keeps bot ownership and loads off the loop",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "0c54f1b3b2cd",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "refactor(gateway): keep the secondary reconnect lane in one module",
+   "type": "refactor",
+   "scope": "gateway"
+  },
+  {
+   "sha": "63ab37256915",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(gateway): a closed conversation a /refine review pinned retires when the review ends",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "b53a7b2194f8",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(gateway): a re-retire timer firing mid-close no longer drops the closing conversation",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "fbf6c6c91d8a",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): a failed gateway pick keeps the draft route the user chose",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "8eaf4dfaf5fd",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): a gateway pick no longer leaves every gateway on legacy sidebar reads",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "28ced3509a93",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "refactor(desktop): keep the gateway keeper's wanted-set helper private",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "79f79e11162d",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): the gateway keeper stops re-probing This device every 30 seconds",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "7e3f44234574",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): the launch burst of kept gateway opens refreshes the Sessions list once",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ef70233d82cc",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): the gateway keeper dials nothing until the primary route is published",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c7d5d4dad48c",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): the gateway keeper redials its own kept route, not any socket to that gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "02697c375f03",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): gateway pins stay with the gateway that owns them",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "6ae8b3ef21b6",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "refactor(desktop): split the relay-lease and pinned-open predicates",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "1f755b85d1ca",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "Pin HarnMem 0.1.1 and mention the omp adapter",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "97d75f3eed01",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): let remote Origin-less ticket dials reach the Webapp gate",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "d3e415edb98c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "5f60d72b65dd",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): import the per-gateway profile record at boot, not at module load",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c5240e37a481",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): restore a remote primary only onto a profile its gateway serves",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "3c42c4b7a0da",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): windows send main single per-gateway profile changes, never their whole map",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e29791ceb419",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): push the per-gateway profile memory to main only on a real change",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c193f62e4131",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): boot the primary on a profile its gateway serves",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "8691747fa50f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "refactor(desktop): the secondary socket entry type lives in gateway-socket-entry",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "1d08444e2ecf",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a saved display toggle re-sent on a gateway switch lands on the new route",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "fec457aadd52",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): tutorial-lifetime's gateway mock serves the active-route request",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "38cfaf61ab9d",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): voice mode and display toggles write to the active gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9e07602f9733",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): the approval-mode chip asks the active gateway, not a local backend",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a475de488396",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a cached down roster row never cancels a same-gateway profile repair",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e39d602df46b",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): label the Gateways connection form \"Primary gateway\"",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ef997a20b62e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): Settings > Gateways > This window shows the gateway the window is on",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "16d6b5293ca7",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a launch that fell back never switches gateways on its own later",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ea0cfc524e5f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "refactor(desktop): the gateway registry's host hooks live in gateway-registry-config",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c40d5c001442",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a Settings re-home publishes the new gateway with its own profile",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "21a6921167b4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): keep every gateway in All profiles when the SSH primary serves the selected profile",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "59fb45d2c55b",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): hiding another gateway's worktree lane leaves a local lane at that path alone",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "47cfadf47bf4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): retry another gateway's colour read after a failure and on reconnect",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a38afbb0e57a",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): sidebar colour reads never dial another gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "1b80b7634d24",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a colour pick on one folder never erases another's on that gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "d7ab33733260",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): another gateway's project runs its git on that gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "068feb2a01ec",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): theme another gateway's project on that gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "732117ab666b",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): projects another gateway owns keep their owner",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "d6d74704e239",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): every gateway's sessions stay visible under Gateway & profile and Project grouping",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a8b5fab1c165",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "2ca1aa6ca649",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): the startup profile restore keeps only a profile the gateway serves",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "fc6d8029fcf3",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): validate the startup profile on the selected gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a236931d4682",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): session-list polling no longer keeps a restored session in memory",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c06b525bc38a",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): retired sessions keep their delete eviction, re-retire after a read, and pin a running /refine review",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "2dd7d59a7b40",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "perf(gateway): retire closed local and idle API sessions from the authority's memory",
+   "type": "perf",
+   "scope": "gateway"
+  },
+  {
+   "sha": "066371bb6cf6",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): remote-topology allows This device's kept gateway; the chat still goes remote",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "565f6d0528bf",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(e2e): the PTY leftover check exempts the attached gateway's own supervisor",
+   "type": "test",
+   "scope": "e2e"
+  },
+  {
+   "sha": "4d26e0cceaed",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): restored webhook sessions keep their shared listener",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "10d34c53d967",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): an old saved guess never answers a restored chat through the primary bot",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "fd2648e8dae9",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "perf(mem): agent-close and TUI turn trims stop forcing a full GC in the gateway",
+   "type": "perf",
+   "scope": "mem"
+  },
+  {
+   "sha": "d88b2ea44a8f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): take post-delivery by the turn's own key; drop closed-session retirement from this PR",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "b6be5a8fd3cb",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): API-server turns run their post-delivery slot too; scheduling restores a retired local session",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "29a2f7448b7c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): hand a late messaging waiter its turn's post-delivery slot back",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "f71a73d936c8",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): resolve the post-delivery adapter through the authority's seam; retire local state in one helper",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "01803238e3cc",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): run local turns' post-delivery callbacks; stop pinning each local session's last turn",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c6df7639da9f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(gateway): cover the deferred replay release when the finalizer finds the lock held",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "d611a45da425",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "perf(gateway): free an ended session's replay ring and counters",
+   "type": "perf",
+   "scope": "gateway"
+  },
+  {
+   "sha": "fcbf94c2e761",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "perf(mem): cap glibc malloc arenas in the gateway and serve processes",
+   "type": "perf",
+   "scope": "mem"
+  },
+  {
+   "sha": "b9d324b7488b",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): a guessed receiving bot is never saved, and an old guess never lends the primary bot",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "a5388a1cdacd",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): an inferred transport never counts as the receiving bot",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "767bc9cc6df0",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): the held-completion warning reads config like its sibling reads",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "cfc6df6fa072",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): say what is missing when an async completion is held",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "8f5a76f4f416",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): record the receiving bot on routes saved without one",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "14641f91693e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): completions of a bot_profile-routed session reach the bot that received it",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "30b6d8b1f177",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(gateway): drop the helper-level recursion-cap FIFO case",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "5590da53ba2e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): park eventless follow-ups at the recursion cap",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "0e47519c3199",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): heal origins before the fallback baseline, not after",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "5c68378860b4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): heal named-profile routes from row columns under multiplex",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "2e7fcb246cc4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): restore a routing entry's missing origin from its conversation row",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "b8e0f9ed290e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(gateway): pin the shared-owner /bg delegation join",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "e8639fd4312e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a removed gateway stays removed for its terminal tabs",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f9cf1f0f5d68",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a terminal tab records its gateway before its first start",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "b564465a8e48",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): guard the renderer's terminal gateway ownership",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "2325df0f1885",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): right-click on the terminal rail + opens the gateway menu",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "71c094f36140",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): keep Enter retrying an SSH terminal whose gateway is offline",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f3686eeb0aa5",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "docs(desktop): per-gateway terminals",
+   "type": "docs",
+   "scope": "desktop"
+  },
+  {
+   "sha": "0d521cd3831c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "feat(desktop): each terminal tab owns the gateway it was opened on",
+   "type": "feat",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9a56be3d8605",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): a relay lease still defers an edit on a kept gateway; doc the launch-time cost",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "32a39600c414",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a gateway pick rescans the star map and leaves the old profile's project",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "4841ace95384",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): keep-connected pin never blocks a gateway edit; review fixes",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "13bd44e4a4df",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): every gateway stays connected; picking one is instant, with no switch prompt",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "33920f4b2f00",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): a folded completion keeps only its own identity; a finishing job's tick never blocks the fold",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "3030077ef0f4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): a completion fold never reorders past a prompt or stores results twice",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "343a5f7f58d8",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(gateway): background completions that pile up behind a busy turn run as one turn",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "df128a1cb40c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "refactor(telegram): read a video note through the video branch at each site",
+   "type": "refactor",
+   "scope": "telegram"
+  },
+  {
+   "sha": "48f744e99743",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(telegram): fold video-note coverage into the existing media tests",
+   "type": "test",
+   "scope": "telegram"
+  },
+  {
+   "sha": "840d104031c8",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(telegram): an uncaptioned video note keeps the group silence notice",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "ed960fe9602f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(telegram): localize the download-failure reply for video notes",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "7af86aa2ddfa",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(i18n): a freshly started gateway serves installed language packs",
+   "type": "fix",
+   "scope": "i18n"
+  },
+  {
+   "sha": "98f76dd52ca6",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): keep a cancelled drain cancelled when its delivery fails",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "0e06a88c993b",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): collect terminal media one admission at a time per profile",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "61ba1f684e63",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): a profile rescan drops status verdicts about removed credentials",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "ce0602e8a97b",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(telegram): catch NetworkError, not TelegramError, after a kept-prompt edit fails",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "44678e564732",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(telegram): network error on a resolved-prompt edit keeps the prompt",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "02a790293dc0",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): timed-out and resolved approval cards keep the full request",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "92c86afb1ff1",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): resolved approval cards keep the request on Telegram, Feishu and Teams",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "3a73078f3abe",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(slack): show emoji reactions in thread context",
+   "type": "feat",
+   "scope": "slack"
+  },
+  {
+   "sha": "bd87b03d3345",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "test(update): hand-off lock tests pass when a Hermes gateway ran the tests",
+   "type": "test",
+   "scope": "update"
+  },
+  {
+   "sha": "c419cf7c864a",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(telegram): replies to a channel or anonymous-admin post keep the notice",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "61794f3f173e",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(telegram): a reply to an unknown author keeps the notice without a \"?\"",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "5bb0e7d87d46",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(telegram): uncaptioned voice notes and audio files keep the silence notice in groups",
+   "type": "fix",
+   "scope": "telegram"
+  },
+  {
+   "sha": "78aa58f672ba",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): room allow_silence honours the gateway's own config for its primary profile",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "73da180084f9",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "refactor(gateway): pass the platform name to platform_section as str",
+   "type": "refactor",
+   "scope": "gateway"
+  },
+  {
+   "sha": "e2d8f3606c4f",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "docs(gateway): two allow_silence limits the room docs did not state",
+   "type": "docs",
+   "scope": "gateway"
+  },
+  {
+   "sha": "30071865c9cd",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): a failed room silence receipt no longer turns silence into an error",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "71981bd1fda6",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): room allow_silence reads top-level platform blocks and fails safe",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c88ccd08c841",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "test(gateway): real projection paused on the event lock while its session is retired",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "a7c6f729beb1",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "docs(gateway): scope comments say what the off-loop reads depend on",
+   "type": "docs",
+   "scope": "gateway"
+  },
+  {
+   "sha": "86cc60932fb2",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(gateway): retired-session polls answer not_found; one scope build path",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "e47a8af39569",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(relay): keep a turn's Slack status on its own message when DM turns overlap",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "01bfcd41cdae",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "feat(plugin-catalog): bump signal-notify to v1.1.0",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "361e201dda00",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(catalog): disclose hermes-ledgerline's gateway, model and messaging use",
+   "type": "fix",
+   "scope": "catalog"
+  },
+  {
+   "sha": "af3257e8871b",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "catalog(mediarag): v0.1.13 \u2014 corrective (adapter exec, uv bootstrap, version parity)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "078255d5348f",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "test(gateway): pin null-origin local completion deferral",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "341afcbf9a15",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(gateway): admit completions for routes without an origin",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "8e13a8090a93",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(gateway): read the RPC owner scope and ancillary polls off the event loop",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "1ae92cf59f21",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(gateway): stop per-frame deflate and per-tool control reads from saturating the loop",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c841bfcd0ad2",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(gateway): decide a compressed Bot Chat's displacement by its tip",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "075618f4a2a7",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(gateway): judge Bot Chat history by the delivering principal",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "381876c64293",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): keep the open chat bound across a gateway reconnect",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "606b83456bfa",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(discord): release the /model picker once it is answered",
+   "type": "fix",
+   "scope": "discord"
+  },
+  {
+   "sha": "0d76bdb14d17",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(relay): review follow-ups: scrub echoed bearers, keep mid-dial credentials, JSON proxy 403s",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "7b067fe0bad2",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(relay): recover from one transient connector failure instead of staying broken",
+   "type": "fix",
+   "scope": "relay"
+  },
+  {
+   "sha": "7372d5b82015",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "catalog(mediarag): v0.1.7 \u2014 dropbox adapter, adapters no longer drop document formats",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "20ec0bae9f31",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "docs(dashboard): a dev build keeps using an already-running local gateway",
+   "type": "docs",
+   "scope": "dashboard"
+  },
+  {
+   "sha": "927fe54ff185",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(desktop): empty profile sections sit with their gateway when local is a secondary",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c2f14e48b89a",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(gateway): a secondary-profile Webapp tab keeps a scale-to-zero instance awake",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "e137ffb73fe1",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "plugin-catalog: hermes-whatsapp-voice 0.2.2 (no approvals on calls, voice runs only voice_tools)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "1a08f050cccc",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): preserve owner Bot Chat history on first delivery",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "30d33275ce31",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(plugin-catalog): pin signal-notify to v1.0.0 release",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "b776dee3ba26",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(plugin-catalog): add signal-notify",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "ac8d159b86e4",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(plugin-catalog): bump whatsapp-agent-platform to 0.2.1",
+   "type": "fix",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "3e7461cd4bdd",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tui_gateway): Bot Chat streaming never shows or speaks a closing silence marker",
+   "type": "fix",
+   "scope": "tui_gateway"
+  },
+  {
+   "sha": "ba7bfeadb1b7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): an overflow split never sends a closing silence marker alone",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "7ba6a66c3b84",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tui_gateway): a Bot Chat reply keeps its saved-row receipt when a closing marker is dropped",
+   "type": "fix",
+   "scope": "tui_gateway"
+  },
+  {
+   "sha": "5b418c56960f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(gateway): a marker closing a reply never reaches the chat",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "fbb0d63a92de",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): drop a silence marker that ends a real reply",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c73b595460e8",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: register approvals.discord_prompt_timeout in the default config",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "1d90557426dc",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor: the Discord approval card retires through the views' shared embed stamp",
+   "type": "refactor",
+   "scope": ""
+  },
+  {
+   "sha": "62c89c1894c2",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor: the Discord approval card's timeout notice goes through edit_message",
+   "type": "refactor",
+   "scope": ""
+  },
+  {
+   "sha": "df128c13bb9d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "ci: run the WhatsApp bridge node tests in the JS & TS job",
+   "type": "ci",
+   "scope": ""
+  },
+  {
+   "sha": "91cb42ee3748",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): keep one gateway's sessions in one sidebar section",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "0bb556f3a9a0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): drop a remote attachment's original name with it",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "67bce8c25dfd",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(slack): strip mention labels before emphasis parsing in rich_text",
+   "type": "fix",
+   "scope": "slack"
+  },
+  {
+   "sha": "a0f9c92bd7a7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(slack): render mentions as rich_text elements in rich_blocks",
+   "type": "fix",
+   "scope": "slack"
+  },
+  {
+   "sha": "cf6623e43359",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): resolve delegation mode from configured interim and keep the pinned mode across refreshes",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "fa2befeed70f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): join delegations in the turn when interim messages are off",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "c49ecd58922b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): a cancel during the producer start hook releases its typing and bracket",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "02438db863e1",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): give producer-admitted relay turns their typing and reactions back",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "a3349cf1d550",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(whatsapp): give delivery receipts their own bridge queue",
+   "type": "fix",
+   "scope": "whatsapp"
+  },
+  {
+   "sha": "f3acd8ff331c",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(whatsapp): run the bridge reaps off the gateway event loop",
+   "type": "fix",
+   "scope": "whatsapp"
+  },
+  {
+   "sha": "7b90783f7629",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(whatsapp): keep main's TIME-WAIT-aware port_is_free for the respawn wait",
+   "type": "fix",
+   "scope": "whatsapp"
+  },
+  {
+   "sha": "58488ac7339c",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(whatsapp): wait for the FIN, not the clock, in the TIME-WAIT test",
+   "type": "test",
+   "scope": "whatsapp"
+  },
+  {
+   "sha": "8b5572118985",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): run the Webapp's gateway socket in the served profile's scope",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "839415bd112b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): a cancelled hot-serve reserve can no longer take the profile after cleanup",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "24479b4529bd",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): hot-serve of a new profile no longer parks it over a client's lock probe",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "4c53f64a8076",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): a client's lock probe no longer makes the gateway boot exit 1",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "67f3231f4b6f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(tui): keep the RPC pipe open while the in-gateway child runs",
+   "type": "test",
+   "scope": "tui"
+  },
+  {
+   "sha": "be95d40a7e93",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tui): the stdio gateway's RPC pipe never reaches a child on Windows",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "95762e286ddb",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(groups): the standalone backend forwards every room method the gateway serves",
+   "type": "fix",
+   "scope": "groups"
+  },
+  {
+   "sha": "98a953afa9be",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(env): a tool child keeps its gateway's profile pin without the supervisor claim",
+   "type": "fix",
+   "scope": "env"
+  },
+  {
+   "sha": "4ca896962584",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(gateway): the macOS daemon-env test waits on its witness, not on a Popen",
+   "type": "test",
+   "scope": "gateway"
+  },
+  {
+   "sha": "b5168b7f7e37",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): the unmanaged daemon drops systemd's notify socket and watchdog too",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "5c668bbe4daa",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp-access): status poll queries the gateway outside the skills lock",
+   "type": "fix",
+   "scope": "webapp-access"
+  },
+  {
+   "sha": "fc73d805672f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): the gateway route lists and runs a stalled room's Retry too",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "2023f6cc4d28",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): a Group Chat whose members can't be woken says so once, with Retry",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "90c2fbaf0d37",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): Group Chats handed from the standalone backend take Sends again",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "08527eef1ce3",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): a lost managed worker's board note lands before its admission settles, boundedly",
+   "type": "fix",
+   "scope": "gateway"
+  },
+  {
+   "sha": "aecf04f3d8a7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: an answered Discord approval whose click edit fails still retires its card",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "e0e3349ed332",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor: move the Discord exec-approval view into a sibling module",
+   "type": "refactor",
+   "scope": ""
+  },
+  {
+   "sha": "50f57a131fdd",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: a stale Discord approval click leaves the card to the request's observer",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "8654f1a68417",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: answered Discord prompts release their view",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "b5caaf7b449e",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: a Discord approval card that settles mid-send shows how it ended",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "ac50e08b54d2",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix: preserve resolved Discord observer after stale click",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "3f945df636d1",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): inspect plugin repositories through the gateway",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "bdaef8d90b24",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(dashboard): a profile's channel status follows its gateway and enabled secret sources",
+   "type": "fix",
+   "scope": "dashboard"
+  },
+  {
+   "sha": "e5a86d08d3d8",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(gateway): keep a Bot Chat a native ticket can adopt; move a stale-route foreign stamp aside",
+   "type": "fix",
+   "scope": "gateway"
+  }
+ ],
+ "profiles-isolation": [
+  {
+   "sha": "1e81ee57e326",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(webapp): voice relays through the host, and a created profile is served right away",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "201326cf5894",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(checkpoints): never snapshot home's parents or Hermes browser profiles",
+   "type": "fix",
+   "scope": "checkpoints"
+  },
+  {
+   "sha": "e090092285fa",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "feat(memory): profile lifecycle and config-storage seams for memory providers",
+   "type": "feat",
+   "scope": "memory"
+  },
+  {
+   "sha": "d063eefc6797",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(plugins): review nits \u2014 caution wording, reload wording, per-profile Update all",
+   "type": "fix",
+   "scope": "plugins"
+  },
+  {
+   "sha": "6b2895cacb85",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(update): list --cpu-profile in the holder value-flag fallback",
+   "type": "fix",
+   "scope": "update"
+  },
+  {
+   "sha": "ca14c438e486",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(mcp): an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one",
+   "type": "fix",
+   "scope": "mcp"
+  },
+  {
+   "sha": "c08c48530595",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(docker): supervise profile gateways outside the root s6 scandir",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "ae95c1caffae",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(desktop): profile overrides and never-ready parking through the real registry",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "7019faa6c470",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): a profile secondary records its wire under the backend it resolved",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "56601f7c9a92",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): room_plumbing maps to follow_profile_config only, as on serve",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "fcdca2dbd4d8",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): Team Gateway-managed platforms and profile-scoped link calls",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9b83f7cf858d",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "plugin-catalog: tinyfish 0.2.5 makes setup telemetry opt-in, adds profile tools",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "6112c2adb9e1",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(profiles): share profile fixtures without shadowing imports",
+   "type": "test",
+   "scope": "profiles"
+  },
+  {
+   "sha": "3e0985d01719",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(profiles): move force-install swap tests to their own file",
+   "type": "test",
+   "scope": "profiles"
+  },
+  {
+   "sha": "f6e40b0105ff",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(profiles): keep force-install swap dirs out of skill discovery",
+   "type": "fix",
+   "scope": "profiles"
+  },
+  {
+   "sha": "b04acfce7f29",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "refactor(profiles): keep the force-install swap inside _replace_entry",
+   "type": "refactor",
+   "scope": "profiles"
+  },
+  {
+   "sha": "8819d8830861",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(mcp): a same-named stdio server gets its own child per profile",
+   "type": "test",
+   "scope": "mcp"
+  },
+  {
+   "sha": "d3e415edb98c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "1345680261f5",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): judge each profile liveness path on its own, like the CLI",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "75cbc7d057e0",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): forget remembered local profiles the CLI would refuse",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ef989024880c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): decide remote profile repair from the default profile's effective route",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "5f60d72b65dd",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): import the per-gateway profile record at boot, not at module load",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c5240e37a481",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): restore a remote primary only onto a profile its gateway serves",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "3c42c4b7a0da",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): windows send main single per-gateway profile changes, never their whole map",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9acd625c8f7d",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a profile-less primary dial follows the profile a remote boot re-pins",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e29791ceb419",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): push the per-gateway profile memory to main only on a real change",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c193f62e4131",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): boot the primary on a profile its gateway serves",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "527bbf3d9a71",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): display and voice writes name their profile, so a shared remote backend applies them there",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a475de488396",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a cached down roster row never cancels a same-gateway profile repair",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c40d5c001442",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a Settings re-home publishes the new gateway with its own profile",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "5a4ecb0b41c4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): socket listeners see the whole new route, not the new socket with the old profile",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "7e907a9ad0cc",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): publish the request connection and its profile in one frame",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "21a6921167b4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): keep every gateway in All profiles when the SSH primary serves the selected profile",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9fe3d20f68dd",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): SSH shared profiles fail fast on a missing profile, keep older-runtime and pinned session reads",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "8ef28ee7013a",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): serve SSH named profiles from the connection's one remote backend",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a8b5fab1c165",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "2ca1aa6ca649",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): the startup profile restore keeps only a profile the gateway serves",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "b5182f334298",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): give the boot harness's fake bridge a profile roster",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "fc6d8029fcf3",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): validate the startup profile on the selected gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "b29bf60b3a32",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(nous): an older shared login never replaces a newer profile login",
+   "type": "fix",
+   "scope": "nous"
+  },
+  {
+   "sha": "0079924fcd58",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): 'New terminal on\u2026' tabs record the active profile",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "32a39600c414",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a gateway pick rescans the star map and leaves the old profile's project",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "bd47fe3b63a4",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(telemetry): count busy messages that wait behind a running FIFO turn; cancelled rows read as dropped; per-profile home and closing-day peak",
+   "type": "fix",
+   "scope": "telemetry"
+  },
+  {
+   "sha": "a41d1dfca08e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(telemetry): a busy message saved behind a pause or restart is not dropped; auto-resumed chats count toward their own profile's peak",
+   "type": "fix",
+   "scope": "telemetry"
+  },
+  {
+   "sha": "9f050ccc82f8",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): status bar names the profile when another profile's messaging is down",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f8bcc73c79b2",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): roster never crosses profiles and one hung backend never freezes the rest",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "4e89a6d585bd",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(mattermost): stop sending setup to a profile dialog that has no user id",
+   "type": "fix",
+   "scope": "mattermost"
+  },
+  {
+   "sha": "f92db3b007be",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(profiles): hermes update never copies the default .env into a profile",
+   "type": "fix",
+   "scope": "profiles"
+  },
+  {
+   "sha": "890ddad6178e",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(profiles): hermes update's .env backfill leaves messaging channels behind",
+   "type": "fix",
+   "scope": "profiles"
+  },
+  {
+   "sha": "3408c1a23c68",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(tui): keep a Desktop cwd record when the profile's terminal policy is unreadable",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "b623ded86d38",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(fs): resolve an unmounted Docker session's files in the profile sandbox",
+   "type": "fix",
+   "scope": "fs"
+  },
+  {
+   "sha": "91aeb64d9590",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "ram-first-context: re-pin to 364992af (profile isolation fix per cc3f1a94 review)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "62128cd8ffdc",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(desktop): a profile whose scan failed no longer shows \"No sessions yet\"",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "927fe54ff185",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(desktop): empty profile sections sit with their gateway when local is a secondary",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e77bb162b474",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "test(update): secure the profile home before the config-ro chmod",
+   "type": "test",
+   "scope": "update"
+  },
+  {
+   "sha": "2bed5b22584f",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(secrets): move secret caches and the Photon token to the profile home root",
+   "type": "fix",
+   "scope": "secrets"
+  },
+  {
+   "sha": "93286ffd8749",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(bedrock): an unresolved application-profile ARN issuer is unknown, not foreign",
+   "type": "fix",
+   "scope": "bedrock"
+  },
+  {
+   "sha": "7750d1a1d23b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(docker): keep unmounted Desktop sessions on the profile sandbox",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "b6d85d2bcb32",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(docker): declare the sourced profile.d script's shell for shellcheck",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "eaf03cb4dca1",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(desktop): profiles with no chats keep their sections when nothing else is listed",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "47f0fc99d2dc",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(desktop): show every profile as a sidebar section, chats or not",
+   "type": "feat",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f2703ac57813",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): keep per-profile usage totals on the host's profile groups",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "9562f87b56f0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(webapp): a listed Webapp row resumes its own profile through `local`",
+   "type": "test",
+   "scope": "webapp"
+  },
+  {
+   "sha": "009fd7caba2d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(desktop): a refused desktop half is not reported once another profile published it",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f2cc013158ce",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): the launch scope bound for 'profile: default' keeps process-env credentials",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "fca91b93d7f0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): a profile socket naming the launch profile runs in the launch scope",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "50f259a83f37",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): refuse an unbound profile ticket and bind explicit profiles on launch sockets",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "8b5572118985",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): run the Webapp's gateway socket in the served profile's scope",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "fd9ff2a0cdcb",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): a signed-out /api/status on the Webapp shows no profile names or install id",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "98a953afa9be",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(env): a tool child keeps its gateway's profile pin without the supervisor claim",
+   "type": "fix",
+   "scope": "env"
+  },
+  {
+   "sha": "cbe64d453dde",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(multiplex): the home-keyed cache test no longer asks models.dev whether gpt-4o sees images",
+   "type": "test",
+   "scope": "multiplex"
+  },
+  {
+   "sha": "26f6f63579a9",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(env): load an unreadable profile .env as absent, with a warning",
+   "type": "fix",
+   "scope": "env"
+  },
+  {
+   "sha": "a8c44982a3a5",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(config-remote): the served-profile signature's fake remote backend reports no file tooling",
+   "type": "test",
+   "scope": "config-remote"
+  },
+  {
+   "sha": "bdaef8d90b24",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(dashboard): a profile's channel status follows its gateway and enabled secret sources",
+   "type": "fix",
+   "scope": "dashboard"
+  }
+ ],
+ "sessions-state": [
+  {
+   "sha": "8283794aa417",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(checkpoints): rollback never rewinds the store; excludes drop before staging",
+   "type": "fix",
+   "scope": "checkpoints"
+  },
+  {
+   "sha": "3c3e5ff3a3e0",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "docs(checkpoints): name the home-ancestor and excluded-dir rules",
+   "type": "docs",
+   "scope": "checkpoints"
+  },
+  {
+   "sha": "201326cf5894",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(checkpoints): never snapshot home's parents or Hermes browser profiles",
+   "type": "fix",
+   "scope": "checkpoints"
+  },
+  {
+   "sha": "d0001c5ba236",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "test: reap session-leaked Hermes daemons on macOS too",
+   "type": "test",
+   "scope": ""
+  },
+  {
+   "sha": "9767033cada0",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): /save refusal names the missing capability (older gateway or sidecar without the session authority), not just an outdated gateway",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "2ac12f6c92bd",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): /save on a gateway without session.export refuses options it cannot honour",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "e15c799addc7",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(approval): word the session provenance note for both session writers",
+   "type": "fix",
+   "scope": "approval"
+  },
+  {
+   "sha": "334902908561",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): a session left mid-turn keeps asking its questions, and switching back shows them",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "54b4e5cf3850",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "refactor(tui): background-session notices are a module-level watch, not a hook in useMainApp",
+   "type": "refactor",
+   "scope": "tui"
+  },
+  {
+   "sha": "16b99e61ca85",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "refactor(tui): the live-session poll's roster patch and background notices leave useMainApp",
+   "type": "refactor",
+   "scope": "tui"
+  },
+  {
+   "sha": "7ae16ae9a0fc",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): announce a background session waiting on an approval on the shared gateway",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "5d8e6fcd4a64",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(tui): /new mid-turn keeps the running session working in the background",
+   "type": "feat",
+   "scope": "tui"
+  },
+  {
+   "sha": "90c19e319683",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(aux): tighten the aux-slot wording and drop session-search summaries",
+   "type": "docs",
+   "scope": "aux"
+  },
+  {
+   "sha": "42500a10d9a6",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(acp): expose session-scoped service-tier picker",
+   "type": "fix",
+   "scope": "acp"
+  },
+  {
+   "sha": "2c82d34b7e9b",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "ci(js): drop vitest's run history from the cached node_modules",
+   "type": "ci",
+   "scope": "js"
+  },
+  {
+   "sha": "4273f3822dbc",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(state): count the test runner only when a Python interpreter runs it",
+   "type": "fix",
+   "scope": "state"
+  },
+  {
+   "sha": "aaa89f4f0042",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(state): count the repo test runner as a pytest ancestor",
+   "type": "fix",
+   "scope": "state"
+  },
+  {
+   "sha": "fb3109279593",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(bots): group rooms sit in one chat column like a session window",
+   "type": "feat",
+   "scope": "bots"
+  },
+  {
+   "sha": "af48c7fcaf44",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "refactor(bots): split the room history row into notice and message rows",
+   "type": "refactor",
+   "scope": "bots"
+  },
+  {
+   "sha": "1b0070b8bb6c",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "docs(desktop): isSessionAbsentError also covers a row the caller may not read",
+   "type": "docs",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ed7b042f12d5",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "fix(desktop): Desktop-driven room members can start a session on the owning gateway",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "063304e59b67",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "refactor(session): pick the browse/discovery limit default in one place",
+   "type": "refactor",
+   "scope": "session"
+  },
+  {
+   "sha": "d1d2be3ad0ea",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for ctx_checkpoint",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "646cd6c58851",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(plugin-catalog): re-pin ctx_checkpoint to 0.6.2",
+   "type": "chore",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "81f76fd4b858",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "chore(catalog): review disclosure for cli-session-tabs",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "7e3f44234574",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(desktop): the launch burst of kept gateway opens refreshes the Sessions list once",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "73cd2de272ca",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "plugin-catalog: re-pin mock-review to v1.1.3 (woken session can build on opt-in, no spurious stalled pings, new showcase image)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "0422f223fa9c",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): a real openSession moves the user-open revision; a pop-out does not",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9fe3d20f68dd",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): SSH shared profiles fail fast on a missing profile, keep older-runtime and pinned session reads",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "d6d74704e239",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): every gateway's sessions stay visible under Gateway & profile and Project grouping",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "26ced2f9fc13",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(desktop): kept-route redial test no longer loads session-states cold",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "edf1495a314f",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix: warm reopen keeps totals for cron and messaging sessions too",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "e53cd9f31a5b",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "feat: reopened sessions show their stored cache hit before a new turn",
+   "type": "feat",
+   "scope": ""
+  },
+  {
+   "sha": "43abe4016459",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix: warm reopen of an agentless session keeps its stored token totals",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "b0e2b309153a",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix: Desktop status bar shows the switched-to session's own cache hit and t/s",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "2f82917753be",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(tui): park a reaped session's completions instead of dropping them",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "cb84cdecc2a9",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(sessions): a read-only view opened first no longer blocks adopting a phone chat",
+   "type": "fix",
+   "scope": "sessions"
+  },
+  {
+   "sha": "7aa5200e91ee",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(sessions): hermes sessions adopt offers login-stamped phone chats",
+   "type": "fix",
+   "scope": "sessions"
+  },
+  {
+   "sha": "3da1531caf6e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(sessions): bundled platforms and automation labels stay read-only; adopt scan stays fast",
+   "type": "fix",
+   "scope": "sessions"
+  },
+  {
+   "sha": "3b7d75d7dabe",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(sessions): adopt a phone-app chat only for its native owner",
+   "type": "fix",
+   "scope": "sessions"
+  },
+  {
+   "sha": "fcee404be6f0",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(sessions): old phone-app chats continue in Desktop instead of opening read-only",
+   "type": "fix",
+   "scope": "sessions"
+  },
+  {
+   "sha": "8bf447a7291e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): session/terminal linking follows the (host, cwd) pair",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "2a2b26b20e3a",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): match a session's cwd only to terminal tabs on its own host",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "5f792efb3ac2",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): keep an SSH-torn-down terminal session until its disconnect reaches the tab",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a41d1dfca08e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(telemetry): a busy message saved behind a pause or restart is not dropped; auto-resumed chats count toward their own profile's peak",
+   "type": "fix",
+   "scope": "telemetry"
+  },
+  {
+   "sha": "c7da41dd522d",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): a session's running highlight ends when its background work ends off screen",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "f491463da71a",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "chore(plugin-catalog): bump better-session-appearance to 1.2.4",
+   "type": "chore",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "4081291c4014",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "chore(plugin-catalog): re-pin ctx_checkpoint to 0.6.0",
+   "type": "chore",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "3a917f6a5b2f",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "chore(plugin-catalog): re-pin ctx_checkpoint to 0.5.1",
+   "type": "chore",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "0aafd4263df2",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(plugin-catalog): pin priors to 17d3e1f (Hermes now hands the wallet server its per-call and session caps)",
+   "type": "feat",
+   "scope": "plugin-catalog"
+  },
+  {
+   "sha": "cc9dbb0583fc",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(desktop): sessions waiting on subagents or background processes keep the running highlight",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "426f9ad1fb60",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(desktop): drop the \"automatic continuation\" layers badge from session rows",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "65effb1e9fcc",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix: /model reset on the session owner (canonical TUI, Desktop, attached CLI)",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "5bb7bdc7c4e1",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat: /model reset \u2014 clear a session's model pin without losing history (NS-563)",
+   "type": "feat",
+   "scope": ""
+  },
+  {
+   "sha": "49a3f0c64ea6",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "chore(catalog): update CLI Session Tabs to 1.1.0",
+   "type": "chore",
+   "scope": "catalog"
+  },
+  {
+   "sha": "a10fda2340bc",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "test(webapp): browser notifications never prompt from an event and open the session on click",
+   "type": "test",
+   "scope": "webapp"
+  },
+  {
+   "sha": "b1d7c5b296d4",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(desktop): re-queued external sends keep their identity and land in the created session; billing card matches its provider",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "e864515d2651",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(projects): write host_workspace only for the session's own folder",
+   "type": "fix",
+   "scope": "projects"
+  },
+  {
+   "sha": "b623ded86d38",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(fs): resolve an unmounted Docker session's files in the profile sandbox",
+   "type": "fix",
+   "scope": "fs"
+  },
+  {
+   "sha": "208d5532275d",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(desktop): drop the previous session's cache-hit rate on a switch",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "62128cd8ffdc",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(desktop): a profile whose scan failed no longer shows \"No sessions yet\"",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "ea95e67ec6a1",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "test(state): the config/WAL lock-order probe follows the fill out of the config import",
+   "type": "test",
+   "scope": "state"
+  },
+  {
+   "sha": "c211af07244f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(desktop): make session tabs and sidebar keyboard accessible",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "7750d1a1d23b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(docker): keep unmounted Desktop sessions on the profile sandbox",
+   "type": "fix",
+   "scope": "docker"
+  },
+  {
+   "sha": "9562f87b56f0",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(webapp): a listed Webapp row resumes its own profile through `local`",
+   "type": "test",
+   "scope": "webapp"
+  },
+  {
+   "sha": "91cb42ee3748",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(webapp): keep one gateway's sessions in one sidebar section",
+   "type": "fix",
+   "scope": "webapp"
+  },
+  {
+   "sha": "0216b1a320fa",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(sessions): refresh epoch survives compression rotation; --session targets the tip",
+   "type": "fix",
+   "scope": "sessions"
+  },
+  {
+   "sha": "29c69f1df132",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(sessions): key the blind skills-cache probe on file_cache_version",
+   "type": "test",
+   "scope": "sessions"
+  },
+  {
+   "sha": "be6fef473e4a",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(desktop): a reply settled during an unbound cold resume shows in full",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "95ea5013663a",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(desktop): a reply that finishes during a reconnect's resume renders in full",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "c90b27e8e3a2",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(nix): pass the token as HERMES_DASHBOARD_SESSION_TOKEN=file:<path>",
+   "type": "feat",
+   "scope": "nix"
+  },
+  {
+   "sha": "7c8d7b9cf35a",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(nix): the session token rides the unit environment as a path",
+   "type": "feat",
+   "scope": "nix"
+  },
+  {
+   "sha": "e4f03d406367",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test: TestSessionTokenInjection moves to the token sibling's test file",
+   "type": "test",
+   "scope": ""
+  },
+  {
+   "sha": "de4a083d6c85",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "feat(backend): read the dashboard session token from a file",
+   "type": "feat",
+   "scope": "backend"
+  },
+  {
+   "sha": "91832ef012e5",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(desktop): a stale-target retry with no stored session restores the original history",
+   "type": "fix",
+   "scope": "desktop"
+  }
+ ],
+ "tools-toolsets": [
+  {
+   "sha": "9fb740ec4a57",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "test(browser): read the child's env from a file, not from redacted output",
+   "type": "test",
+   "scope": "browser"
+  },
+  {
+   "sha": "32a2c3bad68c",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(terminal): each preview size of a file gets its own kitty image id",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "64a30e926c5e",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(tui): inline image cache keys on the tool call, forgets off, stays bounded",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "0eb6546eaa46",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "refactor(terminal): one half-block painter; trim the inline-image API",
+   "type": "refactor",
+   "scope": "terminal"
+  },
+  {
+   "sha": "17ba59a92ae6",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(terminal): the CLI and the TUI draw the same image files",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "4c910ce2b919",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(terminal): GNU screen gets half-blocks; pinned kitty passes through tmux",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "9aea04c329fd",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix: a too-deeply nested tool result no longer drops tool.complete",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "268266994b12",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(terminal): draw tool images only for calls that showed one",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "c39016f6613b",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(terminal): bound inline-image decoding before it starts",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "6dd58eda3470",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(terminal): iTerm2 image size is the decoded byte count",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "28203b081f47",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(terminal): link Sprites to fly.io/sprites",
+   "type": "docs",
+   "scope": "terminal"
+  },
+  {
+   "sha": "735615f4b64a",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(terminal): give the full Sprite name shape on named profiles",
+   "type": "docs",
+   "scope": "terminal"
+  },
+  {
+   "sha": "8ca88d897def",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(terminal): document the Sprites plugin backend alongside the other terminal backends",
+   "type": "docs",
+   "scope": "terminal"
+  },
+  {
+   "sha": "308f31770723",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "test(e2e): live gateway-owned room spec with scripted tool calls and failures",
+   "type": "test",
+   "scope": "e2e"
+  },
+  {
+   "sha": "a6cdad3e9fb6",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "plugin-catalog: re-pin mock-review to v1.1.4 (password-gated here.now boards may wake with wake_toolsets; LAN boards guarded)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "c2dac477f58e",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(tools): start the check_fn grace reuse window when the probe returns",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "c49a94bee193",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(tools): keep a pinned Tool Search bridge on a same-process pin restore",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "fa830bef1db1",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "plugin-catalog: wakeshift: pin eeef97d (declares tool_request middleware)",
+   "type": "other",
+   "scope": ""
+  },
+  {
+   "sha": "f135a3de0a70",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "refactor(terminal): move graphics detection and encoders out of the pet",
+   "type": "refactor",
+   "scope": "terminal"
+  },
+  {
+   "sha": "adecc4024456",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "test(terminal): build the profile-home fixtures under the isolated native root",
+   "type": "test",
+   "scope": "terminal"
+  },
+  {
+   "sha": "b9e983665c7a",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(tools): key the tools[] freeze on generation and selection, hold flips on pin restore",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "09d2e686f9b8",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(browser): raw CDP metadata check reads the host after userinfo",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "e10765f7c309",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(terminal): key a named profile's unnamed chats by its name too",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "fdb71a95a260",
+   "date": "2026-10-30",
+   "pr": null,
+   "subject": "fix(terminal): keep the :ws: key idempotent and test the unmounted key gate",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "7aca8caeafb1",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(tools): keep a live session's tools[] frozen when a check_fn flips back",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "9b839d815eb1",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(tools): expire the tool-definitions memo with its check_fn verdicts",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "e20007e4e7c0",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(browser): raw CDP URL scan reads bracketed IPv6 and scheme-relative hosts",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "1c11a23f0f61",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(browser): raw CDP blocklist, interception and cookie calls work on guarded backends",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "149e3f5539b8",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(terminal): reuse the profile container for sessionless workers",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "0e8d47084818",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "chore(terminal): keep process_registry.py at its line cap after the rebase",
+   "type": "chore",
+   "scope": "terminal"
+  },
+  {
+   "sha": "35c2783b6ab7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(terminal): relative spawn PATH entries survive a resetting login profile",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "4e1453f3513c",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(terminal): env bash shebang for the stand-in login shell",
+   "type": "test",
+   "scope": "terminal"
+  },
+  {
+   "sha": "3580324e8b7f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(terminal): explicit encodings in the login-shell PATH tests (windows-footguns)",
+   "type": "test",
+   "scope": "terminal"
+  },
+  {
+   "sha": "11262fac9655",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(terminal): pin the resetting login profile with a stand-in login shell",
+   "type": "test",
+   "scope": "terminal"
+  },
+  {
+   "sha": "854cef24e9f1",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(terminal): pin the profile-home mode in the background PATH test",
+   "type": "test",
+   "scope": "terminal"
+  },
+  {
+   "sha": "b9c7d4e8af79",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(terminal): the background PATH test pins the login shell's HOME",
+   "type": "test",
+   "scope": "terminal"
+  },
+  {
+   "sha": "29fef14fbf35",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(terminal): background commands keep spawn PATH dirs a login profile resets",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "6fa171ce5423",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(terminal): keep the spawn PATH's dirs a login profile resets out of the snapshot",
+   "type": "fix",
+   "scope": "terminal"
+  },
+  {
+   "sha": "13461950bf04",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(browser): runtime-root choice and the short-dir claim, independent of the host",
+   "type": "test",
+   "scope": "browser"
+  },
+  {
+   "sha": "92e8a6398d8c",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): browser_exec binds its daemon socket under a deep HOME",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "f4aa77a4678f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): raw CDP applies the metadata floor in both guard branches; docs state what it covers",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "1fdfdecbcf9d",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): raw CDP's metadata floor covers Runtime.evaluate and url params when the guard is off",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "09660feb36d4",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): raw CDP keeps the cloud-metadata floor when the private-URL guard is off",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "6558a2eff2d9",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "refactor(tools): keep submit_stdin within the file cap; move its tests to a sibling file",
+   "type": "refactor",
+   "scope": "tools"
+  },
+  {
+   "sha": "9194256d0120",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): activate hidden tabs only when the harness actually drives a cloud browser",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "9c6d155a160f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): bring a hidden tab to the front only on a cloud browser",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "c9ffc6e960e7",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): capture_screenshot() accepts a pathlib.Path on the jpeg fallback; test cloud new_tab activation",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "42448157b19a",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): catch only the errors the hidden-tab activation can raise",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "5abbff9d0f1b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(browser): capture_screenshot() no longer hangs 60s on a hidden tab",
+   "type": "fix",
+   "scope": "browser"
+  },
+  {
+   "sha": "bde889a52381",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tools): judge registered toolsets before the profile resolver in the platform warning",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "a56aa010cc14",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tools): already-exited stdin advice no longer claims every process read stdin",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "639f97da0e3f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tools): stdin advice reads the recorded PTY fallback; cron notices drop the job pin",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "bf904a84cef9",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(tools): cron run notices carry real usage; stdin errors name the fix",
+   "type": "fix",
+   "scope": "tools"
+  },
+  {
+   "sha": "bd2fb30d2e84",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(terminal): per-turn terminal scope applies managed scope last",
+   "type": "fix",
+   "scope": "terminal"
+  }
+ ],
+ "agent-turn-loop": [
+  {
+   "sha": "8e7cf55eb673",
+   "date": "2026-11-05",
+   "pr": null,
+   "subject": "fix(agent): a task with its own URL re-probes when that URL's pin changes",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "129e86cd1d31",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): a moved compression route clears the previous summariser's cooldown",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "6ac5474f28f3",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): the feasibility latch records the route read before the probe",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "8a39468c5203",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): a changed provider context pin re-probes a warm agent",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "884a3bbbf773",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "refactor(agent): import the feasibility probe functions from their own module",
+   "type": "refactor",
+   "scope": "agent"
+  },
+  {
+   "sha": "ab0dde92fade",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): a bypass session's compression probe keeps its own provider entries",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "e4066c1e5a6e",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): measure the compression model against today's provider entries",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "3ad3c4101abe",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): trust a feasibility latch that recorded no route",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "95683f47fad4",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): re-probe compression feasibility when the compression route moves",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "36b29e812a2c",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): anchor the intent-ack tool gate on this turn's own user row",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "6190ffdc3250",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): scope the intent-ack no-tools gate to the current turn",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "be765e31d810",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(compression): scope the summary-abort to Gemini prompt blocks only",
+   "type": "fix",
+   "scope": "compression"
+  },
+  {
+   "sha": "9c1799ed1af4",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(compression): a safety-blocked summary request aborts with the transcript intact",
+   "type": "fix",
+   "scope": "compression"
+  },
+  {
+   "sha": "74234d61c4ab",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(compression): assert the stance rule and section are wired in, not their wording",
+   "type": "test",
+   "scope": "compression"
+  },
+  {
+   "sha": "73bfb9ce7e40",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(compression): keep uncertain claims labelled UNVERIFIED through compaction",
+   "type": "feat",
+   "scope": "compression"
+  },
+  {
+   "sha": "5fed142bf9d2",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): byte-cap recovery status line no longer claims HTTP 413",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "17e3162e6d95",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): SDK-wrapped field-length 400s no longer count as a request byte cap",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "371abaea41b0",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): keep token caps worded as size caps on the token-overflow path",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "c2c5dd82db13",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(agent): pin image-rejection guard to the sent request, not history",
+   "type": "test",
+   "scope": "agent"
+  },
+  {
+   "sha": "0d76f7ee60a2",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): only mark a model image-rejecting when the failed request carried images",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "a7732d031e11",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(agent): recover \"is not a multimodal model\" image rejections from text-only endpoints",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "0754ec0e2827",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(bot-loop): chain identity, per-send hops, fork/compression keying, one notice policy",
+   "type": "fix",
+   "scope": "bot-loop"
+  },
+  {
+   "sha": "e08cf6f308aa",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(desktop): compact confirmation names the chat it will compact",
+   "type": "feat",
+   "scope": "desktop"
+  },
+  {
+   "sha": "d64292c1b30b",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(desktop): compact row closes the meter through a statusbar context, not a MenuItem",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "25b6bfb0fabc",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(desktop): compact row is a menu item so the dropdown closes before the confirm",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "36d4b151fbf7",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(desktop): compact button targets the chat it was opened on",
+   "type": "test",
+   "scope": "desktop"
+  },
+  {
+   "sha": "9ad2c02acc26",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "refactor(desktop): compact button runs the shared /compress pipeline",
+   "type": "refactor",
+   "scope": "desktop"
+  },
+  {
+   "sha": "a212421dbd50",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(context): keep the fallback source on the compressor, and through MoA presets",
+   "type": "fix",
+   "scope": "context"
+  },
+  {
+   "sha": "d4c807f4e3fa",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(desktop): compact context from the status bar without leaving Bot Chat",
+   "type": "feat",
+   "scope": "desktop"
+  },
+  {
+   "sha": "4ea79443bc8e",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "perf(agent): the token memo keeps no more idle entries than it always had",
+   "type": "perf",
+   "scope": "agent"
+  },
+  {
+   "sha": "967c73a10454",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "chore(compression): fold the post-compression trim comment so the compressor facade does not grow",
+   "type": "chore",
+   "scope": "compression"
+  },
+  {
+   "sha": "92628552ab06",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(agent): a single message larger than the token-memo budget is not memoized",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "79ff304b4c55",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(agent): token-memo hits share the eviction lock so a racing hit can't make eviction drop an active entry",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "c0bcfe2bb28b",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(hooks): a blocked turn runs no post-turn compaction",
+   "type": "fix",
+   "scope": "hooks"
+  },
+  {
+   "sha": "53cbb3838940",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(agent): name stream_max_lifetime in the exhausted-retries headline",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "b484be561039",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(agent): configure stream_max_lifetime through config.yaml only",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "c41de4d95f79",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(agent): timeout summary follows only the cause chain and names the real provider key",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "a8c7ec078d83",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(agent): name the phase and the setting in transport-timeout error summaries",
+   "type": "fix",
+   "scope": "agent"
+  },
+  {
+   "sha": "01af9039df08",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(compression): stop the post-compression trim from stalling the dashboard loop",
+   "type": "fix",
+   "scope": "compression"
+  },
+  {
+   "sha": "882482b58a3f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(compression): the active-request bridge obeys the post-handoff progress floor",
+   "type": "fix",
+   "scope": "compression"
+  },
+  {
+   "sha": "f6a84fd6d91f",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "fix(compression): a tail cut inside the first post-handoff tool group still compacts",
+   "type": "fix",
+   "scope": "compression"
+  }
+ ],
+ "cli-surface": [
+  {
+   "sha": "1a71782f1795",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(cli): backtrack picker \u2014 Esc Esc / /rewind to edit & resend or fork from an earlier prompt",
+   "type": "feat",
+   "scope": "cli"
+  },
+  {
+   "sha": "695d9a641d42",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cli): write the --cpu-profile before an in-place exec handoff",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "ce154453eb76",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cli): --cpu-profile starts where each launch path parses argv",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "ed1afb082eb3",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cli): the prompt's parser drops an image-probe reply that arrives late",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "5ce017578436",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cli): a VS Code reply past the probe deadline is still read, in cbreak",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "be01eb2a9585",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(cli): full-resolution images in VS Code when its image support is on",
+   "type": "feat",
+   "scope": "cli"
+  },
+  {
+   "sha": "025e1febe99b",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(cli): inline images name the tools that show one; iTerm images after resize",
+   "type": "docs",
+   "scope": "cli"
+  },
+  {
+   "sha": "55bc503305fe",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cli): refuse an oversized PNG preview before anything decodes it",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "fcfd416dcdee",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(cli): keep inline-image transmits out of the replayed scrollback",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "e0d6efd4dee1",
+   "date": "2026-11-03",
+   "pr": null,
+   "subject": "feat(cli): full-resolution images in iTerm2, WezTerm and Konsole",
+   "type": "feat",
+   "scope": "cli"
+  },
+  {
+   "sha": "7cce4ab92069",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(cli): cover multi-sentence reasoning without a repeated footer",
+   "type": "test",
+   "scope": "cli"
+  },
+  {
+   "sha": "aa28a71341ff",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(cli): the glyph layout's reasoning summary never repeats the start of the thought",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "ab9dda55d610",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(cli): draw images inline in the classic CLI scrollback",
+   "type": "feat",
+   "scope": "cli"
+  },
+  {
+   "sha": "66c48cb158de",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "feat(cli): /model reset in the classic CLI, help hint and queued-pick display (salvage #74899)",
+   "type": "feat",
+   "scope": "cli"
+  },
+  {
+   "sha": "f398ff59b8e7",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "test(cli): pin the reader-first ordering in the unretrieved-future test",
+   "type": "test",
+   "scope": "cli"
+  },
+  {
+   "sha": "679ec082c8ae",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "refactor(cli): one builder for a turn the owner never saw; pin the unretrieved-future fix",
+   "type": "refactor",
+   "scope": "cli"
+  },
+  {
+   "sha": "d72b65595e42",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(cli): a closing socket refuses before the send, and an unsent prompt keeps its turn",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "7303b01fd6ad",
+   "date": "2026-10-29",
+   "pr": null,
+   "subject": "fix(cli): a request after the gateway socket closed is reported as not sent",
+   "type": "fix",
+   "scope": "cli"
+  },
+  {
+   "sha": "ac7e758c3d1b",
+   "date": "2026-10-28",
+   "pr": null,
+   "subject": "test(config-remote): the TUI outage test injects through hermes_cli.config_backend",
+   "type": "test",
+   "scope": "config-remote"
+  }
+ ],
+ "delegation-orchestration": [
+  {
+   "sha": "c58e6de692f1",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "docs(delegation): prefix_stagger_seconds is a cap on the warm-up wait, not a stagger",
+   "type": "docs",
+   "scope": "delegation"
+  },
+  {
+   "sha": "17a8d1e201c2",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "test(delegation): pin the gate's non-streamed and failed-leader releases, queued-child teardown and the config read",
+   "type": "test",
+   "scope": "delegation"
+  },
+  {
+   "sha": "fbec17e9e22e",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "fix(delegation): background siblings outlive a parent stop; a gate-skipped child is released",
+   "type": "fix",
+   "scope": "delegation"
+  },
+  {
+   "sha": "8226ce64621a",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "chore(delegation): keep config_defaults at its line cap; event-driven gate test",
+   "type": "chore",
+   "scope": "delegation"
+  },
+  {
+   "sha": "6d0686ba3c47",
+   "date": "2026-11-04",
+   "pr": null,
+   "subject": "feat(delegation): opt-in prompt-cache warm-up gate for batch subagents",
+   "type": "feat",
+   "scope": "delegation"
+  },
+  {
+   "sha": "6059d35108af",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(delegation): preserve initialization after transcript reservation",
+   "type": "fix",
+   "scope": "delegation"
+  },
+  {
+   "sha": "41774335a695",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "test(delegation): retain session store in Kanban child fake",
+   "type": "test",
+   "scope": "delegation"
+  },
+  {
+   "sha": "13e0ce980129",
+   "date": "2026-11-02",
+   "pr": null,
+   "subject": "fix(delegation): reserve child transcripts before publishing session IDs",
+   "type": "fix",
+   "scope": "delegation"
+  },
+  {
+   "sha": "e1f0ccb1e1d8",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "test(delegation): join the worker before asserting the dispatch context is released",
+   "type": "test",
+   "scope": "delegation"
+  },
+  {
+   "sha": "e48531be2982",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(delegation): completed async records stop pinning the dispatching turn's Context",
+   "type": "fix",
+   "scope": "delegation"
+  },
+  {
+   "sha": "cbd71f33b1b8",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(tui): hold a parked delegation in the ledger's held-copy registry",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "b87a9a360998",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(tui): parked results outrank progress notices; a parked delegation's loss is loud",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "f702e968d829",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(tui): park live delegations too and never lose a drain's in-memory copies",
+   "type": "fix",
+   "scope": "tui"
+  },
+  {
+   "sha": "b84774186502",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(delegation): give each lost-copy re-offer its own lease and count held copies as live",
+   "type": "fix",
+   "scope": "delegation"
+  },
+  {
+   "sha": "8a10a3cbef53",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(delegation): re-offer a pending completion only when its copy is provably lost",
+   "type": "fix",
+   "scope": "delegation"
+  },
+  {
+   "sha": "2d0bf91f111a",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix: every /bg entry point joins its background delegations in the run",
+   "type": "fix",
+   "scope": ""
+  },
+  {
+   "sha": "e032b8a26425",
+   "date": "2026-11-01",
+   "pr": null,
+   "subject": "fix(desktop): sidebar rows not on screen show running subagents and background work",
+   "type": "fix",
+   "scope": "desktop"
+  },
+  {
+   "sha": "cc9dbb0583fc",
+   "date": "2026-10-31",
+   "pr": null,
+   "subject": "fix(desktop): sessions waiting on subagents or background processes keep the running highlight",
+   "type": "fix",
+   "scope": "desktop"
+  }
+ ]
+}

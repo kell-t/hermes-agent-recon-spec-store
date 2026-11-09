@@ -61,3 +61,45 @@
 2026-09-18 (#115607) [e702554e1529] fix(tui-gateway): resolve deferred/cold resume overrides under the session profile scope (#115607)
 2026-09-18 (#58083) [2cb017556dd7] fix(acp): restore not-in-memory sessions off the event loop in every handler (#58083)
 2026-09-18 (#58083) [2a2c3e3ce924] fix(acp): build sessions off the event loop; single-flight DB restores (#58083)
+
+# ==== TAIL APPEND (G-01): 75 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [8283794aa417] fix(checkpoints): rollback never rewinds the store; excludes drop before staging
+2026-11-05 (no-ref) [3c3e5ff3a3e0] docs(checkpoints): name the home-ancestor and excluded-dir rules
+2026-11-05 (no-ref) [201326cf5894] fix(checkpoints): never snapshot home's parents or Hermes browser profiles
+2026-11-05 (no-ref) [d0001c5ba236] test: reap session-leaked Hermes daemons on macOS too
+2026-11-04 (no-ref) [9767033cada0] fix(tui): /save refusal names the missing capability (older gateway or sidecar without the session authority), not just an outdated gateway
+2026-11-04 (no-ref) [2ac12f6c92bd] fix(tui): /save on a gateway without session.export refuses options it cannot honour
+2026-11-04 (no-ref) [e15c799addc7] fix(approval): word the session provenance note for both session writers
+2026-11-04 (no-ref) [334902908561] fix(tui): a session left mid-turn keeps asking its questions, and switching back shows them
+2026-11-04 (no-ref) [54b4e5cf3850] refactor(tui): background-session notices are a module-level watch, not a hook in useMainApp
+2026-11-04 (no-ref) [16b99e61ca85] refactor(tui): the live-session poll's roster patch and background notices leave useMainApp
+2026-11-04 (no-ref) [7ae16ae9a0fc] fix(tui): announce a background session waiting on an approval on the shared gateway
+2026-11-04 (no-ref) [5d8e6fcd4a64] feat(tui): /new mid-turn keeps the running session working in the background
+2026-11-04 (no-ref) [90c19e319683] docs(aux): tighten the aux-slot wording and drop session-search summaries
+2026-11-04 (no-ref) [42500a10d9a6] fix(acp): expose session-scoped service-tier picker
+2026-11-03 (no-ref) [2c82d34b7e9b] ci(js): drop vitest's run history from the cached node_modules
+2026-11-03 (no-ref) [4273f3822dbc] fix(state): count the test runner only when a Python interpreter runs it
+2026-11-03 (no-ref) [aaa89f4f0042] fix(state): count the repo test runner as a pytest ancestor
+2026-11-03 (no-ref) [fb3109279593] feat(bots): group rooms sit in one chat column like a session window
+2026-11-03 (no-ref) [af48c7fcaf44] refactor(bots): split the room history row into notice and message rows
+2026-11-03 (no-ref) [1b0070b8bb6c] docs(desktop): isSessionAbsentError also covers a row the caller may not read
+2026-11-03 (no-ref) [ed7b042f12d5] fix(desktop): Desktop-driven room members can start a session on the owning gateway
+2026-11-02 (no-ref) [063304e59b67] refactor(session): pick the browse/discovery limit default in one place
+2026-11-02 (no-ref) [d1d2be3ad0ea] chore(catalog): review disclosure for ctx_checkpoint
+2026-11-02 (no-ref) [646cd6c58851] chore(plugin-catalog): re-pin ctx_checkpoint to 0.6.2
+2026-11-02 (no-ref) [81f76fd4b858] chore(catalog): review disclosure for cli-session-tabs
+2026-11-02 (no-ref) [7e3f44234574] fix(desktop): the launch burst of kept gateway opens refreshes the Sessions list once
+2026-11-01 (no-ref) [73cd2de272ca] plugin-catalog: re-pin mock-review to v1.1.3 (woken session can build on opt-in, no spurious stalled pings, new showcase image)
+2026-11-01 (no-ref) [0422f223fa9c] test(desktop): a real openSession moves the user-open revision; a pop-out does not
+2026-11-01 (no-ref) [9fe3d20f68dd] fix(desktop): SSH shared profiles fail fast on a missing profile, keep older-runtime and pinned session reads
+2026-11-01 (no-ref) [d6d74704e239] fix(desktop): every gateway's sessions stay visible under Gateway & profile and Project grouping
+2026-11-01 (no-ref) [26ced2f9fc13] test(desktop): kept-route redial test no longer loads session-states cold
+2026-11-01 (no-ref) [edf1495a314f] fix: warm reopen keeps totals for cron and messaging sessions too
+2026-11-01 (no-ref) [e53cd9f31a5b] feat: reopened sessions show their stored cache hit before a new turn
+2026-11-01 (no-ref) [43abe4016459] fix: warm reopen of an agentless session keeps its stored token totals
+2026-11-01 (no-ref) [b0e2b309153a] fix: Desktop status bar shows the switched-to session's own cache hit and t/s
+2026-11-01 (no-ref) [2f82917753be] fix(tui): park a reaped session's completions instead of dropping them
+2026-11-01 (no-ref) [cb84cdecc2a9] fix(sessions): a read-only view opened first no longer blocks adopting a phone chat
+2026-11-01 (no-ref) [7aa5200e91ee] fix(sessions): hermes sessions adopt offers login-stamped phone chats
+2026-11-01 (no-ref) [3da1531caf6e] fix(sessions): bundled platforms and automation labels stay read-only; adopt scan stays fast
+2026-11-01 (no-ref) [3b7d75d7dabe] fix(sessions): adopt a phone-app chat only for its native owner

@@ -61,3 +61,45 @@
 2026-09-19 (#115656) [ffae0825eff0] fix(cron): live-lane text send uses the already-authorized transport (#115656)
 2026-09-19 (#61421) [5d0a39a1333f] fix(agent): stop probing hosted provider hosts for local server types (#61421)
 2026-09-19 (#65488) [9202bae546fd] fix(dashboard): custom endpoint validation persists the base URL that served /models (#65488)
+
+# ==== TAIL APPEND (G-01): 122 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [a2d566c6ba52] plugin-catalog: bump wallaby-provider to 1.1.0
+2026-11-05 (no-ref) [002c20612a9b] feat(plugin-catalog): add upstash memory provider
+2026-11-05 (no-ref) [48438d0b5cd1] fix(desktop): list shared/src/hermes-cloud.ts in the electron tsconfig
+2026-11-05 (no-ref) [e090092285fa] feat(memory): profile lifecycle and config-storage seams for memory providers
+2026-11-05 (no-ref) [a285c4f4ba72] chore(config): finish the auxiliary.skills_hub removal
+2026-11-04 (no-ref) [84a0301415ed] fix(review): the background review never asks the user for a skill's API key
+2026-11-04 (no-ref) [ff09cead02e9] docs(stt): name stt.<provider>.language in prose so every provider key stays documented
+2026-11-04 (no-ref) [c10474fbb630] docs(stt): blank per-provider language inherits stt.language, not auto-detect
+2026-11-04 (no-ref) [b411560709ca] chore(groups): router thread keeps the caller's context; config_defaults stays at its main size
+2026-11-04 (no-ref) [75eef50b8601] fix(tui): image.render caps any caller's preview budget; config-backed test
+2026-11-04 (no-ref) [27781df22a74] test(desktop): match busy-control authority generation checks
+2026-11-04 (no-ref) [9625c34f5258] fix(bedrock): fall through to the catalog family window for Anthropic, OpenAI and xAI
+2026-11-04 (no-ref) [4b3fba6942d5] fix(bedrock): size GPT-6.1 Terra, GPT-5.4 and third-party models from their AWS cards
+2026-11-03 (no-ref) [a44e24065a6a] feat(plugin-catalog): add otari model provider
+2026-11-03 (no-ref) [d8c25927c6ae] Link native connector transition guide and OAuth verification
+2026-11-03 (no-ref) [c60840e64e90] plugin-catalog: clarify required FilmEase OAuth setup
+2026-11-03 (no-ref) [9e8eddb4309c] feat(plugin-catalog): add scaleway-provider
+2026-11-03 (no-ref) [69c5d4baed88] feat(plugin-catalog): re-pin scaleway-provider at 1.1.0 (subdir, requires_hermes)
+2026-11-03 (no-ref) [c2ef9764d054] feat(plugin-catalog): add crowbot provider
+2026-11-03 (no-ref) [56601f7c9a92] fix(desktop): room_plumbing maps to follow_profile_config only, as on serve
+2026-11-03 (no-ref) [fd267bb3242a] fix(desktop): MCP health sweep reads config and status from one source
+2026-11-03 (no-ref) [446a54d539c9] test: model data these assertions depend on comes from fixtures
+2026-11-03 (no-ref) [21aa2ac26f5c] docs(tests): name the helper get_config actually uses in the #147036 regressions
+2026-11-03 (no-ref) [e7ba4fe1ddf9] test(web): pin /api/config/schema loop responsiveness through the ASGI route
+2026-11-03 (no-ref) [b27f6ee57c8f] test(anthropic): name every mandatory-thinking family in the module docstring
+2026-11-02 (no-ref) [f135a9ede721] chore(catalog): bump model-fallback-heuristic to ce150572ea10de682a2c67902b314590b55683b3
+2026-11-02 (no-ref) [23fcab925e9b] feat(plugin-catalog): add scaleway-provider
+2026-11-02 (no-ref) [cf07d2a100b7] docs(configuring-models): drop the dead Web Extract auxiliary task
+2026-11-02 (no-ref) [40ca63428b27] test(pm): let the cmake floor test answer the pinned-python sysconfig probe
+2026-11-02 (no-ref) [ad25cdd478ed] fix(anthropic): treat Claude Mythos as mandatory-thinking
+2026-11-02 (no-ref) [5a1b40862233] chore(catalog): review disclosure for hashference-provider
+2026-11-02 (no-ref) [43b5bde2b968] chore(plugin-catalog): pin hashference-provider to 82700f5 (CI installs Hermes's dev group on v0.22.5)
+2026-11-02 (no-ref) [bd375d9a1587] feat(plugin-catalog): add hashference-provider
+2026-11-02 (no-ref) [a31d7a2ef34c] chore(catalog): review disclosure for fortytwo-provider
+2026-11-02 (no-ref) [36bf5fb3e24a] feat(catalog): add Fortytwo model provider
+2026-11-02 (no-ref) [45ad6ede6be8] Add Postroom portable plugin catalog entry with OAuth and data disclosures
+2026-11-02 (no-ref) [75d8914a2dc0] chore(catalog): review disclosure for hermes-kame-api-rotation, hermes-kame-provider
+2026-11-02 (no-ref) [60f502939461] feat: Daybreak switch for catalog-listed ChatGPT subscription models
+2026-11-02 (no-ref) [b5bce5c622c5] fix(auth): two rotations in one iat second order by obtained_at, never expiry
+2026-11-01 (no-ref) [a0a6a070928d] chore(plugin-catalog): bump provider-status to 1.6.8

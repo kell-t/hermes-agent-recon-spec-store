@@ -61,3 +61,24 @@
 2026-09-07 (#104636) [af212103b0a8] feat(cli): show entry id and priority in hermes auth list (#104636)
 2026-09-06 (#104462) [1d06f7a95ae4] docs+evals(compression): token-accounting replay harness and developer-guide section (#104462)
 2026-09-04 (#102117) [4ab96371d2b4] docs: sync developer-guide tooling/gateway/CLI +  user-guide with the facade/siblings layout (#102117)
+
+# ==== TAIL APPEND (G-01): 19 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-04 (no-ref) [1a71782f1795] feat(cli): backtrack picker — Esc Esc / /rewind to edit & resend or fork from an earlier prompt
+2026-11-04 (no-ref) [695d9a641d42] fix(cli): write the --cpu-profile before an in-place exec handoff
+2026-11-04 (no-ref) [ce154453eb76] fix(cli): --cpu-profile starts where each launch path parses argv
+2026-11-04 (no-ref) [ed1afb082eb3] fix(cli): the prompt's parser drops an image-probe reply that arrives late
+2026-11-04 (no-ref) [5ce017578436] fix(cli): a VS Code reply past the probe deadline is still read, in cbreak
+2026-11-04 (no-ref) [be01eb2a9585] feat(cli): full-resolution images in VS Code when its image support is on
+2026-11-04 (no-ref) [025e1febe99b] docs(cli): inline images name the tools that show one; iTerm images after resize
+2026-11-04 (no-ref) [55bc503305fe] fix(cli): refuse an oversized PNG preview before anything decodes it
+2026-11-04 (no-ref) [fcfd416dcdee] fix(cli): keep inline-image transmits out of the replayed scrollback
+2026-11-03 (no-ref) [e0d6efd4dee1] feat(cli): full-resolution images in iTerm2, WezTerm and Konsole
+2026-11-02 (no-ref) [7cce4ab92069] test(cli): cover multi-sentence reasoning without a repeated footer
+2026-11-02 (no-ref) [aa28a71341ff] fix(cli): the glyph layout's reasoning summary never repeats the start of the thought
+2026-10-31 (no-ref) [ab9dda55d610] feat(cli): draw images inline in the classic CLI scrollback
+2026-10-31 (no-ref) [66c48cb158de] feat(cli): /model reset in the classic CLI, help hint and queued-pick display (salvage #74899)
+2026-10-29 (no-ref) [f398ff59b8e7] test(cli): pin the reader-first ordering in the unretrieved-future test
+2026-10-29 (no-ref) [679ec082c8ae] refactor(cli): one builder for a turn the owner never saw; pin the unretrieved-future fix
+2026-10-29 (no-ref) [d72b65595e42] fix(cli): a closing socket refuses before the send, and an unsent prompt keeps its turn
+2026-10-29 (no-ref) [7303b01fd6ad] fix(cli): a request after the gateway socket closed is reported as not sent
+2026-10-28 (no-ref) [ac7e758c3d1b] test(config-remote): the TUI outage test injects through hermes_cli.config_backend
