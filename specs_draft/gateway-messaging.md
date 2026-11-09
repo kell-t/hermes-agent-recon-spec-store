@@ -1,6 +1,6 @@
 # Capability: gateway-messaging
 
-Baseline: hermes-agent main @ 2bd378ed (2026-11-05). Evidence window: 2026-02-26 .. 2026-10-27. | Pass 2 (scenario grounding) applied 2026-11-08
+Baseline: hermes-agent main @ 2bd378ed (2026-11-05). Evidence window: 2026-02-26 .. 2026-10-27. | Pass 2 (scenario grounding) applied 2026-11-08 | Pass 2b (anchor verification) applied 2026-11-08
 
 ## Summary
 The messaging gateway runs the same agent core on ~20 chat platforms (Telegram, Discord, Slack, WhatsApp, Signal, relay, api_server, ...). It owns platform adapters over a shared base, two-stage inbound message guards, streaming delivery contracts, background-process completion notifications, authorization, and the multiplexer that serves many profiles from one process. Code lives behind the `gateway/run.py` facade with `run_*.py` phases, `session*.py`, and `platforms/<name>.py` adapters over `platforms/base.py`.
@@ -45,9 +45,9 @@ Slash command handlers SHALL be looked up by name through a command handler tabl
 
 ### Requirement: Prefix-stable draft streaming frames
 For stream-is-the-message adapters (`draft_stream_is_message = True`), draft frames SHALL be prefix-stable (frame N a string prefix of frame N+1); per-tick mutation of drafts (fence-closing, cursor suffixes, segment resets, markdown conversion) SHALL NOT occur, because a non-prefix frame forces whole-snapshot re-append and recreates duplicate finals.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: doc: gateway/AGENTS.md § Streaming delivery contract (four invariants, each from a live duplicate-final incident); contract tests `tests/gateway/test_stream_final_contract.py`; [PR #141014](https://github.com/NousResearch/hermes-agent/pull/141014) — keep two invariants for the hosted prompt digest (test)
-- Anchor: not located (attribute `draft_stream_is_message` present in `gateway/platforms/` and `gateway/relay/adapter.py` per grep, line not opened)
+- Anchor: `gateway/stream_consumer_transport.py:319-321` ("Stream-is-the-message draft frames must stay prefix-stable: a closing ``` on a mid-code-block frame makes frame N not a prefix of N+1 and the connector re-appends the whole snapshot"), `:438-439` ("'...text▉' is never a prefix of '...text more▉', which forces the connector's whole-text re-append on EVERY tick (stacked copies)"), `gateway/stream_consumer.py:240` (consumer reads `adapter.draft_stream_is_message`), `gateway/relay/adapter.py:188` (set True for the relay Slack descriptor)
 
 #### Scenario: Successive draft frames only grow
 - **WHEN** a `draft_stream_is_message = True` adapter emits successive draft frames of one turn
@@ -63,9 +63,9 @@ For stream-is-the-message adapters (`draft_stream_is_message = True`), draft fra
 
 ### Requirement: Consumer declares the final, adapter never guesses
 The streaming finish path SHALL carry the completed `final_response` in `finish(final_text)`; post-stream augmentation MUST ride this payload, and mutating `final_response` after the seal SHALL trigger corrective reconcile rather than silent divergence.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: doc: gateway/AGENTS.md § Streaming delivery contract invariant 2 (`delivered_final_matches` mismatch → corrective duplicate send)
-- Anchor: not located
+- Anchor: `gateway/stream_consumer.py:547-549` (`def finish(self, final_text=None)` — "final_text is the AUTHORITATIVE completed final_response (incl. post-stream augmentation the accumulator never saw); the drain loop adopts it as the finalize payload"), `gateway/stream_consumer.py:335` (`delivered_final_matches` tri-state reconcile), `gateway/run_turn.py:1298` (runner consults `delivered_final_matches`; demonstrable False overrides the confirmed-delivery flag)
 
 #### Scenario: Finish carries the completed final
 - **WHEN** a native stream finishes
@@ -96,9 +96,9 @@ Any adapter send that is not the turn-final SHALL set `metadata["_interim_send"]
 
 ### Requirement: Reconcile by edit, never by plain send
 A lane delivering a final beside a sealed native stream SHALL first try `edit_message` on the consumer's message id and SHALL fall back to plain `send()` only when no editable message exists.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: doc: gateway/AGENTS.md § Streaming delivery contract invariant 4 ("live-verified" chat.update)
-- Anchor: not located
+- Anchor: `gateway/run_notifications.py:312` (`_deliver_queued_first_response`), `:334-335` ("Reconcile-by-edit first: a stream-sealed message already carries most of the answer; a plain send here would duplicate it"), `:344` (`await adapter.edit_message(chat_id=..., message_id=_sc_msg_id, content=..., finalize=True)` — plain send only when no editable message id exists)
 
 #### Scenario: Final beside a sealed stream edits in place
 - **WHEN** "a lane delivering a final beside a sealed stream (queued follow-ups, media-accompanied finals)"
@@ -181,7 +181,7 @@ Per-platform slash access control SHALL be active only when the operator set `al
 Under multiplexing, the gateway SHALL serve a profile created after a single-profile boot in place without restart, SHALL still load the launch home's `.env` under multiplex routing, and SHALL store per-conversation offers in the routed profile.
 - Status: INFERRED
 - Evidence: [PR #141623](https://github.com/NousResearch/hermes-agent/pull/141623) — serve a profile created after a single-profile boot in place, without a restart; [PR #125530](https://github.com/NousResearch/hermes-agent/pull/125530) — still load the launch home's .env under multiplex routing; [PR #127818](https://github.com/NousResearch/hermes-agent/pull/127818) — first-contact note only in DMs, offer flag saved in the routed profile
-- Anchor: not located
+- Anchor: `gateway/run_bootstrap.py:357` (control-socket verb table: `"rescan-profiles": _rescan_profiles_handler`), `gateway/control_socket.py:534` (`rescan_gateway_profiles` — creator signals the host; "callers then rely on the periodic rescan"), `gateway/host_attach.py:252-256` (rescan-then-attach), `gateway/run.py:1575-1577` (launch home's `.env` loaded unconditionally at boot) and `gateway/run.py:1580-1586` (`_reload_runtime_env_preserving_config_authority` — "Multiplex never reloads .env globally"); third clause (offer flag in the routed profile, #127818) anchor not opened
 
 #### Scenario: Profile created after a single-profile boot is served in place
 - **WHEN** a profile is created after a single-profile boot (Desktop's New Agent, `hermes profile create`) — previously "every ticket the Desktop minted for it through the host's control socket was refused"
@@ -196,15 +196,15 @@ Under multiplexing, the gateway SHALL serve a profile created after a single-pro
 
 ### Requirement: Multi-tenant gateway isolation
 A second tenant's host gateway SHALL never be attached to, refused as, or reported as ours.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [PR #121352](https://github.com/NousResearch/hermes-agent/pull/121352) — "a second tenant's host gateway never attaches, refuses, or reports as ours"
-- Anchor: not located
+- Anchor: `gateway/host_attach.py:118-123` (`launched_by_other_tenant` — "two tenants (separate HERMES_HOME roots) each expose a profile named default: tenant A's multiplexer 'serving default' is a name collision for tenant B, never coverage, so it is not this tenant's host gateway (#121352)"), applied at `gateway/host_attach.py:374` (attach guard) and `gateway/host_topology.py:74`
 
 ### Requirement: Telegram topic and edit routing fidelity
 Telegram routing SHALL follow a new DM topic by time rather than message-id adjacency, SHALL keep an edit of an older lobby message in its room, and an edit of an already-sent message SHALL NOT be rejected with an admission conflict.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [PR #136567](https://github.com/NousResearch/hermes-agent/pull/136567) — follow a new DM topic by time, not message-id adjacency; edit of older lobby message keeps its room; [PR #140845](https://github.com/NousResearch/hermes-agent/pull/140845) — editing a sent message no longer replies admission_conflict; [PR #139611](https://github.com/NousResearch/hermes-agent/pull/139611) — send unanchored when a reply anchor is not a message id
-- Anchor: not located
+- Anchor: `plugins/platforms/telegram/telegram_topic_routing.py:31` (`_NEW_TOPIC_FOLLOW_SECONDS = 5.0`) and `:79,:97` ("ends the follow; each adoption extends it" — adoption by `sent_at - last_sent_at`, i.e. by time), `plugins/platforms/telegram/adapter.py:7154` (`_edit_revision` — an edit carries its own revision, `:7151`), `plugins/platforms/telegram/adapter.py:1039-1045` (`_reply_to_message_id_for_send` — a non-message-id anchor parses to None and the send goes unanchored or on the DM topic's own anchor). The lobby-edit-keeps-its-room clause rides the same routing mixin per its pinned tests (test_telegram_new_topic_opener.py) — that exact branch not read line-by-line.
 
 #### Scenario: Thread-less opener adopts a newly created DM topic by time
 - **WHEN** Telegram for Android "sends the opener of a topic created from 'All messages' without `message_thread_id`", and only the preceding `forum_topic_created` service message names the topic
@@ -230,9 +230,9 @@ Telegram routing SHALL follow a new DM topic by time rather than message-id adja
 
 ### Requirement: Turn executor reuses parked threads
 The gateway turn executor SHALL hand work to parked threads instead of starting a new thread on the event loop per turn.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [PR #142061](https://github.com/NousResearch/hermes-agent/pull/142061) — "the turn executor hands work to parked threads instead of starting one on the loop"
-- Anchor: not located
+- Anchor: `gateway/turn_executor.py:29-33` (docstring — "An item goes to a parked (idle) worker when one exists, otherwise to a new thread. ... Handing an item to a parked worker is a queue put. A worker parked for ``idle_timeout`` exits."), `:53` (`def submit`), `:35-38` (reuse hygiene — "A reused thread must look fresh to its next item")
 
 #### Scenario: Submitting a turn hands work to a parked worker
 - **WHEN** turn work is `submit`ted on the gateway event loop — where "starting a thread there waits until the new thread gets the GIL, which froze the loop on every submit while many turns ran"
@@ -248,21 +248,21 @@ The gateway turn executor SHALL hand work to parked threads instead of starting 
 
 ### Requirement: Turns reload the routed profile's current .env
 A turn SHALL reload the serving profile's current `.env` on every execution path — messaging turns, local turns, and bypass sessions alike — so `${VAR}` references resolve against the profile's live values rather than values frozen at boot.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [commit 8bc8980657bd] "a local turn reloads the profile's .env, as a messaging turn does"; [commit 6e7567be260b] "a bypass session's turn never reloads the profile's .env"; [commit 9bbe8e880f44] "a resume expands ${VAR} from the profile's current .env"
-- Anchor: not located
+- Anchor: `gateway/run_turn_runner.py:1275-1279` ("Rotated .env keys reach this turn's config reads (side tasks read config.yaml), as on the messaging path ... A bypass session never reads the profile." → `if not policy.ignore_user_config: _reload_runtime_env_preserving_config_authority()`), `gateway/run.py:1580-1586` (`_reload_runtime_env_preserving_config_authority` — "Reload .env per turn for rotated keys while config.yaml stays authoritative for budgets ... Multiplex never reloads .env globally")
 
 ### Requirement: Side tasks resolve the profile's config with built-in defaults
 A gateway side task SHALL read the routed profile's `config.yaml` like every other side-task reader, and a bypass session SHALL keep the built-in side-task defaults rather than overriding them.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [commit 2afffc46ba15] "side tasks read the profile's config.yaml, like every other side-task reader"; [commit 7c00c01c9852] "bypass sessions keep the built-in side-task defaults"
-- Anchor: not located
+- Anchor: `gateway/session_policy.py:20-21` ("Sections a ``follow_profile_config`` session re-reads from the owning profile's CURRENT config each turn"), `agent/auxiliary_task_config.py:17-20` (`_SESSION_AUXILIARY` — a bypass session's own saved `auxiliary:` section, "code defaults only", "set by its ``policy_scope`` so its side tasks never read the profile"), `agent/auxiliary_task_config.py:45-47` ("declared defaults layered under user config (user wins); built-in defaults live in DEFAULT_CONFIG")
 
 ### Requirement: Bot Mode roster carries every bot's saved description
 In Bot Mode, the teammate roster SHALL list every bot's saved description, not just the main bot's, so each bot's role is visible wherever the roster is composed.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [commit e27c38006a67] "Bot Mode shows every bot's saved description, not just the main bot's"; doc: website/docs/user-guide/bot-mode.md § Direct messages
-- Anchor: not located
+- Anchor: `gateway/session_group_controls.py:457` (`entry['description'] = str(meta.get('description') or '').strip()` — every discovered profile's saved description rides `profiles.list`, not just the configured/main bot's; roster composition at `:74` `_roster_siblings`)
 
 #### Scenario: Roster composes from each profile's title/description
 - **WHEN** a Bot Chat's system prompt is composed
@@ -270,7 +270,9 @@ In Bot Mode, the teammate roster SHALL list every bot's saved description, not j
 - Source: doc: website/docs/user-guide/bot-mode.md § Direct messages
 
 ## Known gaps / open questions
-- Streaming contract invariants 2/4 are documented with incident lineage but their enforcement anchors (`delivered_final_matches`, reconcile-by-edit call sites) were not opened at the pin — locate next pass.
+- Streaming contract invariants 2/4: RESOLVED at pass 2b — enforcement anchors opened and set (`gateway/stream_consumer.py:335/:547`, `gateway/run_turn.py:1298`, `gateway/run_notifications.py:334-344`); requirement statuses upgraded to VERIFIED.
+- DOC-vs-CODE (pass 2b, flagged not fixed): tail-folded "Turns reload ... .env" wording says "bypass sessions alike", but the pinned code deliberately NEVER reloads the profile `.env` for a bypass session (`gateway/run_turn_runner.py:1278-1279` — `if not policy.ignore_user_config:`, comment "A bypass session never reads the profile"), consistent with cited commit 6e7567be260b. The requirement text overstates the bypass clause.
+- D-01 (ledger drift register): CLOSED at pass 2b — the 85% gateway-hygiene constant claimed by agent/AGENTS.md ("gateway session hygiene (85% threshold)") exists at the pin: `gateway/run_turn_hygiene.py:102` (`threshold_pct=0.85`; :97 "deliberately HIGHER than the agent's compressor (0.50)"). Pass 1 searched `gateway/session*.py` only; the constant lives in `run_turn_hygiene.py`. (No requirement in this file carries the hygiene claim — recorded for the agent-turn-loop owner / ledger.)
 - Gateway lifecycle vs Desktop app section of gateway/AGENTS.md not drafted (ownership boundary with deferred desktop-ui capability).
 - `builtin_hooks/` extension point ("none shipped") — contract for always-registered gateway hooks undocumented beyond its existence; UNVERIFIED.
 - Post-admission consuming gateway plugin extension (#129958, profile-scoped) is a plugin×gateway contract — boundary with plugins capability (deferred); excluded here.
@@ -278,7 +280,7 @@ In Bot Mode, the teammate roster SHALL list every bot's saved description, not j
 - `/login` single-worker `_login_executor`, one-attempt-per-process, and `nous/welcome` eviction semantics (gateway/AGENTS.md) — no PR-ref evidence sampled; UNVERIFIED.
 
 ## Scenario-ification notes
-- REQ "Multi-tenant gateway isolation": no doc-grounded trigger; kept as invariant. (Only evidence is PR #121352's phrasing — echoed verbatim in the requirement itself; no Tier A release note, no Tier B doc section, and no test asserts "never attaches/refuses/reports as ours". Anchor still unlocated.)
+- REQ "Multi-tenant gateway isolation": no doc-grounded trigger; kept as invariant. (Only evidence is PR #121352's phrasing — echoed verbatim in the requirement itself; no Tier A release note, no Tier B doc section, and no test asserts "never attaches/refuses/reports as ours". Anchor located at pass 2b — `gateway/host_attach.py:118` docstring — but that is implementation comment, not a Tier A/B trigger+outcome doc, so no scenario added.)
 - REQ "Multiplexed gateways serve profiles created after boot": the third clause (per-conversation offer flag saved in the routed profile, #127818) has no Tier A/B/C grounding found — scenario-ified for the first two clauses only.
 - REQ "Admin gating opt-in per platform": "in-flight agents SHALL not bypass admin gating" is scenario-ified from the busy-path authorization test (#17775), which covers inbound sender gating while a session runs — it does not test an in-flight agent circumventing `allow_admin_from`. The requirement's wording may overstate what the evidence shows.
 - Tail folds: 3 requirements added (max 3 allowed). Deferred tail candidates: stale approval-card binding cluster (5ab58da1f63a, 79f28901db7f, 8ebc4ef6ccab, 7ab170ea6d36 — strong Tier B/C grounding, better folded with the approvals capability); bot-to-bot loop-cap cluster (4e93f80e4720, 8180676731e4, 160339e0dd5c — Bot Mode engine, mostly undocumented); Slack thread-context allowlist tagging (cad0aaaf0d77); all desktop/tui/webapp/docker/mcp/model-routing lines per scope notes.
