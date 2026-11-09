@@ -36,7 +36,7 @@ Non-secret behavioral settings SHALL NOT be introduced as new `HERMES_*` environ
 One provider runtime resolver SHALL serve CLI, gateway, cron jobs, ACP and auxiliary model calls — credential resolution, custom-endpoint resolution, provider registry (`resolve_provider()`), and the shared `/model` switch pipeline — so surfaces cannot diverge on provider semantics.
 - Status: VERIFIED
 - Evidence: doc: website/docs/developer-guide/provider-runtime.md ("shared provider runtime resolver used across: CLI, gateway, cron jobs, ACP, auxiliary model calls")
-- Anchor: `hermes_cli/runtime_provider.py`, `hermes_cli/auth.py`, `hermes_cli/model_switch.py` (named implementation files, opened as tree entries)
+- Anchor: `hermes_cli/runtime_provider.py:1044` (`resolve_runtime_provider`), `hermes_cli/auth.py:919` (`is_runtime_provider_routable`), `hermes_cli/model_switch.py:1163` (model switch late-imports `resolve_runtime_provider`)
 
 #### Scenario: Any surface resolves a provider
 - **WHEN** one of the surfaces — "CLI, gateway, cron jobs, ACP, auxiliary model calls" — needs provider credentials or endpoint data
@@ -47,7 +47,7 @@ One provider runtime resolver SHALL serve CLI, gateway, cron jobs, ACP and auxil
 A provider SHALL be addable by dropping a plugin that calls `register_provider()` (bundled `plugins/model-providers/<name>/`, or user `plugins/model-providers/` under HERMES_HOME which overrides a bundled provider of the same name); the resolver SHALL pick it up with no new branch, reading canonical `base_url`, `env_vars` priority, `api_mode` and `fallback_models` from the `ProviderProfile`.
 - Status: VERIFIED
 - Evidence: doc: website/docs/developer-guide/provider-runtime.md (Primary implementation section, verbatim rule)
-- Anchor: `providers/` (`base.py`, registry entry points `register_provider`/`get_provider_profile` per doc; `plugins/model-providers/` ships dozens of provider dirs at the pin)
+- Anchor: `providers/__init__.py:140` (`register_provider`), `providers/__init__.py:218` (`get_provider_profile`); `plugins/model-providers/` ships 40 provider dirs at the pin
 
 #### Scenario: Add a provider plugin without touching the resolver
 - **WHEN** a new plugin under `plugins/model-providers/<your-provider>/` (or `$HERMES_HOME/plugins/model-providers/<your-provider>/`) calls `register_provider()`
