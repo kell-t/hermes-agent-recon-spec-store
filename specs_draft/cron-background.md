@@ -138,7 +138,7 @@ A file lock at `<home>/cron/.tick.lock` SHALL keep overlapping processes to one 
 `hermes cron tick` (headless mode) SHALL skip agent jobs when no gateway owns the home — stamping `last_fire_error`, warning once per tick, leaving the due instant untouched — instead of spawning an unmanaged gateway daemon; the in-process ticker and `hermes cron run` are not headless.
 - Status: VERIFIED
 - Evidence: doc: cron/AGENTS.md § Hardening invariants ("Same policy as approvals")
-- Anchor: `cron/scheduler_gateway_gate.py` (module dedicated to the gate; opened as gate owner per doc)
+- Anchor: `cron/scheduler_gateway_gate.py:1` (module docstring — headless tick refuses, never spawns), `cron/scheduler_gateway_gate.py:29` (`_gateway_unavailable`)
 
 #### Scenario: A headless tick refuses instead of spawning a gateway
 - **WHEN** `hermes cron tick` runs (system crontab / external scheduler) and discovery says no gateway owns the home
