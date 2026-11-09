@@ -103,7 +103,7 @@ The message flow SHALL never emit two same-role messages in a row and SHALL NOT 
 ### Requirement: Durable session turn lease
 Each conversation turn SHALL run under a durable cross-process session turn lease so concurrent drivers of the same session (CLI resume, gateway, background delivery) serialize; losing the lease SHALL interrupt the turn attributed to the lease, not the user.
 **Status**: VERIFIED
-**Evidence**: PR #112647 (referenced in-code: "attributes the stop to the lease, not the user"); doc: agent/AGENTS.md § Shape (turn lease taken before `run_conversation`)
+**Evidence**: issue #112647 (closed; cited in-code e.g. tests/agent/test_interrupt_issuer_attribution.py — note: an issue, not a pull); doc: agent/AGENTS.md § Shape (turn lease taken before `run_conversation`)
 **Anchor**: `agent/turn_facade_lease.py:1` (module docstring), `agent/turn_facade_lease.py:24` (`_REASON_LEASE_LOST`)
 
 #### Scenario: One writer per session across surfaces
@@ -218,7 +218,7 @@ Agent-level tools (todo, memory, ...) SHALL be intercepted through the `INLINE_T
 ### Requirement: Context-file load caps and install-tree exclusion
 Context files (AGENTS.md-style) SHALL load from the CWD only at startup and SHALL be capped (`CONTEXT_FILE_MAX_CHARS = 20_000`, dynamic cap from the context window, configurable `context_file_max_chars`); install-tree AGENTS.md SHALL never load as project context.
 **Status**: VERIFIED
-**Evidence**: doc: agent/AGENTS.md § Message-flow invariants (cites PR #64611 for install-tree exclusion); bundle PR window contains related prompt work
+**Evidence**: doc: agent/AGENTS.md § Message-flow invariants (cites #64611 — PR closed unmerged on GitHub; behavior on main confirmed at the anchors, landed via salvage path per repo rubric); bundle PR window contains related prompt work
 **Anchor**: `agent/prompt_builder.py:1033` (`CONTEXT_FILE_MAX_CHARS = 20_000`), `agent/prompt_builder.py:1048` (dynamic ceiling clamp)
 
 #### Scenario: Context files load at startup, capped

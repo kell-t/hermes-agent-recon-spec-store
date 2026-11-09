@@ -81,7 +81,7 @@ The streaming finish path SHALL carry the completed `final_response` in `finish(
 Any adapter send that is not the turn-final SHALL set `metadata["_interim_send"] = True`; seal-interception SHALL exist at both egress doors (`send()` and `send_for_platform()`), and a new egress door SHALL add the same checks.
 **Status**: VERIFIED
 **Evidence**: doc: gateway/AGENTS.md § Streaming delivery contract invariant 3
-**Anchor**: `gateway/stream_consumer_fallback.py`, `gateway/relay/adapter.py`, `gateway/run.py` (grep hits for `_interim_send`)
+**Anchor**: `gateway/stream_consumer_fallback.py:329` and `:356` (`_md["_interim_send"] = True` marking at egress), grep hits also in `gateway/relay/adapter.py`, `gateway/run.py`
 
 #### Scenario: Commentary is marked interim
 - **WHEN** a consumer-side `adapter.send()` is not the turn-final (commentary, segment-tail flushes)
@@ -136,7 +136,7 @@ A backgrounded terminal process armed with completion notification SHALL have it
 New platform adapters SHALL implement the step-by-step adapter contract against `platforms/base.py` (access policy, exec approval, log safety, post-delivery, streaming TTS mixins), and each adapter SHALL pick a base toolset (Telegram → `"messaging"`).
 **Status**: VERIFIED
 **Evidence**: doc: gateway/AGENTS.md § Shape; doc: gateway/platforms/ADDING_A_PLATFORM.md
-**Anchor**: `gateway/platforms/ADDING_A_PLATFORM.md`, `gateway/platforms/base.py` (mixin files: `base_exec_approval.py`, `access_policy_mixin.py`, `base_log_safety.py`)
+**Anchor**: `gateway/platforms/ADDING_A_PLATFORM.md:102` (§ Core Adapter — required methods at :106, optional default stubs at :118), `gateway/platforms/base.py` (mixin files: `base_exec_approval.py`, `access_policy_mixin.py`, `base_log_safety.py`)
 
 #### Scenario: Adding a new platform adapter
 - **WHEN** a new platform adapter is added

@@ -1,0 +1,125 @@
+# Kanban evidence bundle (pass3 G-07 mining, 2026-11-08) — strict scope=kanban or subject word 'kanban'
+# PR-window commits (98), oldest first:
+c15af4055ec4 test(kanban): add tests for judge transport failure and worker failed stops (#91264)
+242244bf6861 fix(kanban): stop goal loop on worker/judge failures (#91264)
+101f1c598a3b test(kanban): done-order board test completes tasks with result evidence (#117483)
+6504b665ba15 fix(kanban): refuse empty complete_task evidence (#117483)
+a21747fe4efc fix(kanban): an anchorless thread subscription warns once instead of vanishing (#110919)
+ad0398eed89f fix(kanban): preserve sticky block on tasks created with initial_status=blocked (#107398)
+4139695c97e7 fix(gateway): media delivery denies the session/kanban SQLite stores (#41071)
+d604ba6585b8 fix(bot-mode): running kanban/tool workers now light the Bots roster (#90268)
+edd73daaf441 test(kanban): regression for idle-board WS disconnect detection (#77833)
+fa72a1edf8d2 fix(kanban): re-create the schema when a cached DB path loses it (#83445)
+7ba456e98d15 fix(test): fail-closed kanban write guard prevents real HERMES_HOME pollution (#69283)
+c03a06b8d954 fix(kanban): cover remaining add_notify_sub call sites for chat_type (#56580)
+c1b0f6f3c1d0 feat(kanban): per-task model dropdown — set/override worker model+provider from the board (#69876)
+9ca8ce433507 fix(kanban): unpack judge_goal's 4-tuple at the completion gate (#67973)
+e4f87557b9cd feat(kanban): modal create-task dialog, editable board project directory, comment workflow hint (#66333)
+aaf5691261f1 feat(kanban): collect project directory when creating boards (#63249)
+f67aae323010 fix(kanban): make scratch cleanup explicit in dashboard (#63123)
+3b23a984b5f9 feat(kanban): stamp handoff freshness so workers don't read stale state as current (#53973)
+9ef49cd78f80 fix(backup): include projects.db, kanban boards, and sibling stores in pre-update snapshot (#52889)
+5b5c79a8ef43 feat(kanban): typed block reasons + unblock-loop breaker (#52848)
+84e1d31e5442 refactor(kanban): fold worker/orchestrator skills into injected guidance (#50473)
+d164ed0326e3 fix(kanban): make reclaim claim-lock-aware to stop task/run status desync (#50366)
+1f4c5aed6dcb fix(kanban): honor kanban.auto_decompose toggle live, without a gateway restart (#50358)
+84ba83b09ad1 fix(kanban): bound the cross-process init lock so connect() can't hang forever (#50353)
+9630ec6c19e6 fix(kanban): pin worker TERMINAL_CWD to the task workspace (#50348)
+e217fd42e269 feat(kanban): add task lifecycle plugin hooks (claimed/completed/blocked) (#50349)
+e581740aa1e8 fix(kanban): single-writer dispatch lock to prevent orphan-dispatcher DB corruption (#50331)
+37fa3c58b40e docs(kanban-worker): document kanban_complete artifacts deliverable param (#49854)
+dfa561092a69 fix(kanban): machine-global singleton lock for the embedded dispatcher (#41448)
+cb125c2b3fa6 fix(kanban): pin assigned profile toolsets for workers (#45590)
+df9fb8e5e68b fix(tools): stop hermes tools reporting kanban as removed (#38918)
+4c544b633d95 fix(kanban): don't permanently block tasks that hit a provider rate limit (#38223)
+272c2f30aa60 fix(kanban): kanban_create inherits the spawning worker's task workspace (#37182)
+72e82f88c00d fix(kanban): decompose children inherit root workspace instead of forcing scratch (#37172)
+0cd7d54b0010 feat(kanban): goal_mode cards run workers in a /goal loop (#35710)
+d276018378b8 docs(toolsets): clarify all/* wildcard does not enable kanban (#35729)
+b47cb1bbf279 feat(kanban): file attachments on tasks (#35395)
+10dec7c6dc3e fix(kanban): respect mobile safe areas in task detail drawer (#35378)
+592a4ffb6bf0 fix(kanban): close three blocked/iteration-exhausted handling gaps (#29747)
+bc31ee5cf8d5 fix(kanban): bridge worker runtime activity to board heartbeat (#31752)
+40217aa1946b fix(kanban): tell workers not to use clarify; route to kanban_block instead (#32167)
+ae6817f7f735 fix(kanban): add --reason flag to unblock for symmetry with block (#30897)
+69b74c15a324 fix(kanban): CLI dispatch honors max_in_progress/max_spawn from config; swap missing 'avoid-ai-writing' skill for bundled humanizer (#33488, #29415) (#34337)
+3b6347af158e feat(kanban): default_assignee fallback + per-profile concurrency cap (#27145, #21582) (#34244)
+769ee86cd2b3 feat(kanban): attach images referenced in task bodies to worker vision (#34210)
+f30db14ceda4 fix(kanban): SIGTERM on worker must terminate the process (#28181)
+ce529d60728e fix(kanban): scratch tasks must not inherit board.default_workdir (#28818)
+80ad1609c88a fix(kanban): refuse to rmtree workspace_path outside managed scratch root (#28818)
+ad11327db0b5 feat(kanban): warn users that scratch workspaces are deleted on completion (#30949)
+cae7537359c0 infographic: kanban.db corruption defense (#30858 + #30862) (#30952)
+d35f8932e802 test(kanban): cover sticky blocks for worker-initiated kanban_block (#28712)
+34120a0ae20a fix(kanban): worker-initiated block must not be auto-promoted (#28712)
+709e37e19e95 fix(dashboard): add scheduled kanban i18n strings (#28534)
+7bcdced6c1d8 fix(kanban): respawn guard defers blocker_auth instead of auto-blocking (#28683)
+88ee58f7d2e3 fix(kanban): stale reclaim must not tick failure counter (#28680)
+362ef912eae2 fix(kanban-dashboard): restore implementations dropped during salvages (#28481)
+19128108ac10 fix(tests): catch up six stale tests after compression/aux/kanban changes (#28465)
+53cf82a1ea7a fix(kanban): remove orphan conflict markers from kanban.py (#28459)
+1a883b421f6c fix(kanban): remove orphan conflict markers from config.py (#28458)
+78da7efa2038 docs(codex_app_server): document multi-root Kanban writable_roots (#27941)
+e215558ba705 test(kanban-dashboard): pin enriched 409 detail and inline error wiring (#26744)
+fe5e0bf5a349 feat(kanban): add board-level default workdir (#25430)
+a86d2ad55741 fix(kanban-dashboard): wire onValueChange on OrchestrationPanel Selects (#27893)
+16abb74eab2d fix(kanban): use selectChangeHandler for workspace, parent, and bulk-reassign selects (#24547)
+4414a99d8c3e fix(kanban): stop forcing dashboard text to all caps (#26413)
+dadc8aa25580 fix(kanban): surface unusable triage auxiliary model (auto-decompose aware) (#27871)
+1345dda0cf45 feat(kanban): orchestrator-driven auto-decomposition on triage (#27572)
+1eadb069c794 fix(kanban): --severity filter uses >= comparison per documented behavior (#26379)
+3b122cc1ac3a feat(kanban): stranded_in_ready diagnostic for unclaimed tasks (#23578)
+0e0ddaac8fa0 fix(kanban-dashboard): tone down completed-run metadata panel (#19548)
+6f2d60559e97 fix(kanban): drop redundant init_db() in gateway watchers (#21378)
+8954537f956b fix(kanban): request default board explicitly (#21819)
+ade5981429e6 fix(kanban): sanitize comment author rendering in build_worker_context (#22769)
+7d66d30d774e feat(kanban): add tooltips and docs link across dashboard (#21541)
+24d48ffb8294 feat(kanban): add `specify` — auxiliary LLM fleshes out triage tasks (#21435)
+ac51c4c1ad09 feat(kanban): per-task max_retries override (#20263 follow-up, supersedes #20972) (#21330)
+76d2dcdc8e10 fix(kanban): make code/pre styling theme-immune across all themes (#21086) (#21247)
+b9f1ac8c1022 fix(kanban): make dashboard board pin authoritative over server current file (#21230)
+fdb9e0f6a65e fix(kanban): auto-block workers that exit without completing (#20894) (#21214)
+49c3c2e0d37c docs(kanban): fix worker skill setup instructions too (#20960)
+45cbf93899a9 docs(kanban): fix orchestrator skill setup instructions (#20958)
+1fc8733a6986 fix(kanban): unify failure counter across spawn/timeout/crash outcomes (#20410)
+f67063ba81f9 feat(kanban): generic diagnostics engine for task distress signals (#20332)
+de9238d37e77 feat(kanban): hallucination gate + recovery UX for worker-created-card claims (#20232)
+56a78e74b26a feat(kanban-dashboard): sharper home-channel toggle contrast, drop → running action (#19916)
+1c7c7c3c5f48 feat(kanban-dashboard): per-platform home-channel notification toggles (#19864)
+ff3d2773e2a3 feat(kanban): auto-subscribe gateway chat on tool-driven kanban_create (#19718)
+d3b22b76d8b6 fix(kanban): enforce worker task-ownership on destructive tool calls (#19713)
+b2b479b40ece docs(kanban): backfill multi-board refs in reference docs (#19704)
+5ec6baa40060 feat(kanban): multi-project boards — one install, many kanbans (#19653)
+33f554d83cc6 feat(kanban-dashboard): workspace kind + path inputs in inline create form (#19679)
+986ec04048b3 docs: document /kanban slash command (#19584)
+bff484a51b8f fix(kanban-dashboard): widen drawer, bump body fonts, fix code-block contrast (#19638)
+8163d3719227 fix(skill): reference built-in video_analyze/vision_analyze tools in kanban-video-orchestrator (#19562)
+b58db237e4e1 fix(kanban): drop worker identity claim from KANBAN_GUIDANCE (#19427)
+c86842546750 feat(kanban): durable multi-profile collaboration board (#17805)
+06f81752ed40 Revert "feat(kanban): durable multi-profile collaboration board (#16081)" (#16098)
+15937a6b4654 feat(kanban): durable multi-profile collaboration board (#16081)
+
+# TAIL commits post-2026-10-27 (23):
+0f29a7d98917 2026-11-04 chore(catalog): pin kanban-gantt to 1.9.0
+083772b37465 2026-11-03 plugin-catalog: pin kanban-empowered 0.3.0 to 31cb914404ee1295d565b14a0ab1e440d7d22fdc
+fb5a2b140371 2026-11-03 plugin-catalog: update kanban-empowered to 0.3.0
+41774335a695 2026-11-02 test(delegation): retain session store in Kanban child fake
+e03222879c39 2026-11-02 feat(desktop): pin Kanban boards as quick-switch tabs
+40bbdd2e3274 2026-11-02 chore(catalog): review disclosure for kanban-empowered
+8aaa8af075f8 2026-11-02 plugin-catalog: kanban-empowered 0.2.0
+fef61fbc7fd5 2026-11-02 plugin-catalog: kanban-empowered 0.1.1
+f6e0ffe53529 2026-11-02 plugin-catalog: add kanban-empowered
+25e7f5fc21d8 2026-10-31 test(kanban): pin post-commit kanban_task_blocked for dependency waits
+d4283a9c9cdf 2026-10-31 fix(kanban): dispatch dependency block hook post-commit
+5166f83bb824 2026-10-28 chore(catalog): review disclosure for kanban-gantt
+dbde5a991ae0 2026-10-28 fix(kanban): the owner refuses a worker that dials into a restart wait opened after discovery
+eace3e056e8b 2026-10-28 fix(kanban): a worker cut by a restart's after-turn wait waits for the next owner outside it
+0431192d69d4 2026-10-28 fix(kanban): the protocol-violation streak never matches a worker's quoted output; docs match the release rule
+c777ba429fc8 2026-10-28 fix(kanban): keep the worker's last output when a lost worker's clean exit is rebooked
+a0712a5db1bd 2026-10-28 refactor(kanban): keep the lost-worker folds in kanban_owner_recovery, drop the FILE_LINES waivers
+e62c15e667e4 2026-10-28 fix(kanban): a lost worker's clean exit is a crash, not also a protocol violation
+f10386a58f17 2026-10-28 fix(kanban): a bound run stays the crash sweep's; no recorded pid is no proof inside the claim TTL
+c91bd232c0d7 2026-10-28 fix(kanban): drop the worker.adopt handshake retry from the lost-worker salvage
+b2e0171c29e5 2026-10-28 fix(kanban): one owner-refusal rule and one give-up message for a recovering worker
+f4e042e944df 2026-10-28 fix(kanban): a restarting owner's control socket or handshake failure during a redial also retries
+89f13590e0e8 2026-10-28 fix(kanban): any transport loss resumes the same attempt, bounded from the owner's last answer

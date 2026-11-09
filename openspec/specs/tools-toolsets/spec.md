@@ -84,9 +84,9 @@ All tool handlers SHALL return a JSON string, except a tool returning pixels, wh
 
 ### Requirement: Schema descriptions stay toolset-agnostic
 A tool's schema description SHALL NOT name tools from other toolsets (they may be unavailable, inducing hallucinated calls); cross-references SHALL be added dynamically at definition-build time.
-**Status**: INFERRED
-**Evidence**: doc: tools/AGENTS.md § Rules for tool code ("Cross-references are added dynamically in get_tool_definitions() in model_tools.py")
-**Anchor**: `model_tools.py` (get_tool_definitions post-processing blocks — lines not opened)
+**Status**: VERIFIED
+**Evidence**: doc: tools/AGENTS.md § Rules for tool code ("Cross-references are added dynamically in get_tool_definitions() in model_tools.py") — code: the rewriter table and availability-gated injection live in model_tools.py's Dynamic-schema-rewrite section
+**Anchor**: `model_tools.py:358-361` (Dynamic schema rewrites header) — the invariant comment: 'Cross-references must use that set so the model never hears of an absent tool.'; `model_tools.py:479` (`_DYNAMIC_SCHEMA_REWRITERS`) — per-tool rewriters (execute_code, browser_cdp, browser_exec, delegate_task, …) that inject cross-references only for tools in the availability set; `model_tools.py:490` (`_apply_dynamic_schemas`) — applied at definition-build time inside `_compute_tool_definitions` (called at `model_tools.py:521`)
 
 #### Scenario: Cross-references are injected at definition-build time, not in the schema
 - **WHEN** a tool's description would name a tool from another toolset (e.g. a browser tool saying prefer web_search)
@@ -117,9 +117,9 @@ A new core tool requires the highest ladder rung justification (fundamental, bro
 
 ### Requirement: Session/platform toolset reduction honors config
 Session- and platform-level toolset configuration (`agent.disabled_toolsets`, e.g. `[browser]` for headless/Docker) SHALL be honored across desktop/TUI gateway surfaces; subset toolsets SHALL not silently strip tools the session still resolved (e.g. web_search after Blank Slate).
-**Status**: INFERRED
-**Evidence**: [PR #44499](https://github.com/NousResearch/hermes-agent/pull/44499) — honor agent.disabled_toolsets in the desktop/TUI gateway; [PR #134593](https://github.com/NousResearch/hermes-agent/pull/134593) — stop subset toolset 'search' from stripping web_search after Blank Slate; doc: toolsets.py:106 comment
-**Anchor**: `toolsets.py:455` (`session_disabled_toolsets`) — behavior PRs cited, line opened for the helper only
+**Status**: VERIFIED
+**Evidence**: [PR #44499](https://github.com/NousResearch/hermes-agent/pull/44499) — honor agent.disabled_toolsets in the desktop/TUI gateway; [PR #134593](https://github.com/NousResearch/hermes-agent/pull/134593) — stop subset toolset 'search' from stripping web_search after Blank Slate; doc: toolsets.py:106 comment — code: agent_factory forwards agent.disabled_toolsets on the TUI/desktop gateway; selection subtracts disabled last; tools_config clears covered subset entries
+**Anchor**: `tui_gateway/agent_factory.py:446-454` (`_load_disabled_toolsets`) — reads `agent.disabled_toolsets`; docstring names #44499 ('the desktop/TUI gateway historically dropped it… disabled_toolsets: [browser] silently had no effect on Desktop') and it is forwarded at :670; `model_tools.py:349-354` (`_select_tool_names`) — 'Disabled toolsets are always subtracted LAST… any tools belonging to a disabled toolset are strictly stripped out' (#17309); `hermes_cli/tools_config.py:826-832` (`_covered`) — the #134593 subset-cleanup: a disabled entry whose tools are fully covered by a newly enabled toolset (Blank Slate's `search` after enabling `web`) is cleared so `web_search` is not left stripped
 
 #### Scenario: Disabling one platform bundle spares the others
 - **WHEN** `disabled_toolsets` names a platform bundle (e.g. `hermes-yuanbao`) while another bundle (e.g. `hermes-telegram`) stays enabled
@@ -131,24 +131,24 @@ Session- and platform-level toolset configuration (`agent.disabled_toolsets`, e.
 - **THEN** `web_search` SHALL NOT be stripped — it must not be a member of the `browser` toolset, since `disabled_toolsets` is a strict subtraction
 - Source: test: tests/tools/test_model_tools.py::TestDisabledToolsetsPlatformBundle::test_disabling_browser_keeps_web_search_when_web_enabled
 
-### Requirement: Role-gated setup toolset
-Setup profile sessions SHALL get the setup toolset by profile role, and no other configuration path SHALL be able to grant it.
-**Status**: INFERRED
-**Evidence**: [PR #119491](https://github.com/NousResearch/hermes-agent/pull/119491) — "setup profile sessions get the setup toolset by profile role; nothing else can grant it"
-**Anchor**: not located
+### Requirement: Session-platform-gated toolsets
+A toolset SHALL declare the session platforms it exists for (`platforms=` in its spec → `TOOLSET_SESSION_PLATFORMS`), and a session on any other platform SHALL have those tools dropped via `session_platform_tool_drops()` — surface availability is a property of the session, not of the process env.
+**Status**: VERIFIED
+**Evidence**: doc: tools/AGENTS.md § "Surface capability is a property of the SESSION, never of the process env"; supersedes the removed role grant (see Known gaps drift note, #119491)
+**Anchor**: `toolsets.py:143` (`onboarding` toolset, `platforms=frozenset({"desktop"})`), `toolsets.py:244` (`TOOLSET_SESSION_PLATFORMS` derived from specs), `toolsets.py:449` (`session_platform_tool_drops`)
 
 
 #### Scenario: Conformance check (derived)
 - **WHEN** the behavior described by this requirement is exercised
-- **THEN** Setup profile sessions SHALL get the setup toolset by profile role, and no other configuration path SHALL be able to grant it.
+- **THEN** A toolset SHALL declare the session platforms it exists for (`platforms=` in its spec → `TOOLSET_SESSION_PLATFORMS`), and a session on any other platform SHALL have those tools dropped via `session_platform_tool_drops()` — surface availability is a property of the session, not of the process env.
 - NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
   replace with evidence-backed scenarios on next recon pass.
 
 ### Requirement: Shared argument repair for inline tools
 Inline agent tools (clarify, todo, memory, session_search) SHALL go through the same shared argument-repair path as registry tools.
-**Status**: INFERRED
-**Evidence**: [PR #127781](https://github.com/NousResearch/hermes-agent/pull/127781) — "Inline agent tools get the shared argument repair"
-**Anchor**: not located (boundary with agent-turn-loop's inline executor table)
+**Status**: VERIFIED
+**Evidence**: [PR #127781](https://github.com/NousResearch/hermes-agent/pull/127781) — "Inline agent tools get the shared argument repair" — code: INLINE_TOOL_EXECUTORS wraps every entry in coerce_tool_args, the same call handle_function_call makes (a2840f954b, #127781)
+**Anchor**: `agent/inline_tool_executors.py:307-315` (`_coerced` / `INLINE_TOOL_EXECUTORS`) — every inline executor (todo_list, memory, session_search, clarify, …) is wrapped so `coerce_tool_args(name, args)` runs before it; `model_tools.py:902` (`handle_function_call`) — the registry dispatch path applies the same `coerce_tool_args(function_name, function_args)`; `tools/arg_coercion.py:21` (`coerce_tool_args`) — the single shared repair/coercion implementation (imported at `agent/inline_tool_executors.py:17`)
 
 
 #### Scenario: Conformance check (derived)
@@ -159,9 +159,9 @@ Inline agent tools (clarify, todo, memory, session_search) SHALL go through the 
 
 ### Requirement: Pruned spill archives read as expired
 Reading a pruned tool-result spill archive SHALL report "expired", and spill pointers appearing inside structured content and Windows paths SHALL count as references (kept out of pruning).
-**Status**: INFERRED
-**Evidence**: [PR #126351](https://github.com/NousResearch/hermes-agent/pull/126351) — "read_file on a pruned spill archive says 'expired'"; "spill pointers in structured content and Windows paths count as references"
-**Anchor**: not located (`tools/tool_result_storage.py` implied by hermes_state_media.py import)
+**Status**: VERIFIED
+**Evidence**: [PR #126351](https://github.com/NousResearch/hermes-agent/pull/126351) — "read_file on a pruned spill archive says 'expired'"; "spill pointers in structured content and Windows paths count as references" — code: expired_archive_fields merged into read_file misses; backslash separators + instr() scan make structured/Windows pointers owned
+**Anchor**: `tools/tool_result_storage.py:80-89` (`expired_archive_fields`) — an archive-shaped path returns `{"expired": True, "hint": …}` 'instead of a generic miss' (#126351); plain misses get {} (no expired flag); `tools/file_tools.py:691-692` — read_file's not-found branch merges `expired_archive_fields(path)` into the result; `tools/tool_result_storage.py:71-74` (`_SPILLOVER_NAME_RE`, `SPILLOVER_SQL_FILTER`) — pointer regex accepts backslashed (Windows) separators and the SQL filter uses instr() so structured content behind the NUL sentinel still counts as a reference
 
 #### Scenario: A pruned spill archive reads as expired
 - **WHEN** `read_file` targets a spill archive that has been pruned
@@ -190,9 +190,9 @@ Reading a pruned tool-result spill archive SHALL report "expired", and spill poi
 
 ### Requirement: Stable tool-row identity for display
 Tool rows SHALL be keyed on stable tool identity rather than payload bytes for display identity, so providers reusing tool-call ids do not overwrite finished rows.
-**Status**: INFERRED
-**Evidence**: [PR #117750](https://github.com/NousResearch/hermes-agent/pull/117750) — "key display identity of tool rows on stable tool identity, not payload bytes"; related desktop-side #128009/#128003 (desktop capability excluded)
-**Anchor**: not located (state/display boundary)
+**Status**: VERIFIED
+**Evidence**: [PR #117750](https://github.com/NousResearch/hermes-agent/pull/117750) — "key display identity of tool rows on stable tool identity, not payload bytes"; related desktop-side #128009/#128003 (desktop capability excluded) — code: _stable_tool_key keys display dedupe on tool_call ids; payload-content key only as the id-less fallback
+**Anchor**: `hermes_state_identity.py:99-111` (`_stable_tool_key`) — display-dedupe key of a tool-calling assistant row built from stable call ids 'instead of the arguments a prune rewrites' (#117750); None when the id set is incomplete; `hermes_state_messages.py:1106-1117` (`_display_dedupe_key`) — `return _stable_tool_key(row) or (role, dedupe_content, …)`: identity rows never fall back to payload bytes; id-less rows keep the full content key so distinct calls never merge
 
 **Sub-area: Tail fold (commits after 2026-10-27)**
 
@@ -205,9 +205,9 @@ Tool rows SHALL be keyed on stable tool identity rather than payload bytes for d
 
 ### Requirement: The live session's tool surface stays frozen; the definitions memo expires with its verdicts
 The tool list presented to a session SHALL stay frozen for that session even when a `check_fn` verdict flips back or a pin is restored; the memoized tool-definitions cache SHALL expire with its `check_fn` verdicts (and a grace/reuse window for a verdict starts when the probe returns).
-**Status**: INFERRED
-**Evidence**: [commit 7aca8caeafb1] — keep a live session's tools[] frozen when a check_fn flips back; [commit 9b839d815eb1] — expire the tool-definitions memo with its check_fn verdicts; [commit b9e983665c7a] — key the tools[] freeze on generation and selection, hold flips on pin restore; [commit c49a94bee193] — keep a pinned Tool Search bridge on a same-process pin restore; [commit c2dac477f58e] — start the check_fn grace reuse window when the probe returns
-**Anchor**: not located (registry/model_tools cache paths named by commits)
+**Status**: VERIFIED
+**Evidence**: [commit 7aca8caeafb1] — keep a live session's tools[] frozen when a check_fn flips back; [commit 9b839d815eb1] — expire the tool-definitions memo with its check_fn verdicts; [commit b9e983665c7a] — key the tools[] freeze on generation and selection, hold flips on pin restore; [commit c49a94bee193] — keep a pinned Tool Search bridge on a same-process pin restore; [commit c2dac477f58e] — start the check_fn grace reuse window when the probe returns — code: freeze keyed on built-generation + selection in mcp_tool_agent; memo deadline = earliest verdict expiry; grace window stamped at probe return
+**Anchor**: `tools/mcp_tool_agent.py:100-107` (`_publish_tool_snapshot`) — freeze keyed on generation and selection: 'neither the registry … nor the toolset selection moved … a name can only be new because a check_fn flipped, and tools[] stays frozen' (#101367); pin table at :19-24; `model_tools.py:219-224,252-264` (`_live_tool_defs_entry`, `get_tool_definitions`) — the memo expires at the earliest check_fn verdict deadline (`_tool_defs_expiry[cache_key] = verdict_expiry[0]` from `check_fn_verdict_window()`); `tools/registry.py:402-408,416` (`_check_fn_cached`) — 'Stamped at completion': the grace/reuse timestamps (`_check_fn_last_good`, `_CHECK_FN_GRACE_REUSE_SECONDS`) are taken when the probe returns, not when it starts
 
 #### Scenario: Resume and hops keep the same tool list
 - **WHEN** a session resumes (`-q --resume`) or hops between TUI and gateway
@@ -219,9 +219,9 @@ The tool list presented to a session SHALL stay frozen for that session even whe
 
 ### Requirement: browser_exec binds its daemon socket to a kernel-acceptable path under a deep HOME
 `browser_exec` SHALL bind its harness daemon socket under a short private dir when the Hermes home is too deep for the socket path limit, claiming an existing short dir only when it is private and real.
-**Status**: INFERRED
-**Evidence**: [commit 92e8a6398d8c] — browser_exec binds its daemon socket under a deep HOME
-**Anchor**: not located (browser harness socket defaults)
+**Status**: VERIFIED
+**Evidence**: [commit 92e8a6398d8c] — browser_exec binds its daemon socket under a deep HOME — code: fit_default_socket_dir re-homes the daemon socket to a claimed 0700 short dir when the budget is exceeded
+**Anchor**: `tools/browser_harness_dirs.py:98-117` (`fit_default_socket_dir`) — under a deep HOME the default `<home>/runtime/bu-<BU_NAME>.sock` overflows sun_path, so the call's runtime dir moves to a private short dir; called from browser_exec's env build at `tools/browser_use_cli.py:809`; `tools/browser_harness_dirs.py:170-186` (`claim_private_dir`) — an existing dir is accepted only as a real (non-symlink) directory owned by this uid with no group/other access (0700); `tools/browser_harness_dirs.py:25-26,46-53` (`_LINUX_SOCKET_DIR_BUDGET`, `socket_dir_budget`) — the kernel sun_path budgets (Linux 108 / macOS 104 incl. NUL) minus the bu-<64-char>.sock suffix
 
 #### Scenario: Deep HOME still gets a working daemon socket
 - **WHEN** the Hermes home is deep enough that the default socket path exceeds the kernel limit
@@ -232,9 +232,9 @@ The tool list presented to a session SHALL stay frozen for that session even whe
 
 ### Requirement: A too-deeply nested tool result still completes the tool event
 A tool result nested beyond the normal depth SHALL still deliver its `tool.complete` event instead of being dropped.
-**Status**: INFERRED
-**Evidence**: [commit 9aea04c329fd] — a too-deeply nested tool result no longer drops tool.complete
-**Anchor**: not located (result-normalization/egress boundary shared with sessions-state)
+**Status**: VERIFIED
+**Evidence**: [commit 9aea04c329fd] — a too-deeply nested tool result no longer drops tool.complete — code: safe_json_loads now swallows RecursionError, fixing every tool-event parse caller
+**Anchor**: `utils.py:679-684` (`safe_json_loads`) — catches RecursionError alongside JSONDecodeError/TypeError/ValueError, docstring: 'returning *default* on any parse error (a too-deeply nested body included)' (9aea04c329fd); `agent/terminal_image.py:374-377` (`tool_image_path`) — a tool event's result-parse site routes through safe_json_loads, so a deep-nest result degrades to no-image instead of raising out of the tool.complete handler
 
 
 #### Scenario: Conformance check (derived)
@@ -255,5 +255,6 @@ A tool result nested beyond the normal depth SHALL still deliver its `tool.compl
 - REQ "Shared argument repair for inline tools": no doc-grounded trigger; kept as invariant. (tests/agent/test_repair_tool_call_arguments.py pins the shared repair path itself, not the inline-tool membership claim; PR #127781 is not in any release-note body.)
 - REQ "Stable tool-row identity for display": no doc-grounded trigger; kept as invariant. (#117750 absent from release-note bodies; the adjacent reused-tool-call-ids bullets (#128003/#131758, relnote 0.22.0) are desktop-side and excluded by ownership.)
 - Tail req "A too-deeply nested tool result still completes the tool event": commit-only evidence; no Tier A/B/C trigger+outcome pair found.
-- Tail items rejected (out of capability ownership): desktop tool-row/reasoning-render items (#128009, #128003, #126479, #107386, #118271), TUI/terminal inline-image rendering tail commits (2026-11-04 cluster: kitty image ids, half-block painter, iTerm2 sizing, inline image cache — display/TUI surface), terminal-backend PATH/login-shell tail commits (29fef14fbf35, 6fa171ce5423, 35c2783b6ab7 — tools/environments backends sub-capability), Sprites backend docs (docs/website), plugin-catalog re-pins (a6cdad3e9fb6, fa830bef1db1), browser CDP URL-scan/interception details (09d2e686f9b8, e20007e4e70c, 1c11a23f0f61 — browser sub-capability), test-infra chores.
+- Tail items rejected (out of capability ownership): desktop tool-row/reasoning-render items (#128009, #128003, #126479, #107386, #118271), TUI/terminal inline-image rendering tail commits (2026-11-04 cluster: kitty image ids, half-block painter, iTerm2 sizing, inline image cache — display/TUI surface), terminal-backend PATH/login-shell tail commits (29fef14fbf35, 6fa171ce5423, 35c2783b6ab7 — tools/environments backends sub-capability), Sprites backend docs (docs/website), plugin-catalog re-pins (a6cdad3e9fb6, fa830bef1db1), browser CDP URL-scan/interception details (09d2e686f9b8, e20007e4e7c0, 1c11a23f0f61 — browser sub-capability), test-infra chores.
 - Doc-vs-code surprise (flagged, not fixed): 2026-3.23 release note reports disabled toolsets re-enabling themselves after `hermes tools` (#2268) — a historical violation of the session/platform reduction invariant; current behavior is pinned only at the toolset-resolution layer by tests, not by user docs.
+- Drift (pass 3): the role-based setup toolset grant (#119491, a pass-2 requirement) does NOT exist at the pin — c3f85bc54f "delete profile role; the setup profile is a marked, plain profile" (2026-09-29), then b120ac575d (2026-10-13) removed the setup-profile machinery. Surviving mechanism is session-platform-gated toolsets (`toolsets.py` `TOOLSET_SESSION_PLATFORMS`); requirement rewritten to that.
