@@ -178,14 +178,7 @@ Session-isolated container keys and cwd records SHALL be qualified under the rou
 - Evidence: [PR #123989](https://github.com/NousResearch/hermes-agent/pull/123989) — "qualify session-isolated container keys and cwd records under a routed profile scope"
 - Anchor: not located
 
-## Known gaps / open questions
-- `transport_profile` ≠ `runtime_profile` (shared bot → routed satellite) is declared normal in gateway/AGENTS.md but the split's full contract is only partly drafted; needs a requirement once anchors are opened.
-- Many bundle PRs for profile-scoped reads are desktop-UI (`#125969`, `#121966`, `#92569`, `#130714`) — excluded to deferred desktop-ui; the underlying "scope reads/writes to the viewed profile" rule may deserve a cross-cutting requirement in GROUNDWORK.
-- PS-P05/P06 seam list (gateway/AGENTS.md § Profile scope) not enumerated into requirements — 10+ individual contracts; pass 2 candidate.
-- `hermes_dir_acl` per-profile directory ACLs (imported by hermes_state) not drafted — UNVERIFIED.
-- PR-ref window ends 2026-10-27 vs pin 2026-11-05.
-
-## Requirements (tail fold, commits after 2026-10-27)
+## Sub-area: Tail fold (commits after 2026-10-27)
 
 ### Requirement: Force-install swap dirs stay out of skill discovery
 When a profile distribution force-install stages a swap, the staged/locked old-tree swap directories SHALL NOT be visible to skill discovery, and a copy or swap that fails part-way SHALL keep the old tree in place.
@@ -223,6 +216,13 @@ A profile SHALL NOT adopt another account's newer shared Nous login: the profile
 - **THEN** the profile SHALL keep its own refresh token (account B's shared login is not account A's next refresh token)
 - **AND** the shared store keeps account B's token untouched
 - Source: test: tests/hermes_cli/test_nous_shared_store_freshness.py::test_a_profile_never_adopts_another_accounts_newer_shared_login
+
+## Known gaps / open questions
+- `transport_profile` ≠ `runtime_profile` (shared bot → routed satellite) is declared normal in gateway/AGENTS.md but the split's full contract is only partly drafted; needs a requirement once anchors are opened.
+- Many bundle PRs for profile-scoped reads are desktop-UI (`#125969`, `#121966`, `#92569`, `#130714`) — excluded to deferred desktop-ui; the underlying "scope reads/writes to the viewed profile" rule may deserve a cross-cutting requirement in GROUNDWORK.
+- PS-P05/P06 seam list (gateway/AGENTS.md § Profile scope) not enumerated into requirements — 10+ individual contracts; pass 2 candidate.
+- `hermes_dir_acl` per-profile directory ACLs (imported by hermes_state) not drafted — UNVERIFIED.
+- PR-ref window ends 2026-10-27 vs pin 2026-11-05.
 
 ## Scenario-ification notes
 - REQ "Launch home .env stays loaded under multiplex routing": no doc-grounded trigger; kept as invariant. (#125530's wording exists only as a bundle commit title; no release-note/doc/test pair found. Adjacent gateway/AGENTS.md text covers `.env`-over-frozen-env for the standalone path — a different contract.)

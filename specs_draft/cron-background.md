@@ -222,14 +222,7 @@ Completing a Kanban task SHALL refuse empty result evidence (`complete_task` wit
 - Evidence: [PR #117483](https://github.com/NousResearch/hermes-agent/pull/117483) — "refuse empty complete_task evidence"; [PR #91264](https://github.com/NousResearch/hermes-agent/pull/91264) — judge transport failure / worker failed stops (tests)
 - Anchor: not located (kanban code outside `cron/` proper — `plugins/kanban/` boundary, deferred plugins scope)
 
-## Known gaps / open questions
-- Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2.
-- Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass.
-- Kanban dispatcher invariants (cron/AGENTS.md second half) not read/drafted; kanban sits at the deferred plugins boundary — ownership decision needed.
-- `hermes cron` CLI surface verbs drafted only as part of scheduling entry points.
-- PR-ref window ends 2026-10-27 vs pin 2026-11-05.
-
-## Requirements (tail fold, commits after 2026-10-27)
+## Sub-area: Tail fold (commits after 2026-10-27)
 
 ### Requirement: Scheduled jobs get their actual run time in the prompt
 A fired job's prompt SHALL carry the actual fire time; scheduling cadence SHALL stay out of job prompts (the cadence clause is scoped and also applied on update).
@@ -271,6 +264,13 @@ Each job SHALL pick its own missed-run policy: the job's `catch_up` beats the gl
 - **THEN** occurrences past the explicit grace are still skipped unless the job opts into `catch_up`
 - Source: test: tests/cron/test_cron_stop_and_missed_policy.py::test_explicit_grace_skips_past_it_unless_the_job_opts_into_catch_up
 - Source: [relnote 0.23.0] "Each job picks its own missed-run policy (`--catch-up on|off`)."
+
+## Known gaps / open questions
+- Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2.
+- Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass.
+- Kanban dispatcher invariants (cron/AGENTS.md second half) not read/drafted; kanban sits at the deferred plugins boundary — ownership decision needed.
+- `hermes cron` CLI surface verbs drafted only as part of scheduling entry points.
+- PR-ref window ends 2026-10-27 vs pin 2026-11-05.
 
 ## Scenario-ification notes
 - REQ "Lost manual runs are recorded honestly": no doc-grounded trigger; kept as invariant. (#128509 commit-title-only; relnote 2026.9.11's killed-manual-run bullet (#106733) is about not blocking the next run, a different contract.)

@@ -180,14 +180,7 @@ Tool rows SHALL be keyed on stable tool identity rather than payload bytes for d
 - Evidence: [PR #117750](https://github.com/NousResearch/hermes-agent/pull/117750) — "key display identity of tool rows on stable tool identity, not payload bytes"; related desktop-side #128009/#128003 (desktop capability excluded)
 - Anchor: not located (state/display boundary)
 
-## Known gaps / open questions
-- `registry.register()` signature/behavior at line level not opened (grep showed `register_toolset_alias` at :595 and the class region only); VERIFIED claims lean on AGENTS.md + the opened cache/normalizer/discovery lines.
-- MCP tool availability unification (#119644 "installed plugins' MCP tools ... live in every open chat", #119601 shared enabled-flag reader) is a plugins×tools contract owned by the deferred plugins-mcp capability — excluded here, boundary noted.
-- Terminal/browser tool behavior contracts (`tools/environments/` backends) not drafted — sub-capability candidate for pass 2.
-- Truncated/lost tool-call recovery contracts (#72770 max_tokens boost, #101899 arg fragments glued to bare tool name, #102766 clean-EOF retry) are agent-loop/tool-round hybrids — drafted under agent-turn-loop's recovery gap list instead; ownership TBD.
-- PR-ref window ends 2026-10-27 vs pin 2026-11-05.
-
-## Requirements (tail fold, commits after 2026-10-27)
+## Sub-area: Tail fold (commits after 2026-10-27)
 
 ### Requirement: The live session's tool surface stays frozen; the definitions memo expires with its verdicts
 The tool list presented to a session SHALL stay frozen for that session even when a `check_fn` verdict flips back or a pin is restored; the memoized tool-definitions cache SHALL expire with its `check_fn` verdicts (and a grace/reuse window for a verdict starts when the probe returns).
@@ -221,6 +214,13 @@ A tool result nested beyond the normal depth SHALL still deliver its `tool.compl
 - Status: INFERRED
 - Evidence: [commit 9aea04c329fd] — a too-deeply nested tool result no longer drops tool.complete
 - Anchor: not located (result-normalization/egress boundary shared with sessions-state)
+
+## Known gaps / open questions
+- `registry.register()` signature/behavior at line level not opened (grep showed `register_toolset_alias` at :595 and the class region only); VERIFIED claims lean on AGENTS.md + the opened cache/normalizer/discovery lines.
+- MCP tool availability unification (#119644 "installed plugins' MCP tools ... live in every open chat", #119601 shared enabled-flag reader) is a plugins×tools contract owned by the deferred plugins-mcp capability — excluded here, boundary noted.
+- Terminal/browser tool behavior contracts (`tools/environments/` backends) not drafted — sub-capability candidate for pass 2.
+- Truncated/lost tool-call recovery contracts (#72770 max_tokens boost, #101899 arg fragments glued to bare tool name, #102766 clean-EOF retry) are agent-loop/tool-round hybrids — drafted under agent-turn-loop's recovery gap list instead; ownership TBD.
+- PR-ref window ends 2026-10-27 vs pin 2026-11-05.
 
 ## Scenario-ification notes
 - REQ "Role-gated setup toolset": no doc-grounded trigger; kept as invariant. (#119491's wording exists only as a bundle commit title; no release note, in-repo doc, or test names the role grant.)
