@@ -61,3 +61,23 @@
 2026-04-24 (#15183) [fcc05284fc7f] fix(delegate): tool-activity-aware heartbeat stale detection (#13041) (#15183)
 2026-04-24 (#15105) [7634c1386fb3] feat(delegate): diagnostic dump when a subagent times out with 0 API calls (#15105)
 2026-04-23 (#14809) [50d97edbe15e] feat(delegation): bump default child_timeout_seconds to 600s (#14809)
+
+# ==== TAIL APPEND (G-01): 18 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-04 (no-ref) [c58e6de692f1] docs(delegation): prefix_stagger_seconds is a cap on the warm-up wait, not a stagger
+2026-11-04 (no-ref) [17a8d1e201c2] test(delegation): pin the gate's non-streamed and failed-leader releases, queued-child teardown and the config read
+2026-11-04 (no-ref) [fbec17e9e22e] fix(delegation): background siblings outlive a parent stop; a gate-skipped child is released
+2026-11-04 (no-ref) [8226ce64621a] chore(delegation): keep config_defaults at its line cap; event-driven gate test
+2026-11-04 (no-ref) [6d0686ba3c47] feat(delegation): opt-in prompt-cache warm-up gate for batch subagents
+2026-11-02 (no-ref) [6059d35108af] fix(delegation): preserve initialization after transcript reservation
+2026-11-02 (no-ref) [41774335a695] test(delegation): retain session store in Kanban child fake
+2026-11-02 (no-ref) [13e0ce980129] fix(delegation): reserve child transcripts before publishing session IDs
+2026-11-01 (no-ref) [e1f0ccb1e1d8] test(delegation): join the worker before asserting the dispatch context is released
+2026-11-01 (no-ref) [e48531be2982] fix(delegation): completed async records stop pinning the dispatching turn's Context
+2026-11-01 (no-ref) [cbd71f33b1b8] fix(tui): hold a parked delegation in the ledger's held-copy registry
+2026-11-01 (no-ref) [b87a9a360998] fix(tui): parked results outrank progress notices; a parked delegation's loss is loud
+2026-11-01 (no-ref) [f702e968d829] fix(tui): park live delegations too and never lose a drain's in-memory copies
+2026-11-01 (no-ref) [b84774186502] fix(delegation): give each lost-copy re-offer its own lease and count held copies as live
+2026-11-01 (no-ref) [8a10a3cbef53] fix(delegation): re-offer a pending completion only when its copy is provably lost
+2026-11-01 (no-ref) [2d0bf91f111a] fix: every /bg entry point joins its background delegations in the run
+2026-11-01 (no-ref) [e032b8a26425] fix(desktop): sidebar rows not on screen show running subagents and background work
+2026-10-31 (no-ref) [cc9dbb0583fc] fix(desktop): sessions waiting on subagents or background processes keep the running highlight

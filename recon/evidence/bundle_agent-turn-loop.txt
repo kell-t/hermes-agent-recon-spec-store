@@ -61,3 +61,45 @@
 2026-07-31 (#75588) [d2098331e701] test(agent): add compress()-level E2E regression for short tool-suffix OOB (#75588)
 2026-07-27 (#72424) [c2088efe9efa] feat(gateway): session activity watchdog, stall notify, compress timeout (#72424)
 2026-07-27 (#72424) [cfb206fe2e80] feat(gateway): session activity watchdog, stall notify, compress timeout (#72424)
+
+# ==== TAIL APPEND (G-01): 41 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [8e7cf55eb673] fix(agent): a task with its own URL re-probes when that URL's pin changes
+2026-11-04 (no-ref) [129e86cd1d31] fix(agent): a moved compression route clears the previous summariser's cooldown
+2026-11-04 (no-ref) [6ac5474f28f3] fix(agent): the feasibility latch records the route read before the probe
+2026-11-04 (no-ref) [8a39468c5203] fix(agent): a changed provider context pin re-probes a warm agent
+2026-11-04 (no-ref) [884a3bbbf773] refactor(agent): import the feasibility probe functions from their own module
+2026-11-04 (no-ref) [ab0dde92fade] fix(agent): a bypass session's compression probe keeps its own provider entries
+2026-11-04 (no-ref) [e4066c1e5a6e] fix(agent): measure the compression model against today's provider entries
+2026-11-04 (no-ref) [3ad3c4101abe] fix(agent): trust a feasibility latch that recorded no route
+2026-11-04 (no-ref) [95683f47fad4] fix(agent): re-probe compression feasibility when the compression route moves
+2026-11-04 (no-ref) [36b29e812a2c] fix(agent): anchor the intent-ack tool gate on this turn's own user row
+2026-11-04 (no-ref) [6190ffdc3250] fix(agent): scope the intent-ack no-tools gate to the current turn
+2026-11-04 (no-ref) [be765e31d810] fix(compression): scope the summary-abort to Gemini prompt blocks only
+2026-11-04 (no-ref) [9c1799ed1af4] fix(compression): a safety-blocked summary request aborts with the transcript intact
+2026-11-04 (no-ref) [74234d61c4ab] test(compression): assert the stance rule and section are wired in, not their wording
+2026-11-04 (no-ref) [73bfb9ce7e40] feat(compression): keep uncertain claims labelled UNVERIFIED through compaction
+2026-11-04 (no-ref) [5fed142bf9d2] fix(agent): byte-cap recovery status line no longer claims HTTP 413
+2026-11-04 (no-ref) [17e3162e6d95] fix(agent): SDK-wrapped field-length 400s no longer count as a request byte cap
+2026-11-04 (no-ref) [371abaea41b0] fix(agent): keep token caps worded as size caps on the token-overflow path
+2026-11-04 (no-ref) [c2c5dd82db13] test(agent): pin image-rejection guard to the sent request, not history
+2026-11-04 (no-ref) [0d76f7ee60a2] fix(agent): only mark a model image-rejecting when the failed request carried images
+2026-11-04 (no-ref) [a7732d031e11] fix(agent): recover "is not a multimodal model" image rejections from text-only endpoints
+2026-11-04 (no-ref) [0754ec0e2827] fix(bot-loop): chain identity, per-send hops, fork/compression keying, one notice policy
+2026-11-04 (no-ref) [e08cf6f308aa] feat(desktop): compact confirmation names the chat it will compact
+2026-11-04 (no-ref) [d64292c1b30b] fix(desktop): compact row closes the meter through a statusbar context, not a MenuItem
+2026-11-04 (no-ref) [25b6bfb0fabc] fix(desktop): compact row is a menu item so the dropdown closes before the confirm
+2026-11-04 (no-ref) [36d4b151fbf7] test(desktop): compact button targets the chat it was opened on
+2026-11-04 (no-ref) [9ad2c02acc26] refactor(desktop): compact button runs the shared /compress pipeline
+2026-11-04 (no-ref) [a212421dbd50] fix(context): keep the fallback source on the compressor, and through MoA presets
+2026-11-03 (no-ref) [d4c807f4e3fa] feat(desktop): compact context from the status bar without leaving Bot Chat
+2026-11-01 (no-ref) [4ea79443bc8e] perf(agent): the token memo keeps no more idle entries than it always had
+2026-11-01 (no-ref) [967c73a10454] chore(compression): fold the post-compression trim comment so the compressor facade does not grow
+2026-11-01 (no-ref) [92628552ab06] fix(agent): a single message larger than the token-memo budget is not memoized
+2026-11-01 (no-ref) [79ff304b4c55] fix(agent): token-memo hits share the eviction lock so a racing hit can't make eviction drop an active entry
+2026-10-31 (no-ref) [c0bcfe2bb28b] fix(hooks): a blocked turn runs no post-turn compaction
+2026-10-31 (no-ref) [53cbb3838940] fix(agent): name stream_max_lifetime in the exhausted-retries headline
+2026-10-31 (no-ref) [b484be561039] fix(agent): configure stream_max_lifetime through config.yaml only
+2026-10-31 (no-ref) [c41de4d95f79] fix(agent): timeout summary follows only the cause chain and names the real provider key
+2026-10-31 (no-ref) [a8c7ec078d83] fix(agent): name the phase and the setting in transport-timeout error summaries
+2026-10-29 (no-ref) [01af9039df08] fix(compression): stop the post-compression trim from stalling the dashboard loop
+2026-10-28 (no-ref) [882482b58a3f] fix(compression): the active-request bridge obeys the post-handoff progress floor

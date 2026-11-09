@@ -61,3 +61,38 @@
 2026-06-19 (#48673) [cfb55de5ea49] Update Stripe Projects skill docs (#48673)
 2026-06-18 (#48200) [f1254c8eafa4] fix(skills): rmtree scope guard + default pre_update_backup to true (#48200)
 2026-06-17 (#47840) [7bbffceb9c35] feat(curator): make skill consolidation opt-in (prune stays default-on) (#47840)
+
+# ==== TAIL APPEND (G-01): 33 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [6dcdb81f5e8b] fix(plugin-catalog): pethost 1.9.1, the skill writes its own transfer commands and the package holds no token
+2026-11-05 (no-ref) [a53912d2888f] test(aux): pin the skills_hub removal by behaviour, not source text
+2026-11-04 (no-ref) [84a0301415ed] fix(review): the background review never asks the user for a skill's API key
+2026-11-04 (no-ref) [7c6fc00f8028] docs(skills): regenerate the s6 supervision skill page
+2026-11-03 (no-ref) [29a61cb7ab50] fix(skills): a cached scan re-scans when the source's trust level changed
+2026-11-03 (no-ref) [8112254f8a93] chore(skills): drop optional skills that catalog MCPs, plugins and vendor repos cover
+2026-11-03 (no-ref) [c2744d98bd63] docs(skills): regenerate skill pages for the pypdf 6.21.4 pin
+2026-11-02 (no-ref) [7c9b99583cc8] fix(catalog): correct skill count 27→22 (matches v0.8.12 pin)
+2026-11-02 (no-ref) [0aab6dcf8b78] docs(skills): correct the projects reference against the live CLI
+2026-11-01 (no-ref) [c9577b67224b] fix(cache-bounds): atomic expiry vs refresh; one LRU order for skill scopes
+2026-11-01 (no-ref) [557254faa24e] fix(skills): lock guard resolves variables and relative inline code, lets reads through
+2026-11-01 (no-ref) [a639ed0ae491] fix(skills): close terminal lock bypasses; curator honours locks by display name
+2026-11-01 (no-ref) [722d4fac961f] feat(desktop): lock a skill from the Capabilities pane
+2026-11-01 (no-ref) [91c51e04f457] feat(skills): a locked skill can't be changed by the agent through any write path
+2026-10-30 (no-ref) [18d6877f4b00] feat(plugin-catalog): update DSers to v0.1.2 with bundled skills
+2026-10-29 (no-ref) [f282c57b7897] fix(skills): hermes-agent skill describes one-call text+Enter truthfully
+2026-10-29 (no-ref) [a53acf8d3a5d] fix(skills): document env setup never deletes a working env another agent published
+2026-10-29 (no-ref) [b544b82db163] fix(skills): OCR side env stays selected in the next terminal call
+2026-10-28 (no-ref) [395e89060fe3] fix(skills): keep nested-table order and table column names intact
+2026-10-28 (no-ref) [c4f72bc69b57] refactor(skills): move xlsx_restructure formula and freeze-pane steps out of main
+2026-10-28 (no-ref) [cfabecfa797a] fix(skills): pdf --flatten keeps form fields the JSON leaves out
+2026-10-28 (no-ref) [888664fda483] fix(website): the skills catalog can filter by the new vendor taps
+2026-10-28 (no-ref) [08a7c25eecb6] docs(skills): regenerate skill pages and the prompt-surface snapshot
+2026-10-28 (no-ref) [6fdc365d4bf9] refactor(skills): fold docx, powerpoint and xlsx into one microsoft-office skill
+2026-10-28 (no-ref) [183b5ddd5fbc] chore(skills): move niche built-in skills to optional
+2026-10-28 (no-ref) [9347107cdbc0] chore(skills): drop optional skills that official sources now cover
+2026-10-28 (no-ref) [dc82bec3bd4d] fix(skills): the sandbox document venv is built privately and published atomically
+2026-10-28 (no-ref) [d202ddfda225] fix(skills): the tmux prompt wait needs no coreutils timeout
+2026-10-28 (no-ref) [30a8c50a6ff1] fix(skills): document-skill setup works in the Docker sandbox; wait for the prompt before driving Hermes
+2026-10-28 (no-ref) [4a8c01790a03] fix(skills): document skills share one PM-built side environment; pause before Enter in the no-tmux recipe
+2026-10-28 (no-ref) [ad09ca5b4421] docs(skills): regenerate skill pages for the document-skill and tmux recipe edits
+2026-10-28 (no-ref) [b357ebbfc4dc] fix(docker): ship tmux and the Office/PDF libraries; document skills keep a persistent side env
+2026-10-28 (no-ref) [5c668bbe4daa] fix(webapp-access): status poll queries the gateway outside the skills lock

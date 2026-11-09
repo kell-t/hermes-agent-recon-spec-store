@@ -61,3 +61,45 @@
 2026-08-28 (#94647) [b39d76d902b0] feat(tools): session-persistent kernels for execute_code (kernel_mode: session) (#94647)
 2026-08-26 (#95853) [934b2b94cc81] test(tools): pin open_preview missing-path emit (#95853)
 2026-08-26 (#95853) [5fce460df839] fix(tools): reject directory targets in open_preview (#95853)
+
+# ==== TAIL APPEND (G-01): 54 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-05 (no-ref) [9fb740ec4a57] test(browser): read the child's env from a file, not from redacted output
+2026-11-04 (no-ref) [32a2c3bad68c] fix(terminal): each preview size of a file gets its own kitty image id
+2026-11-04 (no-ref) [64a30e926c5e] fix(tui): inline image cache keys on the tool call, forgets off, stays bounded
+2026-11-04 (no-ref) [0eb6546eaa46] refactor(terminal): one half-block painter; trim the inline-image API
+2026-11-04 (no-ref) [17ba59a92ae6] fix(terminal): the CLI and the TUI draw the same image files
+2026-11-04 (no-ref) [4c910ce2b919] fix(terminal): GNU screen gets half-blocks; pinned kitty passes through tmux
+2026-11-04 (no-ref) [9aea04c329fd] fix: a too-deeply nested tool result no longer drops tool.complete
+2026-11-04 (no-ref) [268266994b12] fix(terminal): draw tool images only for calls that showed one
+2026-11-04 (no-ref) [c39016f6613b] fix(terminal): bound inline-image decoding before it starts
+2026-11-04 (no-ref) [6dd58eda3470] fix(terminal): iTerm2 image size is the decoded byte count
+2026-11-04 (no-ref) [28203b081f47] docs(terminal): link Sprites to fly.io/sprites
+2026-11-04 (no-ref) [735615f4b64a] docs(terminal): give the full Sprite name shape on named profiles
+2026-11-04 (no-ref) [8ca88d897def] docs(terminal): document the Sprites plugin backend alongside the other terminal backends
+2026-11-03 (no-ref) [308f31770723] test(e2e): live gateway-owned room spec with scripted tool calls and failures
+2026-11-02 (no-ref) [a6cdad3e9fb6] plugin-catalog: re-pin mock-review to v1.1.4 (password-gated here.now boards may wake with wake_toolsets; LAN boards guarded)
+2026-11-02 (no-ref) [c2dac477f58e] fix(tools): start the check_fn grace reuse window when the probe returns
+2026-11-02 (no-ref) [c49a94bee193] fix(tools): keep a pinned Tool Search bridge on a same-process pin restore
+2026-10-31 (no-ref) [fa830bef1db1] plugin-catalog: wakeshift: pin eeef97d (declares tool_request middleware)
+2026-10-31 (no-ref) [f135a3de0a70] refactor(terminal): move graphics detection and encoders out of the pet
+2026-10-31 (no-ref) [adecc4024456] test(terminal): build the profile-home fixtures under the isolated native root
+2026-10-30 (no-ref) [b9e983665c7a] fix(tools): key the tools[] freeze on generation and selection, hold flips on pin restore
+2026-10-30 (no-ref) [09d2e686f9b8] fix(browser): raw CDP metadata check reads the host after userinfo
+2026-10-30 (no-ref) [e10765f7c309] fix(terminal): key a named profile's unnamed chats by its name too
+2026-10-30 (no-ref) [fdb71a95a260] fix(terminal): keep the :ws: key idempotent and test the unmounted key gate
+2026-10-29 (no-ref) [7aca8caeafb1] fix(tools): keep a live session's tools[] frozen when a check_fn flips back
+2026-10-29 (no-ref) [9b839d815eb1] fix(tools): expire the tool-definitions memo with its check_fn verdicts
+2026-10-29 (no-ref) [e20007e4e7c0] fix(browser): raw CDP URL scan reads bracketed IPv6 and scheme-relative hosts
+2026-10-29 (no-ref) [1c11a23f0f61] fix(browser): raw CDP blocklist, interception and cookie calls work on guarded backends
+2026-10-29 (no-ref) [149e3f5539b8] fix(terminal): reuse the profile container for sessionless workers
+2026-10-28 (no-ref) [0e8d47084818] chore(terminal): keep process_registry.py at its line cap after the rebase
+2026-10-28 (no-ref) [35c2783b6ab7] fix(terminal): relative spawn PATH entries survive a resetting login profile
+2026-10-28 (no-ref) [4e1453f3513c] test(terminal): env bash shebang for the stand-in login shell
+2026-10-28 (no-ref) [3580324e8b7f] test(terminal): explicit encodings in the login-shell PATH tests (windows-footguns)
+2026-10-28 (no-ref) [11262fac9655] test(terminal): pin the resetting login profile with a stand-in login shell
+2026-10-28 (no-ref) [854cef24e9f1] test(terminal): pin the profile-home mode in the background PATH test
+2026-10-28 (no-ref) [b9c7d4e8af79] test(terminal): the background PATH test pins the login shell's HOME
+2026-10-28 (no-ref) [29fef14fbf35] fix(terminal): background commands keep spawn PATH dirs a login profile resets
+2026-10-28 (no-ref) [6fa171ce5423] fix(terminal): keep the spawn PATH's dirs a login profile resets out of the snapshot
+2026-10-28 (no-ref) [13461950bf04] test(browser): runtime-root choice and the short-dir claim, independent of the host
+2026-10-28 (no-ref) [92e8a6398d8c] fix(browser): browser_exec binds its daemon socket under a deep HOME

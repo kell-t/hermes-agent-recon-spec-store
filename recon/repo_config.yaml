@@ -77,6 +77,9 @@ scope:
   owner_note: "Owner mission 2026-11-08: cap ambition deliberately; converging beats exhaustive."
 
 clustering:  # regex applied to commit subject; a commit may land in <=2 buckets
+  # G-04 (pass 2): tools-toolsets and cli-surface regexes tightened (pass-1 \btools?\b /
+  # \bcli\b over-matched desktop/telegram). Tail clustering is SCOPE-FIRST — see
+  # scripts/mine_tail.py SCOPES map built from scope.included[].scopes.
   agent-turn-loop: 'compact|compress|prompt[- ]cach|turn[- ]loop|system prompt|cache[- ]break|token[- ]lock|run_agent|message[- ]flow'
   gateway-messaging: 'gateway|telegram|discord|slack|whatsapp|signal\b|matrix|relay|bot[- ]mode|multiplexer|platform adapter|adapter'
   sessions-state: 'session|state db|hermes_state|history|resume|checkpoint|sqlite'
