@@ -33,9 +33,9 @@ Jobs SHALL accept duration (`"30m"`), every-phrase (`"every monday 9am"`), 5-fie
 
 ### Requirement: Pre-run scripts are files, never command lines
 A job's `script` SHALL always be a file under `HERMES_HOME/scripts/` — never an inline command line (`script='echo hi'` is refused at creation); its stdout is injected into the prompt, and `no_agent=True` makes the script the whole job.
-- Status: INFERRED
-- Evidence: doc: cron/AGENTS.md § Cron (per-job fields)
-- Anchor: not located (creation-time refusal site not opened)
+- Status: VERIFIED
+- Evidence: doc: cron/AGENTS.md § Cron (per-job fields) — code: cron/jobs_invariants.py:40 refuses command-line scripts at both create_job and update_job doors
+- Anchor: `cron/jobs_invariants.py:40` (`_script_is_command_line`) — `if script and _script_is_command_line(script):` raises `SCRIPT_IS_COMMAND_LINE_ERROR`, the creation-time refusal; `cron/jobs_invariants.py:70` (`def _script_is_command_line`) — a script with whitespace that resolves to no file is a command line (`echo hi`), not a path; `cron/jobs.py:1875` (`_validate_job_mode_invariants`) — create_job runs the shared invariant door (also at jobs.py:2134 for update_job, so no bypass via the update door)
 
 #### Scenario: An inline command line is refused at creation
 - **WHEN** a job is created with `script=\"echo hi\"` (a command line instead of a file)
@@ -91,9 +91,9 @@ Cron agent sessions SHALL be hard-interrupted on inactivity (default 600s idle, 
 
 ### Requirement: Bounded catch-up window
 Missed-run catch-up SHALL use half the period clamped to 120s–2h, overridable per job by `grace_minutes` (`0` meaning never catch up — a real value, never conflated with unset), with 120s grace for missed one-shots.
-- Status: INFERRED
-- Evidence: doc: cron/AGENTS.md § Hardening invariants
-- Anchor: not located (`cron/jobs_time.py` per doc "knobs live in cron/jobs_time.py")
+- Status: VERIFIED
+- Evidence: doc: cron/AGENTS.md § Hardening invariants — code: `_compute_grace_seconds` (cron/jobs.py:947) computes half-period clamped [120s, 7200s]; per-job override floors at 120s
+- Anchor: `cron/jobs.py:960` (`return max(_MIN_GRACE_SECONDS, min(int(period_seconds) // 2, _MAX_GRACE_SECONDS))`) — half the period, clamped to the window; `cron/jobs.py:943` (`_MIN_GRACE_SECONDS = 120`) with `cron/jobs.py:944` (`_MAX_GRACE_SECONDS = 7200`) — the 120s–2h clamp bounds; `cron/jobs_time.py:83` (`normalize_grace_minutes`) — "``0`` is a real value (never catch up), so it must never be collapsed into absent"; one-shot 120s grace at `cron/jobs.py:120` (`ONESHOT_GRACE_SECONDS = 120`)
 
 #### Scenario: Late delivery only inside the computed window
 - **WHEN** a cron occurrence is missed and its catch-up window has not lapsed
@@ -110,9 +110,9 @@ Missed-run catch-up SHALL use half the period clamped to 120s–2h, overridable 
 
 ### Requirement: Pinned timezone owns the whole run-time path
 A job's pinned `timezone` SHALL govern every `next_run_at` write site (not just computation); `compute_next_run` resolves job pin before profile zone, `_evaluate_due_job` normalizes stored instants into the job's zone, and timezone-shift repair SHALL be skipped for pinned jobs.
-- Status: INFERRED
-- Evidence: doc: cron/AGENTS.md § Hardening invariants ("one missed site is a burst re-run or a skipped slot")
-- Anchor: not located (`cron/jobs_time.py`)
+- Status: VERIFIED
+- Evidence: doc: cron/AGENTS.md § Hardening invariants ("one missed site is a burst re-run or a skipped slot") — code: pin-before-profile resolution at cron/jobs.py:1239 and repair skip at cron/jobs.py:3217 (`zone is None` guard)
+- Anchor: `cron/jobs.py:1197` (`must pass`) — compute_next_run docstring: "Every caller that advances a job's ``next_run_at`` must pass it, or a pinned job is computed in the wrong zone and jumps a slot"; `cron/jobs.py:1239` (`zone = job_zone or get_timezone() or base_time.tzinfo`) — job pin resolves before the profile zone (job_zone from `jobs_time.zone_for_job` at jobs.py:1203); `cron/jobs.py:3217` (`if kind == "cron" and not manual_run and zone is None and _repair_timezone_shifted_cron(d)`) — repair skipped for pinned jobs (zone not None); `cron/jobs.py:3198` (`zone = jobs_time.zone_for_job(job)`) normalizes the stored instant into the job's zone in `_evaluate_due_job`
 
 #### Scenario: The pinned zone governs every write, and shift-repair stands down
 - **WHEN** a job carries a pinned `timezone`
@@ -187,9 +187,9 @@ Because one process ticks N profile stores, in-flight scheduler state SHALL be k
 
 ### Requirement: Cron ticking is not gated on the multiplex flag
 One host gateway SHALL tick every profile's store regardless of `gateway.multiplex_profiles` (that flag gates adapters only).
-- Status: INFERRED
-- Evidence: doc: cron/AGENTS.md § Hardening invariants (names `run.py::_cron_tick_profile_homes`)
-- Anchor: not located (gateway/run.py sibling not opened)
+- Status: VERIFIED
+- Evidence: doc: cron/AGENTS.md § Hardening invariants (names `run.py::_cron_tick_profile_homes`) — code: gateway/run_bootstrap.py starts the ticker over `_cron_tick_profile_homes(runner.config)` with no multiplex_profiles gate
+- Anchor: `gateway/run_bootstrap.py:398` (`gateway.multiplex_profiles`) — comment at the tick-set site: "its cron ticker owns EVERY profile's store — `gateway.multiplex_profiles` gates adapters, not cron"; the homes call at run_bootstrap.py:402 is ungated; `gateway/run.py:1654` (`def _cron_tick_profile_homes`) — docstring at run.py:1658: "One host process ticks all of them regardless of ``gateway.multiplex_profiles``. Adapter startup already skips ``active``."
 
 #### Scenario: Ticking ignores the multiplex flag
 - **WHEN** `gateway.multiplex_profiles` is off
@@ -199,9 +199,9 @@ One host gateway SHALL tick every profile's store regardless of `gateway.multipl
 
 ### Requirement: Pinned job models never fall back globally
 A job with a pinned model/provider SHALL never fall back to the global fallback chain on failure.
-- Status: INFERRED
-- Evidence: [PR #120312](https://github.com/NousResearch/hermes-agent/pull/120312) — "a pinned job never falls back to the global fallback chain"
-- Anchor: `cron/jobs_model_pin.py` (module named for the rule; lines not opened)
+- Status: VERIFIED
+- Evidence: [PR #120312](https://github.com/NousResearch/hermes-agent/pull/120312) — "a pinned job never falls back to the global fallback chain" — code: `_job_fallback_chain` (cron/scheduler.py:98) feeds the same pinned verdict to resolution, preflight (scheduler_preflight.py:98) and mid-run (scheduler.py:1771)
+- Anchor: `cron/scheduler.py:98` (`def _job_fallback_chain`) — docstring: "A pinned job never borrows the global ``fallback_providers`` chain ... at credential resolution AND mid-run"; `cron/scheduler.py:106` (`return scoped_fallback_chain(`) — passes `pinned=_job_route_pinned(job)` so a pinned job gets no chain; `cron/scheduler.py:92` (`def _job_route_pinned`) — any own provider/model/base_url string is an explicit operator pin
 
 #### Scenario: A pinned job never borrows the global fallback chain
 - **WHEN** a job carries its own `provider`, `model` or `base_url` and its run fails
@@ -212,23 +212,25 @@ A job with a pinned model/provider SHALL never fall back to the global fallback 
 
 ### Requirement: Lost manual runs are recorded honestly
 A manual `hermes cron run` whose worker is lost SHALL be recorded as a lost run, not reported as a restart that never happened.
-- Status: INFERRED
-- Evidence: [PR #128509](https://github.com/NousResearch/hermes-agent/pull/128509) — "record a lost manual run instead of reporting a restart that never happened"
-- Anchor: not located
+- Status: VERIFIED
+- Evidence: [PR #128509](https://github.com/NousResearch/hermes-agent/pull/128509) — "record a lost manual run instead of reporting a restart that never happened" — code: waiter path calls `terminalize_dead_owner` with `external_worker_exited_reason` cause (cron/scheduler.py:3551-3554, #128509)
+- Anchor: `cron/executions.py:565` (`def terminalize_dead_owner`) — docstring: without it "a manual run whose worker dies is filed as 'Scheduler restarted ...' (a restart that never happened)"; records the attempt as `unknown` with an observed cause; `cron/scheduler_worker_failure.py:48` (`def external_worker_exited_reason`) — truthful cause: "Restart-safe cron worker exited with status {returncode} after adopting this execution" (#128509); `cron/scheduler.py:3554` (`if not terminalize_dead_owner(execution_id, reason=reason):`) — the waiter records the lost run instead of reporting a restart
 
 ### Requirement: Kanban completion requires evidence
 Completing a Kanban task SHALL refuse empty result evidence (`complete_task` without evidence is rejected).
-- Status: INFERRED
-- Evidence: [PR #117483](https://github.com/NousResearch/hermes-agent/pull/117483) — "refuse empty complete_task evidence"; [PR #91264](https://github.com/NousResearch/hermes-agent/pull/91264) — judge transport failure / worker failed stops (tests)
-- Anchor: not located (kanban code outside `cron/` proper — `plugins/kanban/` boundary, deferred plugins scope)
+- Status: VERIFIED
+- Evidence: [PR #117483](https://github.com/NousResearch/hermes-agent/pull/117483) — "refuse empty complete_task evidence"; [PR #91264](https://github.com/NousResearch/hermes-agent/pull/91264) — judge transport failure / worker failed stops (tests) — code: gate lives in hermes_cli/kanban_db.py (`_gate_empty_completion`, `EmptyCompletionError`), not plugins/kanban; test tests/hermes_cli/test_kanban_empty_completion.py pins it (#117483)
+- Anchor: `hermes_cli/kanban_db.py:2808` (`raise EmptyCompletionError(task_id)`) — after an auditable `completion_blocked_empty_result` event, empty/whitespace-only evidence is refused; `hermes_cli/kanban_db.py:2777` (`def _gate_empty_completion`) — "Refuse a completion that would leave the card with no evidence"; requires substantive result/summary/stored text (review approval exempt); `hermes_cli/kanban_db.py:2669` (`_gate_empty_completion(conn, task_id, result=result, summary=summary)`) — called from `complete_task` (def at kanban_db.py:2640)
 
 ## Sub-area: Tail fold (commits after 2026-10-27)
 
 ### Requirement: Scheduled jobs get their actual run time in the prompt
 A fired job's prompt SHALL carry the actual fire time; scheduling cadence SHALL stay out of job prompts (the cadence clause is scoped and also applied on update).
-- Status: INFERRED
-- Evidence: [commit 3166c4a4b149] — give scheduled jobs their actual run time in the prompt; [commit 8a900e67159d] — keep scheduling cadence out of cron job prompts; [commit ce1370430ef8] — scope prompt clause to cadence and cover update
-- Anchor: not located (prompt-assembly seam for cron jobs)
+- Status: VERIFIED
+- Evidence: [commit 3166c4a4b149] — give scheduled jobs their actual run time in the prompt; [commit 8a900e67159d] — keep scheduling cadence out of cron job prompts; [commit ce1370430ef8] — scope prompt clause to cadence and cover update — code: `_run_time_line()` (cron/scheduler_prompt.py:293) injected at :357; cadence clause at tools/cronjob_tools.py:1145 covers create and update (commits 3166c4a4b149/8a900e67159d/ce1370430ef8, all ancestors of the pin)
+- Anchor: `cron/scheduler_prompt.py:357` (`prompt = _CRON_HINT + _run_time_line() + prompt`) — every fired job's assembled prompt carries the run-time line; `cron/scheduler_prompt.py:301` (`return f"[CURRENT RUN TIME: {safe_strftime(now, '%A, %Y-%m-%d %H:%M %Z').strip()}{zone}]
+
+"`) — the fire-time line in the configured zone (def at :293); `tools/cronjob_tools.py:1145` (`"For create/update: the full self-contained prompt (when it runs goes in 'schedule'`) — cadence clause scoped to create/update, keeping cadence out of job prompts
 
 #### Scenario: The prompt knows when the job fired
 - **WHEN** a scheduled job fires and its prompt is assembled
@@ -237,9 +239,9 @@ A fired job's prompt SHALL carry the actual fire time; scheduling cadence SHALL 
 
 ### Requirement: Gateway drain holds dispatch; a one-shot due during the hold fires once afterwards
 While a gateway drain holds cron dispatch, a one-shot becoming due SHALL NOT be consumed or lost: it fires once when the next gateway ticks; the drain-hold grace extension is capped, never re-fires a claimed one-shot, and a failed write mid-drain does not restart the hold window.
-- Status: INFERRED
-- Evidence: [commit c7b72e1fe4a7] — a one-shot due while a gateway drain holds dispatch fires once afterwards; [commit b7798657a008] — the drain-hold grace extension is capped and never re-fires a claimed one-shot; [commit b425edd28617] — a failed write mid-drain no longer restarts the hold window
-- Anchor: not located (dispatch-hold machinery adjacent to `cron/dispatch_hold.py`, already in Known gaps)
+- Status: VERIFIED
+- Evidence: [commit c7b72e1fe4a7] — a one-shot due while a gateway drain holds dispatch fires once afterwards; [commit b7798657a008] — the drain-hold grace extension is capped and never re-fires a claimed one-shot; [commit b425edd28617] — a failed write mid-drain no longer restarts the hold window — code: dispatch_hold module docstring states the one-shot "fires once when dispatch resumes"; claim guard at cron/missed_runs.py:136-138; tests/cron/test_oneshot_due_during_drain_hold.py present
+- Anchor: `cron/dispatch_hold.py:77` (`def grace_starts_at`) — a one-shot due during a hold counts grace from the hold's end; extension only for one-shots due within `MAX_EXTENSION_SECONDS` (dispatch_hold.py:29, 1800.0) of the hold's end, i.e. capped; `cron/dispatch_hold.py:32` (`_hold_since: dict[str, float] = {}`) — comment: "Kept in memory so a failed write mid-drain cannot reset ``since``"; `cron/missed_runs.py:137` (`grace_start = d.next_run_dt.timestamp() if claimed else grace_starts_at(`) — a claimed one-shot already fired once, so it never gets the extension (never re-dispatched)
 
 #### Scenario: Due during the drain, fired by the next gateway
 - **WHEN** a one-shot becomes due while a gateway drain holds dispatch
@@ -248,9 +250,9 @@ While a gateway drain holds cron dispatch, a one-shot becoming due SHALL NOT be 
 
 ### Requirement: Per-job catch_up composes with grace_minutes and the global setting
 Each job SHALL pick its own missed-run policy: the job's `catch_up` beats the global setting, an explicit `grace_minutes` still skips past it unless the job opts into `catch_up`, and a `catch_up: off` skip books exactly one missed row with the count.
-- Status: INFERRED
-- Evidence: [commit d4865574e474] — review round 3: Stop settles by its own run, missed counts use the pinned zone, distributions keep catch_up; [commit e9f01737aae3] — how a job's catch_up composes with grace_minutes; [commit bb8c685c8981] — test: an explicit grace_minutes still skips past it unless the job opts into catch_up; [commit 3f435147912f] — a Run-now stopped by cancel reports cancelled, not failed
-- Anchor: not located (catch-up policy resolution in jobs_time/store layer)
+- Status: VERIFIED
+- Evidence: [commit d4865574e474] — review round 3: Stop settles by its own run, missed counts use the pinned zone, distributions keep catch_up; [commit e9f01737aae3] — how a job's catch_up composes with grace_minutes; [commit bb8c685c8981] — test: an explicit grace_minutes still skips past it unless the job opts into catch_up; [commit 3f435147912f] — a Run-now stopped by cancel reports cancelled, not failed — code: `catch_up` in `JOB_DEFINITION_FIELDS` (cron/job_definition.py:18); composition resolved in `job_catches_up` (cron/missed_runs.py:25-41)
+- Anchor: `cron/missed_runs.py:25` (`def job_catches_up`) — docstring: "The job's own ``catch_up`` wins; otherwise one-shots skip, and recurring jobs skip past an explicit ``grace_minutes`` or else follow ``cron.catch_up_missed``"; `cron/missed_runs.py:28` (`value = job.get("catch_up")`) — job bool wins outright; explicit grace override → False at :38; global default at :41 (`_cron_config_number("catch_up_missed", True, ...)`) ; `cron/missed_runs.py:104` (`f"skipped, catch-up off; next run {new_next}"`) — the catch_up-off skip books one missed row with the count via `_book_missed(job, missed, first, ...)` (missed_runs.py:103, def at :63)
 
 #### Scenario: Job policy beats the global setting
 - **WHEN** a job sets `catch_up` while a global missed-run setting exists

@@ -91,9 +91,9 @@ Store errors SHALL distinguish "BUSY, not gone" (retryable, mapped to HTTP 503) 
 
 ### Requirement: Locked-store resilience under gateway load
 Lock contention SHALL NOT surface as crashes of `hermes sessions list` or dashboard 503s under a busy gateway (dedicated read pooling / lock guarding around the single-writer model).
-- Status: INFERRED
-- Evidence: doc: hermes_state.py:197 comment ("database is locked ... under a busy gateway"); siblings `hermes_state_readpool.py`, `hermes_state_lockguard.py`, `hermes_state_lockowners.py` exist for this purpose (not opened)
-- Anchor: not located (line-level)
+- Status: VERIFIED
+- Evidence: doc: hermes_state.py:197 comment ("database is locked ... under a busy gateway"); siblings `hermes_state_readpool.py`, `hermes_state_lockguard.py`, `hermes_state_lockowners.py` exist for this purpose (not opened) — implemented at pin: reader busy budget hermes_state.py:198 (applied :741), lock-patient open hermes_state.py:835, IOERR-retry on read-only opens hermes_state.py:739-763; tests/hermes_state/test_write_lock_patience.py present
+- Anchor: `hermes_state.py:198` (`_READ_BUSY_TIMEOUT_S = 5.0`) — 5 s SQLite busy-handler budget for read-only connections; the comment ending at :197 names the failure it prevents: "database is locked" (dashboard 503s, `hermes sessions list` crashes) under a busy gateway; `hermes_state.py:835` (`_connect_and_init_with_lock_patience`) — writable open waits out a sibling's write lock (VACUUM/checkpoint/FTS) with jittered patience instead of failing the entire open and disabling persistence; `hermes_state_readpool.py:1` (module docstring "Read-connection budgeting for SessionDB's WAL read path") — per-file/process-wide permit ceilings so pooled readers cannot hit EMFILE; used at `hermes_state.py:741` (`timeout=_READ_BUSY_TIMEOUT_S`)
 
 #### Scenario: Writes survive multi-second lock holds
 - **WHEN** sibling Hermes processes legitimately hold the shared `state.db` for multi-second stretches (VACUUM after auto-prune, checkpoint at close on a large WAL, a long FTS pass)
@@ -139,9 +139,9 @@ Retiring/deleting sessions SHALL record and retire the tool-result spillover arc
 
 ### Requirement: One preview-column builder for all session listings
 Session listings SHALL share one preview-column builder so every surface shows identical previews, and listing subqueries SHALL stay on the messages-session index even under stale planner stats.
-- Status: INFERRED
-- Evidence: [PR #119403](https://github.com/NousResearch/hermes-agent/pull/119403) — "one preview-column builder, pinned at every session listing"; "session-list subqueries stay on idx_messages_session under stale planner stats"
-- Anchor: `hermes_state_session_list.py` (file exists; specific lines not opened)
+- Status: VERIFIED
+- Evidence: [PR #119403](https://github.com/NousResearch/hermes-agent/pull/119403) — "one preview-column builder, pinned at every session listing"; "session-list subqueries stay on idx_messages_session under stale planner stats" — implemented at pin: builder _sql_preview_raw/_shape_preview live in hermes_state_common.py (:160/:149), imported by every listing sibling; tests/hermes_state/test_session_list_index_choice.py present
+- Anchor: `hermes_state_common.py:160` (`_sql_preview_raw`) — the single correlated `_preview_raw` builder; its docstring (:162-163) states INDEXED BY exists because with planner stats older than idx_messages_session_id SQLite would read and sort the whole session; `hermes_state_common.py:164` (`INDEXED BY idx_messages_session`) — the preview subquery pinned to the (session_id, timestamp) index; same pin in the last-active subquery at `hermes_state_common.py:265`; `hermes_state_sessions.py:1243` (`_sql_preview_raw('tip.id')`) — the one builder pinned at every listing; also called at hermes_state_sessions.py:1342, hermes_state_telegram.py:72, hermes_state_portability.py:85, shaped by `_shape_preview` (hermes_state_sessions.py:1290/1299)
 
 #### Scenario: List subqueries stay on the timestamp index under stale stats
 - **WHEN** session listings run against planner stats that predate `idx_messages_session_id`
@@ -150,9 +150,9 @@ Session listings SHALL share one preview-column builder so every surface shows i
 
 ### Requirement: Rebuilt follow-up turns reproduce multimodal content
 Follow-up turns reconstructed from the session DB SHALL reproduce attached media (a rebuilt turn must show the user's image again), i.e. persistence is lossless for model-visible content.
-- Status: INFERRED
-- Evidence: [PR #136216](https://github.com/NousResearch/hermes-agent/pull/136216) — "follow-up turns rebuilt from the session DB see the user's image again"
-- Anchor: not located (`hermes_state_messages.py`/`hermes_state_media.py` likely)
+- Status: VERIFIED
+- Evidence: [PR #136216](https://github.com/NousResearch/hermes-agent/pull/136216) — "follow-up turns rebuilt from the session DB see the user's image again" — implemented at pin — in agent/image_replay.py + agent/turn_context.py:1417, NOT in hermes_state_messages/media (draft's guessed location was wrong); tests/agent/test_image_replay.py present
+- Anchor: `agent/image_replay.py:105` (`replay_recent_images`) — puts the newest N retained images back as image_url parts on the wire copy of DB-rebuilt turns; module docstring (:1-20) states replay uses the same `_file_to_data_url` so the rebuilt row is byte-identical and the prompt-cache prefix holds; `agent/image_replay.py:86` (`hashlib.sha256(path.read_bytes()).hexdigest() != path.parent.name`) — only bytes whose content-addressed digest still matches are replayed, inside `_retained_data_url` (:75); `agent/turn_context.py:1417` (`replay_for_agent(agent, api_messages)`) — the rebuilt-turn call site that applies the replay
 
 #### Scenario: Rebuilt follow-up turn re-sends the image byte-identically
 - **WHEN** a follow-up turn is rebuilt from rows persisted in the session DB on a native multimodal route
@@ -162,9 +162,9 @@ Follow-up turns reconstructed from the session DB SHALL reproduce attached media
 
 ### Requirement: Session-deleted hooks are process-local
 `on_session_delete` hook delivery SHALL be documented as process-local, not cross-process.
-- Status: INFERRED
-- Evidence: [PR #124988](https://github.com/NousResearch/hermes-agent/pull/124988) — "docs(hooks): note on_session_delete delivery is process-local, not cross-process"
-- Anchor: not located
+- Status: VERIFIED
+- Evidence: [PR #124988](https://github.com/NousResearch/hermes-agent/pull/124988) — "docs(hooks): note on_session_delete delivery is process-local, not cross-process" — doc claim verified verbatim at hooks.md:1113 (requirement is itself a documentation contract); post-commit firing corroborated in hermes_state_sessions.py:957
+- Anchor: `website/docs/user-guide/features/hooks.md:1113` (`Delivery scope`) — the normative text at the pin, verbatim: "Process-local — the callback runs only in the process that committed the delete. It is not a durable cross-process delivery channel, and it carries no exactly-once guarantee"; `hermes_state_sessions.py:957` (`set_session_archived` docstring) — "A real unarchived -> archived flip fires `on_session_delete` (`reason="archive"`) after commit", corroborating the post-commit in-process delivery the doc describes
 
 #### Scenario: Delete hook fires post-commit on every surface
 - **WHEN** a session delete or deliberate archive commits (single, bulk, empty-session sweep, retention prune, ghost-prune, profile repair)
@@ -179,9 +179,9 @@ Follow-up turns reconstructed from the session DB SHALL reproduce attached media
 
 ### Requirement: Finalized sessions reopen only on a real turn
 Mounting/attaching to a finalized session SHALL NOT reopen its row for display; the first real turn does. Resume-guard proofs rest on the history read, not the reopen.
-- Status: INFERRED
-- Evidence: [PR #85303](https://github.com/NousResearch/hermes-agent/pull/85303) — "mounting a finalized session no longer reopens its row — the first real turn does"; "the resume guard fail-open proof is the history read, not the reopen"
-- Anchor: not located (`tui_gateway` boundary — drafted here because the contract is a state-row lifecycle rule)
+- Status: VERIFIED
+- Evidence: [PR #85303](https://github.com/NousResearch/hermes-agent/pull/85303) — "mounting a finalized session no longer reopens its row — the first real turn does"; "the resume guard fail-open proof is the history read, not the reopen" — implemented at pin: read-only mount in tui_gateway/methods_session.py:679, submit-path reopen _reopen_if_finalized (methods_prompt.py:607, invoked :645/:935, compute_host.py:270); tests/tui_gateway/test_resume_readonly_mount.py present
+- Anchor: `tui_gateway/methods_session.py:679` (`read_history` comment: "Read-only mount: an ended row stays ended") — resume must not clear ended_at/end_reason or DB-derived liveness re-lights a finalized session on open; states the first real turn (prompt.submit) reopens it; `tui_gateway/methods_prompt.py:607` (`_reopen_if_finalized`) — docstring "The first real turn is what reopens a finalized session"; called on the submit path at :645 before the turn's first transcript write (comment at :642: "an ended_at set at mount time is cleared HERE")
 
 #### Scenario: Mounting a finalized session keeps it ended
 - **WHEN** a finalized session is mounted (`session.resume`, its deferred hydration, or the lazy watch path)
@@ -195,9 +195,9 @@ Mounting/attaching to a finalized session SHALL NOT reopen its row for display; 
 
 ### Requirement: One turn's rows bind to one session across rotation
 Rows written during a single turn (submit row, model-switch markers, pivot rows) SHALL be addressed to the session the turn will write, surviving session rotation; superseded model-switch markers SHALL not replay.
-- Status: INFERRED
-- Evidence: [PR #123545](https://github.com/NousResearch/hermes-agent/pull/123545) — "record the submit row's session, address every writer by it"; "pin one turn's rows to one session across a rotation"; "keep superseded model-switch markers from replaying"
-- Anchor: not located
+- Status: VERIFIED
+- Evidence: [PR #123545](https://github.com/NousResearch/hermes-agent/pull/123545) — "record the submit row's session, address every writer by it"; "pin one turn's rows to one session across a rotation"; "keep superseded model-switch markers from replaying" — implemented at pin: submit-row target/owner keys in tui_gateway/session_workdir.py:715/742/789, addressed by session.history (:1985), session.save (:2154/:2165) and the pivot writer (server.py:1201); marker dedupe server.py:1148-1168; tests/tui_gateway/test_submit_row_session_target.py present
+- Anchor: `tui_gateway/session_workdir.py:715` (`_submit_row_target_key`) — returns the live agent.session_id the turn will flush under; docstring records the split-turn failure mode (user row in parent, tool rows/text in child) and that the choice is made ONCE and recorded on the staged dict; `tui_gateway/session_workdir.py:789` (`staged[_SUBMIT_ROW_SESSION_KEY] = target`) — the owning session is recorded at write time so every later addresser (@-expansion rewrite, queue merge, drain deactivation) reads the same key even if a rotation lands mid-turn; `_submit_row_owner_key` (:745) reads it back; `tui_gateway/server.py:1148` (`_MODEL_SWITCH_MARKER_PREFIX`) — only the newest model-switch marker is meaningful; older ones are stale and would otherwise be re-sent every turn, and `_append_model_switch_marker` (server.py:1168) strips prior markers in place before appending (prompt_turn.py:290 comment)
 
 #### Scenario: Submit row lands where the turn's tool rows land
 - **WHEN** a turn writes its durable rows after the agent's session rotated (compression continuation, lease-wait re-resolve, adopted tip)
