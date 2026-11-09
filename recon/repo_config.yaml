@@ -1,0 +1,128 @@
+# Per-repo intel for hermes-agent spec reconstruction. Amended at scope changes.
+# Boot order: PLAYBOOK.md -> this file -> RECON_LEDGER.md
+
+repo:
+  url: https://github.com/NousResearch/hermes-agent
+  default_branch: main
+  pin_tag: v0.23.0
+  pin_sha: 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19
+  pin_date: "2026-11-05"
+  clone_path: repo/          # blobless clone at the pin tag
+  clone_mode: "git clone --filter=blob:none --branch v0.23.0"
+  license: see repo LICENSE  # specs derived from MIT-licensed repo docs/code; keep private store
+  history:
+    total_commits: 62624
+    no_merges: 58953
+    pr_landed_commits: 5893   # subjects ending in (#NNNN)
+    date_range: 2025-07-22 .. 2026-11-05
+    pr_ref_convention: "trailing (#NNNN) on squash-merged subjects; ~5893/58953 = 10% carry refs"
+  tags_total: 233             # incl. canary/rc; release versions ~v0.x.y
+
+scope:
+  decision_date: "2026-11-08"
+  rationale: >
+    Full-project reconstruction of a 62k-commit polyglot repo is a non-converging
+    treadmill (PLAYBOOK lesson 6). We reconstruct the agent-runtime capability
+    surface the owner actually operates (this fleet runs ON hermes-agent), and
+    defer UI-heavy, catalog, packaging and translation surfaces. Desktop alone
+    has 7059 PR-scope commits — deeper than an entire included capability.
+  included:
+    - capability: agent-turn-loop
+      why: core turn loop, prompt-caching invariant, compression — the two load-bearing invariants live here
+      code: [run_agent.py, agent/]
+      scopes: [agent, compression]
+    - capability: gateway-messaging
+      why: messaging gateway facade + ~20 platform adapters, guards, streaming
+      code: [gateway/]
+      scopes: [gateway, telegram, discord, slack, relay, bot-mode, whatsapp, signal, matrix, email-platform]
+    - capability: sessions-state
+      why: SessionDB facade + siblings; session persistence/compaction state
+      code: [hermes_state.py, hermes_state_*.py]
+      scopes: [state, sessions]
+    - capability: skills-system
+      why: built-in skills, curator, skill lifecycle
+      code: [skills/, optional-skills/, agent/curator*.py]
+      scopes: [skills, curator]
+    - capability: tools-toolsets
+      why: tool registry, TOOLSETS dict, footprint ladder, service-gated tools
+      code: [tools/, toolsets.py, model_tools.py]
+      scopes: [tools, terminal, browser]
+    - capability: profiles-isolation
+      why: profile-aware paths, one-process-many-profiles, scope-leak rules (HX002)
+      code: [hermes_constants.py, hermes_cli (profiles/multiplex)]
+      scopes: [profiles, isolation, multiplex]
+    - capability: cron-background
+      why: scheduled jobs, scheduler invariants, kanban dispatcher
+      code: [cron/]
+      scopes: [cron, kanban, scheduler]
+    - capability: config-provider-models
+      why: config.yaml system, .env separation, provider/model resolution, auth
+      code: [agent/providers, hermes_cli config, providers/]
+      scopes: [config, providers, models, auth]
+    - capability: cli-surface
+      why: REPL, slash dispatch, CLI subcommands, setup/config commands
+      code: [cli.py, hermes_cli/]
+      scopes: [cli]
+    - capability: delegation-orchestration
+      why: subagent fleet, parallel children, orchestration contracts
+      code: [tools/ (delegate), agent/]
+      scopes: [delegation, subagent, fleet]
+  deferred:
+    - desktop-ui        # 7059 scope commits; Electron app deserves its own pass
+    - tui-web           # ui-tui, tui_gateway, web dashboard, webapp
+    - plugins-mcp       # plugins/, plugin-catalog/ (2371 scope commits), optional-mcps/
+    - update-packaging  # update (1063), pm, install, docker, nix, ci, deps
+    - memory-system     # small scope (286); folded into sessions-state gaps for now
+    - skins-themes, pets, locales-translations, tests-e2e, website-docs, evals
+  owner_note: "Owner mission 2026-11-08: cap ambition deliberately; converging beats exhaustive."
+
+clustering:  # regex applied to commit subject; a commit may land in <=2 buckets
+  agent-turn-loop: 'compact|compress|prompt[- ]cach|turn[- ]loop|system prompt|cache[- ]break|token[- ]lock|run_agent|message[- ]flow'
+  gateway-messaging: 'gateway|telegram|discord|slack|whatsapp|signal\b|matrix|relay|bot[- ]mode|multiplexer|platform adapter|adapter'
+  sessions-state: 'session|state db|hermes_state|history|resume|checkpoint|sqlite'
+  skills-system: 'skill|curator'
+  tools-toolsets: '\btools?\b|toolset|registry|check_fn|service-gated|function.call|tool call'
+  profiles-isolation: 'profile|hermes_home|HERMES_HOME|isolation|multiplex|per-profile|profile scope'
+  cron-background: 'cron|schedul|job\b|kanban|ticker|background run'
+  config-provider-models: 'config|provider|model\b|models|\.env|api key|auth|oauth|anthropic|openai|base url'
+  cli-surface: '\bcli\b|slash command|repl|hermes |subcommand|mixin|cli_'
+  delegation-orchestration: 'delegat|subagent|sub-agent|fleet|orchestr|child agent|parallel'
+
+normative_docs:
+  root: AGENTS.md               # hub; two invariants; contribution rubric; routing table
+  area_guides:                  # per-area AGENTS.md = strongest in-repo normative source
+    - agent/AGENTS.md
+    - gateway/AGENTS.md
+    - gateway/platforms/ADDING_A_PLATFORM.md
+    - hermes_cli/AGENTS.md
+    - tools/AGENTS.md
+    - plugins/AGENTS.md
+    - cron/AGENTS.md
+    - skills/AGENTS.md
+    - apps/desktop/AGENTS.md
+    - pm/AGENTS.md
+    - tests/AGENTS.md
+    - hermes_platform/AGENTS.md
+    - tui_gateway/AGENTS.md
+    - web/AGENTS.md
+  security: SECURITY.md         # scope authority for boundaries
+  long_form: website/docs/      # Docusaurus: developer-guide/, user-guide/, reference/
+  release_notes: "GitHub Releases API (repo has no in-tree CHANGELOG); fetch pages to evidence/releases.json"
+  contributing: CONTRIBUTING.md
+
+github_api:
+  auth: "curl -s --netrc (PAT at ~/.netrc, read-only); never print token"
+  budget: "5000/hr SHARED across fleet — check rate_limit before API phases; prefer git log"
+  spend_pass1: "releases pages xN + repo meta x1"
+
+fleet:
+  drafting:
+    max_concurrent: 3           # server cap this pass
+    waves: 4                    # 3+3+3+1 across 10 capabilities
+    per_capability_reqs: [8, 20]
+    template: recon/DRAFT_TEMPLATE.md
+  validation:
+    converter: "python3 /opt/data/agent-github-spec-store/tools/draft_to_spec.py specs_draft openspec/specs ''"
+    command: "openspec validate --all --strict --store hermes-agent"
+    path_note: "PATH needs /opt/data/home/.npm-global/bin"
+    namespace: "store folder IS the namespace; capability dirs named after capabilities"
