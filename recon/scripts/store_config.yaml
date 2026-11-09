@@ -1,0 +1,83 @@
+# store_config.yaml — hermes-agent store, kit script knobs.
+# Source of truth for knobs is repo_config.yaml; this file mirrors what the
+# kit scripts execute. Amended at scope/pin changes.
+
+pin_sha: "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"   # tag v0.23.0, main
+
+# Evidence model: squash-merge subjects carry trailing (#NNNN) refs.
+pr_ref_mode: pr-ref
+
+# Author-date where the ref window ended (pass-2 G-01 tail mining start).
+tail_after: "2026-10-27"
+
+release_notes:
+  # No in-tree CHANGELOG: releases mined from GitHub Releases API.
+  mode: releases_json
+
+# Scenario Tier-C is not used here (grounding ran Tier-A releases + Tier-B
+# docs/docstrings); populate if a next pass inventories a test suite.
+test_files: []
+
+docs:
+  - AGENTS.md
+  - SECURITY.md
+  - CONTRIBUTING.md
+  - agent/AGENTS.md
+  - gateway/AGENTS.md
+  - gateway/platforms/ADDING_A_PLATFORM.md
+  - hermes_cli/AGENTS.md
+  - tools/AGENTS.md
+  - cron/AGENTS.md
+  - skills/AGENTS.md
+
+anchor_extensions: [py, md, ts, tsx, yaml, yml, json, sh, toml]
+
+# Data files the behavior writes at runtime (never in-repo): exempt from
+# the bare-path existence rule.
+runtime_artifacts: [config.yaml, jobs.json, cron-jobs.json, .usage.json, manifest.json]
+
+capabilities:
+  agent-turn-loop:
+    subject_regex: 'compact|compress|prompt[- ]cach|turn[- ]loop|system prompt|cache[- ]break|token[- ]lock|run_agent|message[- ]flow'
+    scopes: [agent, compression]
+    code: [run_agent.py, agent/]
+  gateway-messaging:
+    subject_regex: 'gateway|telegram|discord|slack|whatsapp|signal\b|matrix|relay|bot[- ]mode|multiplexer|platform adapter|adapter'
+    tail_subject_regex: 'gateway|telegram|discord|slack|whatsapp|signal\b|matrix|relay|bot[- ]mode|multiplex|platform adapter|adapter'
+    scopes: [gateway, telegram, discord, slack, relay, bot-mode, whatsapp, signal, matrix, email-platform]
+    code: [gateway/]
+  sessions-state:
+    subject_regex: 'session|state db|hermes_state|history|resume|checkpoint|sqlite'
+    scopes: [state, sessions]
+    code: [hermes_state.py, hermes_state_*.py]
+  skills-system:
+    subject_regex: 'skill|curator'
+    scopes: [skills, curator]
+    code: [skills/, optional-skills/, agent/curator*.py]
+  tools-toolsets:
+    subject_regex: '\btools?\b|toolset|registry|check_fn|service-gated|function.call|tool call'
+    tail_subject_regex: 'toolset|tool registry|check_fn|service-gated|function.call|tool call|tool result|tool_|toolsets'
+    scopes: [tools, terminal, browser]
+    code: [tools/, toolsets.py, model_tools.py]
+  profiles-isolation:
+    subject_regex: 'profile|hermes_home|HERMES_HOME|isolation|multiplex|per-profile|profile scope'
+    scopes: [profiles, isolation, multiplex]
+    code: [hermes_constants.py]
+  cron-background:
+    subject_regex: 'cron|schedul|job\b|kanban|ticker|background run'
+    scopes: [cron, kanban, scheduler]
+    code: [cron/]
+  config-provider-models:
+    subject_regex: 'config|provider|model\b|models|\.env|api key|auth|oauth|anthropic|openai|base url'
+    scopes: [config, providers, models, auth]
+    code: [agent/providers, providers/]
+  cli-surface:
+    subject_regex: '\bcli\b|slash command|repl|hermes |subcommand|mixin|cli_'
+    tail_subject_regex: 'slash command|\brepl\b|subcommand|cli_|hermes_cli|\bcli\b (?=flag|command|output|parser|prompt)'
+    scopes: [cli]
+    code: [cli.py, hermes_cli/]
+  delegation-orchestration:
+    subject_regex: 'delegat|subagent|sub-agent|fleet|orchestr|child agent|parallel'
+    tail_subject_regex: 'delegat|subagent|sub-agent|orchestr|child agent|parallel child'
+    scopes: [delegation, subagent, fleet]
+    code: [tools/, agent/]
