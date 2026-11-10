@@ -187,9 +187,9 @@ Subagents SHALL be allowed the `execute_code` tool (subject to the parent's tool
 
 ### Requirement: Opt-in prompt-cache warm-up gate staggers batch siblings behind a leader
 With `delegation.prefix_stagger_seconds` set, cache-sharing batch siblings SHALL wait for the leader's first response to begin before starting, bounded by the configured cap as a warm-up wait (not a fixed stagger); a stopped leader or non-streamed first response SHALL release siblings before the cap, and background siblings SHALL ignore a parent stop while waiting.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [commit 6d0686ba3c47] "feat(delegation): opt-in prompt-cache warm-up gate for batch subagents"; [commit c58e6de692f1] "docs(delegation): prefix_stagger_seconds is a cap on the warm-up wait, not a stagger"; [commit fbec17e9e22e] "background siblings outlive a parent stop; a gate-skipped child is released"; [commit 17a8d1e201c2] "pin the gate's non-streamed and failed-leader releases, queued-child teardown and the config read"
-- Anchor: `tools/delegate_tool_prefix_gate.py:1` (module docstring — "Prompt-cache warm-up gate for batch subagents (delegation.prefix_stagger_seconds)"), `:50` (`PrefixCacheGate.for_children`), `:73` (`_wait`)
+- Anchor: `tools/delegate_tool_prefix_gate.py:1` (module docstring — "Prompt-cache warm-up gate for batch subagents (delegation.prefix_stagger_seconds)"), `:50` (`PrefixCacheGate.for_children`), `:73` (`_wait`) — anchors verified live at pin, pass 4
 
 #### Scenario: Siblings start after the leader's first response begins
 - **WHEN** a batch dispatches cache-sharing siblings with the warm-up gate enabled
@@ -204,9 +204,9 @@ With `delegation.prefix_stagger_seconds` set, cache-sharing batch siblings SHALL
 
 ### Requirement: Child session ids are published only after their transcripts are reserved
 The parent SHALL reserve a child's transcript row and execution under its own owner before publishing the child's session id, so a consumer that opens the published id never builds against an unpersisted child; a failed reservation closes the unpublished child and a later build may retry.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [commit 13e0ce980129] "reserve child transcripts before publishing session IDs"; [commit 6059d35108af] "preserve initialization after transcript reservation"
-- Anchor: `tools/delegate_tool.py:124` (`_open_child_session_db` — reservation path via `reserve_child_store`, "the owner reserves the child's row and execution under the parent's own"), `agent/runtime_session_child.py` (`reserve_child_store`)
+- Anchor: `tools/delegate_tool.py:124` (`_open_child_session_db` — reservation path via `reserve_child_store`, "the owner reserves the child's row and execution under the parent's own"), `agent/runtime_session_child.py:44` (`reserve_child_store`) — anchors verified live at pin, pass 4
 
 #### Scenario: Published children are openable before any child starts
 - **WHEN** a dispatch publishes children's session ids
@@ -216,9 +216,9 @@ The parent SHALL reserve a child's transcript row and execution under its own ow
 
 ### Requirement: A pending completion is re-offered only when its copy is provably lost
 The completion sweep SHALL re-offer a delegation completion into the queue only when the owning process proves its in-memory copy was lost, each re-offer taking its own lease, and replay plus sweep SHALL never offer the same row twice.
-- Status: INFERRED
+- Status: VERIFIED
 - Evidence: [commit 8a10a3cbef53] "re-offer a pending completion only when its copy is provably lost"; [commit b84774186502] "give each lost-copy re-offer its own lease and count held copies as live"
-- Anchor: `tools/async_delegation.py:472` (`_note_reoffers` — "start each lost copy's re-offer lease"; "(home key, delegation_id) -> when the sweep last re-offered a lost copy" at :78)
+- Anchor: `tools/async_delegation.py:472` (`_note_reoffers` — "Start each lost copy's re-offer lease"; module map "when the sweep last re-offered a lost copy" at :78) — anchors verified live at pin, pass 4
 
 #### Scenario: Live copy is never re-offered; lost copy returns after a lease
 - **WHEN** the orphan sweep inspects a completion whose owner is live

@@ -109,7 +109,7 @@ def main() -> None:
     for fn in sorted(os.listdir(drafts_dir)):
         if not fn.endswith(".md"):
             continue
-        cap = f"{prefix}-{fn[:-3]}"
+        cap = f"{prefix}-{fn[:-3]}" if prefix else fn[:-3]
         src = os.path.join(drafts_dir, fn)
         dst_dir = os.path.join(out_root, cap)
         os.makedirs(dst_dir, exist_ok=True)

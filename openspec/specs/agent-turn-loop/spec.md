@@ -118,9 +118,9 @@ Each conversation turn SHALL run under a durable cross-process session turn leas
 
 ### Requirement: Two-layer compaction thresholds
 Context management SHALL use two layers — gateway session hygiene (85%) and the agent `ContextCompressor` (default 50%, configurable, per-model overrides) — and in-place compaction SHALL follow `compression.threshold` without a hidden default token cap.
-**Status**: INFERRED
+**Status**: VERIFIED
 **Evidence**: doc: agent/AGENTS.md § Compression (two layers, thresholds); [PR #126064](https://github.com/NousResearch/hermes-agent/pull/126064) — "Compaction follows compression.threshold again: no default 256K token cap (#117915, #125235)"
-**Anchor**: `agent/context_compressor.py` (threshold math; e.g. `agent/context_compressor.py:2776`) — 85% gateway figure not located at anchor
+**Anchor**: `agent/context_compressor.py` (threshold math; e.g. `agent/context_compressor.py:2776`), `gateway/run_turn_hygiene.py:102` (`threshold_pct=0.85`; :97 "deliberately HIGHER than the agent's compressor (0.50)") — pass 1's "85% gateway figure not located" closed pass 4 (drift D-01)
 
 #### Scenario: Two layers, two thresholds
 - **WHEN** a session's context grows toward its limits
@@ -134,9 +134,9 @@ Context management SHALL use two layers — gateway session hygiene (85%) and th
 
 ### Requirement: Prune-then-summarize compression algorithm
 Compression SHALL first prune old tool results without an LLM call, then select boundaries, then generate a structured summary using the auxiliary compression model.
-**Status**: INFERRED
+**Status**: VERIFIED
 **Evidence**: doc: agent/AGENTS.md § Compression; doc: website/docs/developer-guide/context-compression-and-caching.md
-**Anchor**: not separately located (compression siblings under `agent/`)
+**Anchor**: `agent/context_compressor.py:5462` ("Phases 1-2: prune (cheap, no LLM call), drop blank echoes, determine boundaries on the pruned"), `agent/context_compressor_prune.py:1` (proactive tool-result prune module), `agent/context_compressor_summary.py:1` (summary dispatch) with `:34` (`auxiliary.compression` model) — pass-1 "not separately located" closed pass 4
 
 #### Scenario: Prune first, then boundaries, then summarize
 - **WHEN** compression runs on a conversation
@@ -156,9 +156,9 @@ The system SHALL rebuild the system prompt at each compaction commit boundary so
 
 ### Requirement: Stall-resilient summary generation
 A stalled compression summary stream SHALL retry once on `auxiliary.compression.fallback_chain`; a repeated stall SHALL end with a deterministic fallback summary through the same pipeline, and the system SHALL never commit a prune outside the lease/fence.
-**Status**: INFERRED
+**Status**: VERIFIED
 **Evidence**: doc: agent/AGENTS.md § Compression; [PR #99692](https://github.com/NousResearch/hermes-agent/pull/99692) — stop Codex/Anthropic aux summary streams at the host deadline; [PR #124077](https://github.com/NousResearch/hermes-agent/pull/124077) — classify stream-guard stall as timeout, not terminal failure
-**Anchor**: not located
+**Anchor**: `agent/context_compressor.py:60-72` (summary-route pin lives in a ContextVar so the retry after a stalled summary sees it while the detached stalled worker does not), `:105-107` (repeated stall after the cooldown idle window → `DETERMINISTIC_SUMMARY_ROUTE` "deterministic fallback summary") — pass-4 located
 
 #### Scenario: Stalled summary retries once on the fallback chain
 - **WHEN** a compression summary stream stalls
@@ -173,9 +173,9 @@ A stalled compression summary stream SHALL retry once on `auxiliary.compression.
 
 ### Requirement: In-place compaction keeps the session identity and rolls back on commit failure
 In-place compaction SHALL keep a single stable session id, SHALL roll the live transcript back when a commit fails, and SHALL not hide the newest summarized turn from turn-start in-place compaction.
-**Status**: INFERRED
+**Status**: VERIFIED
 **Evidence**: [PR #99477](https://github.com/NousResearch/hermes-agent/pull/99477) — roll back live transcript when in-place compaction commit fails; [PR #120187](https://github.com/NousResearch/hermes-agent/pull/120187) — turn-start in-place compaction no longer hides newest summarized turn; doc: agent/AGENTS.md ("In-place compaction keeps a single stable session id")
-**Anchor**: not located
+**Anchor**: `agent/conversation_compression.py:3705` ("Rotation: atomic publication failed (including lease loss) — keep the parent live and discard the stale"), `agent/context_compressor.py:412-434` (in-place commit rules; lease watermark rules out overlapping compaction) — pass-4 located
 
 #### Scenario: In-place compaction keeps the durable session id
 - **WHEN** in-place compaction runs (the default)
@@ -261,9 +261,9 @@ With `compression.prepare_ahead`, the system SHALL write the next compaction sum
 
 ### Requirement: Refused compression summary aborts with the transcript intact
 A compression summary request refused by provider safety filtering SHALL abort the compaction as a refusal instead of committing the lossy deterministic fallback; the abort is scoped to Gemini prompt-block refusals.
-**Status**: INFERRED
+**Status**: VERIFIED
 **Evidence**: [commit 9c1799ed1af4] "fix(compression): a safety-blocked summary request aborts with the transcript intact"; [commit be765e31d810] "fix(compression): scope the summary-abort to Gemini prompt blocks only"; test: tests/agent/test_compressor_truncated_summary_guard.py::TestGenerateSummaryTruncationGuard::test_gemini_safety_blocked_summary_request_aborts_and_preserves
-**Anchor**: not located (line-level; the refusal surfaces via `agent/gemini_native_adapter.py` into `agent/context_compressor.py`)
+**Anchor**: `agent/gemini_native_adapter.py:679-684` (raise terminal error when `promptFeedback.blockReason` is set, unary or stream event), `agent/error_classifier.py:914` (the blockReason error matched on its structured code) — pass-4 located (was "refusal surfaces via gemini_native_adapter" note)
 
 #### Scenario: Gemini safety block of the summary aborts, not lossy fallback
 - **WHEN** Gemini blocks the compression summary request (HTTP 200 with `promptFeedback.blockReason`)

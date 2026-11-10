@@ -103,7 +103,7 @@ Skill prose SHALL reference native Hermes tools (`terminal`, `read_file`, `patch
 A skill's `author` SHALL credit the human first (real name + handle), "Hermes Agent" second; a commit authored as "Hermes Agent" is replaced with the human's name.
 - Status: INFERRED
 - Evidence: doc: skills/AGENTS.md § Authoring standards rule 4
-- Anchor: not located — no code enforces the human-first *ordering*; only a soft capitalization lint exists (`tools/skill_linter.py:113`, `author-caps`: an author loosely spelled "hermes agent" should be proper-cased "or a real contributor name"). Ordering stays with human review.
+- Anchor: not located — no code enforces the human-first *ordering*; only a soft capitalization lint exists (`tools/skill_linter.py:113`, `author-caps`: an author loosely spelled "hermes agent" should be proper-cased "or a real contributor name"). Ordering stays with human review. Pass 4 re-verified at pin: the author-caps warn is the only author-related check in the linter; no ordering enforcement exists in `tools/skill_linter.py` or `tools/skills_tool.py` — status honestly stays INFERRED.
 
 #### Scenario: A commit was authored as "Hermes Agent"
 - **WHEN** a contributed skill's commit is authored as "Hermes Agent" (the contributor drafted with Hermes)
