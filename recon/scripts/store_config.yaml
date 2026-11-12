@@ -2,7 +2,7 @@
 # Source of truth for knobs is repo_config.yaml; this file mirrors what the
 # kit scripts execute. Amended at scope/pin changes.
 
-pin_sha: "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"   # tag v0.23.0, main
+pin_sha: "3b421578588243f920886e6fe79a6faa87ea026e"   # tag v0.23.1, main
 
 # Evidence model: squash-merge subjects carry trailing (#NNNN) refs.
 pr_ref_mode: pr-ref

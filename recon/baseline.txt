@@ -1,6 +1,6 @@
 repo: https://github.com/NousResearch/hermes-agent
 branch: main
-tag: v0.23.0
-BASELINE=2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19
-date: 2026-11-08
-clone_mode: blobless (--filter=blob:none --branch v0.23.0)
+tag: v0.23.1
+BASELINE=3b421578588243f920886e6fe79a6faa87ea026e
+date: 2026-11-10 (tag published; pin moved 2026-11-12 by owner request)
+clone_mode: blobless (--filter=blob:none --branch v0.23.1)

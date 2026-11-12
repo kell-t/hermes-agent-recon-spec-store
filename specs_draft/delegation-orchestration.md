@@ -148,7 +148,7 @@ Consumers of the delegation completion queue SHALL restore the launch ledger bef
 Subagent runs SHALL expose live-tailable transcripts to the parent/user while the child works.
 - Status: VERIFIED
 - Evidence: [PR #67479](https://github.com/NousResearch/hermes-agent/pull/67479) — "live-viewable subagent transcripts — tail your subagents while they work"
-- Anchor: `tools/delegation_live_log.py:91` (`LiveTranscriptWriter`), `tools/delegation_live_log.py:235` (`create_live_transcripts`), `tools/delegate_tool.py:644` (dispatch-time creation), `website/docs/user-guide/features/delegation.md` § Live Transcripts
+- Anchor: `tools/delegation_live_log.py:91` (`LiveTranscriptWriter`), `tools/delegation_live_log.py:235` (`create_live_transcripts`), `tools/delegate_tool.py:659` (`create_live_transcripts` call — transcripts pre-created at dispatch), `website/docs/user-guide/features/delegation.md` § Live Transcripts
 
 #### Scenario: Tail a running subagent immediately
 - **WHEN** a `delegate_task` dispatch starts

@@ -112,21 +112,21 @@ Lock contention SHALL NOT surface as crashes of `hermes sessions list` or dashbo
 - **THEN** writers no longer cancel each other's locks and healthy databases are not reported as corrupt
 - Source: [relnote v2026.9.11] "second writers cancelling each other's locks, healthy databases reported as corrupt, one bad row killing `sessions list`. This release closes that class"
 
-### Requirement: FTS5 search with CJK-aware tokenizer option
-Message search SHALL be served by FTS5; a loadable CJK tokenizer (`cjk_unicode61`) re-emitting CJK runs MAY be installed, and the search layer SHALL cope with the table existing only sometimes.
+### Requirement: FTS5 search with retired-CJK-index cleanup
+Message search SHALL be served by FTS5 (plain + trigram tables). A store still holding the `messages_fts_cjk` index an earlier release built SHALL have it dropped at the next read-write open — triggers first, then the source view, `fts_cjk_*` markers and the table — idempotently; CJK terms are served by the trigram and LIKE routes.
 **Status**: VERIFIED
-**Evidence**: doc: hermes_state_fts.py header comments; PR-ref evidence not needed — in-repo doc is the normative source here
-**Anchor**: `hermes_state_fts.py:23` (cjk_unicode61 note), `hermes_state_fts.py:26` (table exists ONLY when ...)
+**Evidence**: [commit 0a0dab06867e] refactor(state)!: remove the CJK FTS5 tokenizer from core — no installer ever shipped `libfts5_cjk.so`, the loader returned False on every install and CJK queries already took the trigram and LIKE routes; `sessions.cjk_fts`, `HERMES_CJK_FTS` and `HERMES_FTS5_CJK_SO` no longer have an effect. (Rewritten at pin v0.23.1; superseded the pass-3 "CJK-aware tokenizer option" requirement — the tokenizer integration was deleted from core.)
+**Anchor**: `hermes_state_fts.py:15` (`_FTS_DDL_TABLES` plain + trigram), `hermes_state_fts.py:165` (`_RETIRED_CJK_TRIGGERS`), `hermes_state_fts.py:178` (`drop_retired_cjk_index`), `hermes_state_schema.py:918` (drop at schema open), `hermes_state_repair.py:815` (drop at repair-probe start)
 
-#### Scenario: CJK queries served by the bigram index
-- **WHEN** a message search uses a CJK query (e.g. a two-character Korean term)
-- **THEN** the loadable CJK-bigram tokenizer serves the hit, while mixed and ASCII queries keep the plain FTS5 path
-- Source: test: tests/hermes_state/test_fts_cjk_bigram.py::test_two_char_korean_hits_cjk_index; ::test_mixed_and_ascii_queries
+#### Scenario: A store built with the CJK index reopens without it
+- **WHEN** a state.db still carries the `messages_fts_cjk` table, its three triggers and its `fts_cjk_*` markers from an earlier release, so outside writers fail with "no such tokenizer: cjk_unicode61"
+- **THEN** the next SessionDB open drops them — "the index, its triggers and its markers are dropped, so writers that never load the tokenizer (the sqlite3 CLI) can write again" — leaving no `messages_fts_cjk` or `fts_cjk_*` residue and `PRAGMA integrity_check` ok
+- Source: test: tests/hermes_state/test_fts_cjk_index_retirement.py::test_open_drops_the_cjk_index_and_restores_outside_writers
 
-#### Scenario: CJK index is opt-outable
-- **WHEN** the config toggle disables the CJK tokenizer
-- **THEN** search continues without the CJK index
-- Source: test: tests/hermes_state/test_fts_cjk_bigram.py::test_config_toggle_disables_cjk
+#### Scenario: Retirement is idempotent and search keeps working
+- **WHEN** the store is opened again after its CJK index was retired
+- **THEN** the second open finds nothing to drop (no repeated retirement warning), appends still work, and `search_messages` on a CJK term still returns the stored message
+- Source: test: tests/hermes_state/test_fts_cjk_index_retirement.py::test_a_second_open_finds_nothing_to_drop
 
 ### Requirement: Tool-result spillover archives die with their session
 Retiring/deleting sessions SHALL record and retire the tool-result spillover archives their messages point at (prefix `gateway.spillover.retired.v1.`), tying spillover lifetime to the owning session.

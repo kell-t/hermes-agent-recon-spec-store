@@ -4,11 +4,12 @@
 repo:
   url: https://github.com/NousResearch/hermes-agent
   default_branch: main
-  pin_tag: v0.23.0
-  pin_sha: 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19
-  pin_date: "2026-11-05"
+  pin_tag: v0.23.1
+  pin_sha: 3b421578588243f920886e6fe79a6faa87ea026e
+  pin_date: "2026-11-10"
+  prev_pin: 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19  # v0.23.0, evidence corpus window
   clone_path: repo/          # blobless clone at the pin tag
-  clone_mode: "git clone --filter=blob:none --branch v0.23.0"
+  clone_mode: "git clone --filter=blob:none --branch v0.23.1"
   license: see repo LICENSE  # specs derived from MIT-licensed repo docs/code; keep private store
   history:
     total_commits: 62624
