@@ -62,7 +62,29 @@
 2026-08-07 (#79768) [11ce6419c3ba] fix(cron): fail closed when the TERMINAL_CWD lock times out (#79768)
 2026-08-06 (#79768) [a1e5ccb325e2] fix(cron): bound TERMINAL_CWD lock acquire with timeout (#79768)
 
-# ==== TAIL APPEND (G-01): 58 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+
+# ==== TAIL APPEND: 80 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-09 (no-ref) [1c5312789d30] fix(dev): just docs-check runs on a laptop and its files start the docs job
+2026-11-08 (no-ref) [a2193fcf4ad8] catalog: re-pin hermes-persona-stickers to 7db126a
+2026-11-08 (no-ref) [c59b667c76dc] fix(cron): a named DM topic is saved in the bot owner's profile, not the job's
+2026-11-07 (no-ref) [2a35007c1e63] plugin-catalog: hermes-standing 0.1.1 (public kanban_comment route, get_hermes_home, L1 default)
+2026-11-07 (no-ref) [db6efce643d3] fix(cron): mirror named-topic deliveries under the real thread id; refresh for media
+2026-11-07 (no-ref) [9a856f8e91a4] fix(cron): route named Telegram DM topics through the live router's resolver
+2026-11-07 (no-ref) [2b0f4a5292cb] plugin-catalog: update kanban-empowered to 0.3.1
+2026-11-07 (no-ref) [307a47994f56] test(upgrade): the start-version tests run in the full-history e2e-upgrade job
+2026-11-07 (no-ref) [e5c93ac4fcf4] test(e2e-upgrade): the handoff restart wait fails in minutes, not at the job timeout
+2026-11-06 (no-ref) [8da6cd93c9a3] feat(plugin-catalog): hermesmade 1.2.6 (share/add refuse in cron runs; requires_hermes >=0.22.1)
+2026-11-06 (no-ref) [7a244f73c164] feat(plugin-catalog): add hermes-colab GPU job runner
+2026-11-06 (no-ref) [f4cfde1e85b4] test(e2e): make the cron -> /compress checks catch dropped turns and lost rows
+2026-11-06 (no-ref) [ff6603408e9d] test(e2e): script the cron delivery -> /compress -> human input check
+2026-11-06 (no-ref) [d2c422f2941a] fix(ci): name each red step of a failed job in the CI review comment
+2026-11-06 (no-ref) [603387951cba] fix(ci): count the gate job in the timing report it now writes
+2026-11-06 (no-ref) [e25d00652afa] ci(docker): resolve the release phase and classify changes in one job
+2026-11-06 (no-ref) [55d08c7c6be4] ci: write the timing report from the gate job
+2026-11-06 (no-ref) [4bacf837d1ef] ci(lint): run the four Python lint checks as steps of one job
+2026-11-06 (no-ref) [d7244125e9b6] ci: run every cheap repository guard as steps of one job
+2026-11-05 (no-ref) [eb111f1b4cae] catalog: add hermes-persona-stickers (community)
+2026-11-05 (no-ref) [5909563e7b82] plugin-catalog: add epoch (calibrated Kanban estimates)
 2026-11-05 (no-ref) [bb719c349235] chore(catalog): review disclosure for cron-consolidator
 2026-11-05 (no-ref) [3a9c3d46d522] Add community entry: cron-consolidator
 2026-11-04 (no-ref) [0f29a7d98917] chore(catalog): pin kanban-gantt to 1.9.0
@@ -82,24 +104,3 @@
 2026-11-02 (no-ref) [40bbdd2e3274] chore(catalog): review disclosure for kanban-empowered
 2026-11-02 (no-ref) [8aaa8af075f8] plugin-catalog: kanban-empowered 0.2.0
 2026-11-02 (no-ref) [fef61fbc7fd5] plugin-catalog: kanban-empowered 0.1.1
-2026-11-02 (no-ref) [f6e0ffe53529] plugin-catalog: add kanban-empowered
-2026-11-02 (no-ref) [b425edd28617] fix(cron): a failed write mid-drain no longer restarts the hold window
-2026-11-02 (no-ref) [b7798657a008] fix(cron): the drain-hold grace extension is capped and never re-fires a claimed one-shot
-2026-11-02 (no-ref) [c7b72e1fe4a7] fix(cron): a one-shot due while a gateway drain holds dispatch fires once afterwards
-2026-11-02 (no-ref) [30ee54ee013d] test(cron): the virtual-clock soak models run-now as an extra fire and admits 'missed' rows
-2026-11-01 (no-ref) [e534ed0b08cc] ci(install-e2e): the bundle-inputs job installs the locked Node before npm ci
-2026-11-01 (no-ref) [edf1495a314f] fix: warm reopen keeps totals for cron and messaging sessions too
-2026-10-31 (no-ref) [d8232c0eb889] plugin-catalog: bump hermes-cron to 1.5.4
-2026-10-31 (no-ref) [3166c4a4b149] feat(cron): give scheduled jobs their actual run time in the prompt
-2026-10-31 (no-ref) [25e7f5fc21d8] test(kanban): pin post-commit kanban_task_blocked for dependency waits
-2026-10-31 (no-ref) [d4283a9c9cdf] fix(kanban): dispatch dependency block hook post-commit
-2026-10-31 (no-ref) [f7a018a77cbd] test(cron): profile-timezone test no longer fails the day before a DST change
-2026-10-30 (no-ref) [ad98ff37f0e5] plugin-catalog: bump hermes-cron to 1.5.3
-2026-10-30 (no-ref) [d4865574e474] fix(cron): review round 3: Stop settles by its own run, missed counts use the pinned zone, distributions keep catch_up
-2026-10-30 (no-ref) [e9f01737aae3] docs(cron): how a job's catch_up composes with grace_minutes
-2026-10-30 (no-ref) [3f435147912f] fix(cron): a Run-now stopped by cancel reports "cancelled", not "failed"
-2026-10-30 (no-ref) [bb8c685c8981] test(cron): an explicit grace_minutes still skips past it unless the job opts into catch_up
-2026-10-28 (no-ref) [5166f83bb824] chore(catalog): review disclosure for kanban-gantt
-2026-10-28 (no-ref) [df128c13bb9d] ci: run the WhatsApp bridge node tests in the JS & TS job
-2026-10-28 (no-ref) [dbde5a991ae0] fix(kanban): the owner refuses a worker that dials into a restart wait opened after discovery
-2026-10-28 (no-ref) [eace3e056e8b] fix(kanban): a worker cut by a restart's after-turn wait waits for the next owner outside it

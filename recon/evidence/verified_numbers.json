@@ -16,6 +16,15 @@
     "checked": "2026-11-08",
     "note": "closed unmerged on GitHub; behavior present on main at the pin (VERIFIED via agent/prompt_builder.py anchors) \u2014 landed via salvage/cherry-pick path per repo rubric"
   },
+  "74899": {
+    "kind": "pr",
+    "state": "closed",
+    "merged_at": null,
+    "title": "feat: /model reset — clear a session's model pin without losing history (NS-563)",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/pulls/74899",
+    "checked": "2026-11-16",
+    "note": "closed unmerged on GitHub; behavior present on main at the pin as salvage commit 66c48cb158de (subject carries '(salvage #74899)') — surfaced by the v0.23.1 evidence re-mine when the old bundle line covering the cite fell out of the tail 40-per-bundle cap"
+  },
   "17309": {
     "kind": "issue",
     "state": "closed",

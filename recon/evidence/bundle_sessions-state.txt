@@ -62,44 +62,45 @@
 2026-09-18 (#58083) [2cb017556dd7] fix(acp): restore not-in-memory sessions off the event loop in every handler (#58083)
 2026-09-18 (#58083) [2a2c3e3ce924] fix(acp): build sessions off the event loop; single-flight DB restores (#58083)
 
-# ==== TAIL APPEND (G-01): 75 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
-2026-11-05 (no-ref) [8283794aa417] fix(checkpoints): rollback never rewinds the store; excludes drop before staging
-2026-11-05 (no-ref) [3c3e5ff3a3e0] docs(checkpoints): name the home-ancestor and excluded-dir rules
-2026-11-05 (no-ref) [201326cf5894] fix(checkpoints): never snapshot home's parents or Hermes browser profiles
-2026-11-05 (no-ref) [d0001c5ba236] test: reap session-leaked Hermes daemons on macOS too
-2026-11-04 (no-ref) [9767033cada0] fix(tui): /save refusal names the missing capability (older gateway or sidecar without the session authority), not just an outdated gateway
-2026-11-04 (no-ref) [2ac12f6c92bd] fix(tui): /save on a gateway without session.export refuses options it cannot honour
-2026-11-04 (no-ref) [e15c799addc7] fix(approval): word the session provenance note for both session writers
-2026-11-04 (no-ref) [334902908561] fix(tui): a session left mid-turn keeps asking its questions, and switching back shows them
-2026-11-04 (no-ref) [54b4e5cf3850] refactor(tui): background-session notices are a module-level watch, not a hook in useMainApp
-2026-11-04 (no-ref) [16b99e61ca85] refactor(tui): the live-session poll's roster patch and background notices leave useMainApp
-2026-11-04 (no-ref) [7ae16ae9a0fc] fix(tui): announce a background session waiting on an approval on the shared gateway
-2026-11-04 (no-ref) [5d8e6fcd4a64] feat(tui): /new mid-turn keeps the running session working in the background
-2026-11-04 (no-ref) [90c19e319683] docs(aux): tighten the aux-slot wording and drop session-search summaries
-2026-11-04 (no-ref) [42500a10d9a6] fix(acp): expose session-scoped service-tier picker
-2026-11-03 (no-ref) [2c82d34b7e9b] ci(js): drop vitest's run history from the cached node_modules
-2026-11-03 (no-ref) [4273f3822dbc] fix(state): count the test runner only when a Python interpreter runs it
-2026-11-03 (no-ref) [aaa89f4f0042] fix(state): count the repo test runner as a pytest ancestor
-2026-11-03 (no-ref) [fb3109279593] feat(bots): group rooms sit in one chat column like a session window
-2026-11-03 (no-ref) [af48c7fcaf44] refactor(bots): split the room history row into notice and message rows
-2026-11-03 (no-ref) [1b0070b8bb6c] docs(desktop): isSessionAbsentError also covers a row the caller may not read
-2026-11-03 (no-ref) [ed7b042f12d5] fix(desktop): Desktop-driven room members can start a session on the owning gateway
-2026-11-02 (no-ref) [063304e59b67] refactor(session): pick the browse/discovery limit default in one place
-2026-11-02 (no-ref) [d1d2be3ad0ea] chore(catalog): review disclosure for ctx_checkpoint
-2026-11-02 (no-ref) [646cd6c58851] chore(plugin-catalog): re-pin ctx_checkpoint to 0.6.2
-2026-11-02 (no-ref) [81f76fd4b858] chore(catalog): review disclosure for cli-session-tabs
-2026-11-02 (no-ref) [7e3f44234574] fix(desktop): the launch burst of kept gateway opens refreshes the Sessions list once
-2026-11-01 (no-ref) [73cd2de272ca] plugin-catalog: re-pin mock-review to v1.1.3 (woken session can build on opt-in, no spurious stalled pings, new showcase image)
-2026-11-01 (no-ref) [0422f223fa9c] test(desktop): a real openSession moves the user-open revision; a pop-out does not
-2026-11-01 (no-ref) [9fe3d20f68dd] fix(desktop): SSH shared profiles fail fast on a missing profile, keep older-runtime and pinned session reads
-2026-11-01 (no-ref) [d6d74704e239] fix(desktop): every gateway's sessions stay visible under Gateway & profile and Project grouping
-2026-11-01 (no-ref) [26ced2f9fc13] test(desktop): kept-route redial test no longer loads session-states cold
-2026-11-01 (no-ref) [edf1495a314f] fix: warm reopen keeps totals for cron and messaging sessions too
-2026-11-01 (no-ref) [e53cd9f31a5b] feat: reopened sessions show their stored cache hit before a new turn
-2026-11-01 (no-ref) [43abe4016459] fix: warm reopen of an agentless session keeps its stored token totals
-2026-11-01 (no-ref) [b0e2b309153a] fix: Desktop status bar shows the switched-to session's own cache hit and t/s
-2026-11-01 (no-ref) [2f82917753be] fix(tui): park a reaped session's completions instead of dropping them
-2026-11-01 (no-ref) [cb84cdecc2a9] fix(sessions): a read-only view opened first no longer blocks adopting a phone chat
-2026-11-01 (no-ref) [7aa5200e91ee] fix(sessions): hermes sessions adopt offers login-stamped phone chats
-2026-11-01 (no-ref) [3da1531caf6e] fix(sessions): bundled platforms and automation labels stay read-only; adopt scan stays fast
-2026-11-01 (no-ref) [3b7d75d7dabe] fix(sessions): adopt a phone-app chat only for its native owner
+
+# ==== TAIL APPEND: 168 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-10 (no-ref) [6c8606d51d36] fix(state): rekey local receipts by route, keep the minting home
+2026-11-09 (no-ref) [557c9b0c52b4] refactor(state): share the entry rekey, prove the API resume after a rename
+2026-11-09 (no-ref) [e704d44c2251] test(tui): prove /fast ultrafast in a real slash worker uses the session endpoint
+2026-11-09 (no-ref) [26bdf3f87128] fix(tui): seed the slash worker's CLI with the session's resolved base URL
+2026-11-08 (no-ref) [a9f2ea05918d] Re-pin sessionguard to 5f80920 (v0.1.1): same-origin briefings, drop params session_id fallback, bound path scan
+2026-11-08 (no-ref) [e459079ea626] Add sessionguard to the plugin catalog
+2026-11-08 (no-ref) [121a7fd2bd1d] fix(plugins): a plugin (re)load in flight is not read as "no on_session_open consumer"
+2026-11-08 (no-ref) [3e0dda730769] fix(aux): a payment error benches a same-host custom endpoint, not the session's provider
+2026-11-07 (no-ref) [2e1b3558f0c6] fix(state): rekey API binding receipts on profile rename
+2026-11-07 (no-ref) [97ad1dae8224] docs(plugins): inject_message no longer interrupts a busy session
+2026-11-07 (no-ref) [e412d4c6a406] feat(plugins): on_session_open fires in the gateway when a local session opens
+2026-11-07 (no-ref) [a9ff9799e273] fix(state): an import links a parent its owner imported before the home moved
+2026-11-07 (no-ref) [ed06004f89f2] refactor(state): history bindings compare their owner through one reader
+2026-11-07 (no-ref) [122fc40fb06b] fix(state): a probe copy that cannot be reopened for its final scan is not damage
+2026-11-07 (no-ref) [3e5bd8c16196] fix(memory): previous_message is the clean ask on a resumed gateway session
+2026-11-07 (no-ref) [8b216354d24f] fix(state): retirement beside an unloadable trigram index; final-scan file failures
+2026-11-07 (no-ref) [8f2db969c848] fix(state): a probe copy that fails after it is made is still not damage
+2026-11-07 (no-ref) [6b30c055999d] fix(state): base FTS damage beside the retired CJK index still routes to repair
+2026-11-07 (no-ref) [cf0cb47da184] fix(state): SQLite failing to write the probe copy is not damage to the store
+2026-11-07 (no-ref) [4d26dc289ae9] fix(state): the unavailable-probe message does not look up the temp directory again
+2026-11-07 (no-ref) [7b01fac97730] fix(state): an OS failure making the probe copy is not damage to the store
+2026-11-07 (no-ref) [66d1a0ef0443] fix(state): repair stops when it cannot check its repaired copy
+2026-11-07 (no-ref) [17acb504b32c] fix(state): a probe that cannot copy the store is not a healthy verdict
+2026-11-07 (no-ref) [ad37ebb76500] fix(state): retire the CJK index before legacy table rebuilds; a full temp volume is not damage
+2026-11-07 (no-ref) [bdcb60c24052] fix(state): CJK index retirement is atomic and repair probes a snapshot
+2026-11-07 (no-ref) [ac61edf74806] fix(state): retire the CJK index without blocking opens or changing check-only
+2026-11-07 (no-ref) [0a0dab06867e] refactor(state)!: remove the CJK FTS5 tokenizer from core
+2026-11-07 (no-ref) [ed8621d9d46e] fix(desktop): /model --session in any position takes the model mutation
+2026-11-07 (no-ref) [307a47994f56] test(upgrade): the start-version tests run in the full-history e2e-upgrade job
+2026-11-07 (no-ref) [b880d944d0ef] test(upgrade): a scenario's generation needs release history, not an error
+2026-11-07 (no-ref) [9167d4b94bcf] perf(state): the handoff lookup reads only the shown rows that can hold a handoff whole
+2026-11-07 (no-ref) [6284cbca7e34] test(state): the handoff lookup finds what the join it replaced found
+2026-11-07 (no-ref) [9a3d87409435] perf(state): the transcript's handoff lookup reads a fixed number of indexed queries per page
+2026-11-07 (no-ref) [6b21d0564de0] feat(memory): initialize() is told whether the agent continues a stored session
+2026-11-06 (no-ref) [4db0ebfe5481] fix(classifier): aux disconnect phrasings no longer widen the large-session overflow guess
+2026-11-06 (no-ref) [3a633cb4afb2] plugin-catalog: kokpit description focuses on session continuity
+2026-11-06 (no-ref) [c046383ccc56] test: split the page-edge window and reach the resume's one-transaction display read
+2026-11-06 (no-ref) [93dfe63df303] fix(state): a reaction still moves the transcript revision after an older Hermes opens the store
+2026-11-06 (no-ref) [2216779700b7] feat(delegate): a delegated child stays addressable by subagent_id; subagent.list rows name its session
+2026-11-06 (no-ref) [a7ce202aea87] fix(state): read a display set and its removed identities in one transaction

@@ -62,7 +62,37 @@
 2026-09-06 (#104462) [1d06f7a95ae4] docs+evals(compression): token-accounting replay harness and developer-guide section (#104462)
 2026-09-04 (#102117) [4ab96371d2b4] docs: sync developer-guide tooling/gateway/CLI +  user-guide with the facade/siblings layout (#102117)
 
-# ==== TAIL APPEND (G-01): 19 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+
+# ==== TAIL APPEND: 48 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-09 (no-ref) [5d085d0f6784] fix(cli): --resume heals an empty-provider row to the entry serving its model
+2026-11-08 (no-ref) [0b82ddc96c39] perf(cli): the setup wizard's docker and subscription imports load on use
+2026-11-07 (no-ref) [3ffff15d71a8] revert(cli): drop the classic CLI one-turn snapshot change
+2026-11-07 (no-ref) [a09d0bc06543] test(cli): the fallback test covers the old loader path; install-root tests stop patching a name nothing reads (review)
+2026-11-07 (no-ref) [a7b7ac654676] fix(cli): drop a dead config fallback and an import of a name that never existed
+2026-11-07 (no-ref) [ca80ce905ae4] test(cli): the version lookup falls back only when pm.paths or pm is absent
+2026-11-06 (no-ref) [6b2b0e33aaca] docs(cli): say `hermes clipboard image` runs in the container under NixOS container mode
+2026-11-06 (no-ref) [f9d95666744a] test(cli): pin magic-byte type detection and let Windows collect the clipboard tests
+2026-11-06 (no-ref) [1e82b6df1470] fix(cli): keep an overwritten --out file's permissions in `hermes clipboard image`
+2026-11-06 (no-ref) [3c8ea50a5c56] fix(cli): keep an existing --out when `hermes clipboard image` fails
+2026-11-06 (no-ref) [63cdc15eb37b] feat(cli): add `hermes clipboard image --json` for clients that paste images
+2026-11-06 (no-ref) [4fca35e87416] fix(plugins): keep _ignore_after_abandoned_load importable from hermes_cli.plugins
+2026-11-06 (no-ref) [9201b14533a2] fix(plugins): read every facade-owned name in PluginContext from hermes_cli.plugins
+2026-11-06 (no-ref) [1f96e0fb03ce] refactor(plugins): move PluginContext into hermes_cli/plugin_context.py
+2026-11-05 (no-ref) [d569ce08b24a] fix(cli): fullwidth spaces wrap by terminal cells in panels
+2026-11-05 (no-ref) [5de49e24ac83] fix(cli): long CJK prompts wrap in one pass, and the pager caches rows
+2026-11-05 (no-ref) [67c3927837a7] fix(cli): a primed Esc chord works with more keys already buffered
+2026-11-05 (no-ref) [1fc56d5a7986] fix(cli): cell wrap keeps a combining mark with its letter
+2026-11-05 (no-ref) [87c2cc251129] fix(cli): the backtrack pager hard-wraps a long URL or hash
+2026-11-05 (no-ref) [ce9ce12bee0f] fix(cli): fast Esc Esc ← / ↵ opens browse instead of an Alt chord
+2026-11-05 (no-ref) [0bbc4fb76a1d] docs(cli): Esc backtrack prime hint and transcript browser keys
+2026-11-05 (no-ref) [1da0bc0da3e6] fix(cli): the second Esc opens browse at once, without the escape timeout
+2026-11-05 (no-ref) [8a6fb5113f40] feat(cli): Codex-style Esc backtrack: prime hint, transcript pager browse
+2026-11-05 (no-ref) [06466a651238] fix(cli): panels wrap, clip and pad by terminal cells (CJK-safe), from #149354
+2026-11-05 (no-ref) [a2db0efb2969] test(cli): pin why get_fallback_chain stays importable from oneshot
+2026-11-05 (no-ref) [47035ba50755] test(cli): say two CLI resume surfaces in the kanban guard docstring
+2026-11-05 (no-ref) [936f3465f828] refactor(cli): remove the unused one-shot agent that ran outside the gateway
+2026-11-04 (no-ref) [d52c04b7d773] fix(cli): keep get_fallback_chain importable from hermes_cli.oneshot
+2026-11-04 (no-ref) [efc1c5e894ab] test(cli): keep the live runtime-fallback resolver tests
 2026-11-04 (no-ref) [1a71782f1795] feat(cli): backtrack picker — Esc Esc / /rewind to edit & resend or fork from an earlier prompt
 2026-11-04 (no-ref) [695d9a641d42] fix(cli): write the --cpu-profile before an in-place exec handoff
 2026-11-04 (no-ref) [ce154453eb76] fix(cli): --cpu-profile starts where each launch path parses argv
@@ -74,11 +104,3 @@
 2026-11-04 (no-ref) [fcfd416dcdee] fix(cli): keep inline-image transmits out of the replayed scrollback
 2026-11-03 (no-ref) [e0d6efd4dee1] feat(cli): full-resolution images in iTerm2, WezTerm and Konsole
 2026-11-02 (no-ref) [7cce4ab92069] test(cli): cover multi-sentence reasoning without a repeated footer
-2026-11-02 (no-ref) [aa28a71341ff] fix(cli): the glyph layout's reasoning summary never repeats the start of the thought
-2026-10-31 (no-ref) [ab9dda55d610] feat(cli): draw images inline in the classic CLI scrollback
-2026-10-31 (no-ref) [66c48cb158de] feat(cli): /model reset in the classic CLI, help hint and queued-pick display (salvage #74899)
-2026-10-29 (no-ref) [f398ff59b8e7] test(cli): pin the reader-first ordering in the unretrieved-future test
-2026-10-29 (no-ref) [679ec082c8ae] refactor(cli): one builder for a turn the owner never saw; pin the unretrieved-future fix
-2026-10-29 (no-ref) [d72b65595e42] fix(cli): a closing socket refuses before the send, and an unsent prompt keeps its turn
-2026-10-29 (no-ref) [7303b01fd6ad] fix(cli): a request after the gateway socket closed is reported as not sent
-2026-10-28 (no-ref) [ac7e758c3d1b] test(config-remote): the TUI outage test injects through hermes_cli.config_backend

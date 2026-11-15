@@ -62,7 +62,30 @@
 2026-04-24 (#15105) [7634c1386fb3] feat(delegate): diagnostic dump when a subagent times out with 0 API calls (#15105)
 2026-04-23 (#14809) [50d97edbe15e] feat(delegation): bump default child_timeout_seconds to 600s (#14809)
 
-# ==== TAIL APPEND (G-01): 18 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+
+# ==== TAIL APPEND: 40 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-09 (#150198) [f483ce2667dd] fix(delegation): keep _delegate_from on reserved subagent rows (#150198)
+2026-11-08 (no-ref) [a8c19d727fc3] plugin-catalog: add muster — fleet health board for delegated subagents
+2026-11-07 (no-ref) [9de30f85137b] chore(plugin-catalog): re-pin advanced-delegation to 13b2c1c (1.1.1)
+2026-11-07 (no-ref) [3f0e3104c367] fix(delegation): a unit whose runner raises keeps the results of tasks that finished
+2026-11-06 (no-ref) [2216779700b7] feat(delegate): a delegated child stays addressable by subagent_id; subagent.list rows name its session
+2026-11-06 (no-ref) [2f3f57b96e5c] fix(delegation): a split unit that stalls keeps the results of tasks that finished
+2026-11-06 (no-ref) [2fe80ec82e4d] fix(delegation): a split unit that fails before any task reports lists its own tasks
+2026-11-06 (no-ref) [4098b6217b28] fix(delegation): a split unit's failed task keeps its own goal
+2026-11-06 (no-ref) [c327644d0f74] test(desktop): pin the delegate card's id join and its unstamped-row path
+2026-11-06 (no-ref) [2def5be2362c] fix(desktop): place roster-hydrated delegate children by goal, not index
+2026-11-06 (no-ref) [033c9f29730d] fix(desktop): only refuse live children stamped with another delegation
+2026-11-05 (no-ref) [5b066f2cb158] catalog: repin delegation-scout to e0029ed72d5963113c47a72fc360d3df6bc33ffc (untrack pycache)
+2026-11-05 (no-ref) [f74a6b3b0812] catalog: repin delegation-scout to da348cd913488e280c3fb650022390025e492f62 (tool-bridge arity fix)
+2026-11-05 (no-ref) [03b40fca033b] catalog: add delegation-scout (vdimarco/hermes-delegation-scout) @ f33b8c8
+2026-11-05 (no-ref) [2d7102c7af17] Bump sentry pin to a7032a5 (wrapper handling, subagent taint inheritance, false-positive fixes)
+2026-11-05 (no-ref) [859bbde685e8] Bump sentry pin to a7032a5 (wrapper handling, subagent taint inheritance, false-positive fixes)
+2026-11-05 (no-ref) [f74520465ac6] Bump sentry pin to a7032a5 (wrapper handling, subagent taint inheritance, false-positive fixes)
+2026-11-05 (no-ref) [a6dd4f4726aa] fix(desktop): a rejected delegate batch lists no children
+2026-11-05 (no-ref) [60794cedc659] chore(plugin-catalog): pin the advanced-delegation card image to the same commit
+2026-11-05 (no-ref) [c410e1f38af0] chore(plugin-catalog): bump advanced-delegation to 1.1.0
+2026-11-05 (no-ref) [27f4a045da52] fix(delegation): route saves tell a null extra key from an omitted one
+2026-11-05 (no-ref) [494b618eb9a3] feat(delegation): backends declare their own route keys; route saves keep them
 2026-11-04 (no-ref) [c58e6de692f1] docs(delegation): prefix_stagger_seconds is a cap on the warm-up wait, not a stagger
 2026-11-04 (no-ref) [17a8d1e201c2] test(delegation): pin the gate's non-streamed and failed-leader releases, queued-child teardown and the config read
 2026-11-04 (no-ref) [fbec17e9e22e] fix(delegation): background siblings outlive a parent stop; a gate-skipped child is released

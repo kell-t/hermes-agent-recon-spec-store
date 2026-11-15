@@ -62,44 +62,45 @@
 2026-09-24 (#118216) [9fb2dd4c3961] fix(acp): stamp ended_at on ACP sessions at adapter shutdown (#118216)
 2026-09-24 (#110174) [a164569429ad] fix(agent): admit and sync gateway-staged attachments on remote execution backends (#110174)
 
-# ==== TAIL APPEND (G-01): 260 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
-2026-11-05 (no-ref) [6b5f6ee269c5] docs(voice): the Webapp always relays voice
-2026-11-05 (no-ref) [1e81ee57e326] fix(webapp): voice relays through the host, and a created profile is served right away
-2026-11-05 (no-ref) [e27c38006a67] fix(gateway): Bot Mode shows every bot's saved description, not just the main bot's
-2026-11-05 (no-ref) [1fcc57e6d230] refactor(bot-mode): drop comments and test scaffolding that still describe the removed helpers
-2026-11-05 (no-ref) [e9f8551c2398] refactor(bot-mode): delete Bot Chat mailbox helpers left unreachable by the authority FIFO
-2026-11-04 (no-ref) [f87c5412983a] catalog(pass-secrets): declare the real platform matrix
-2026-11-04 (no-ref) [af6c5a72d688] fix(desktop): keep group chat Stop and Deny while the gateway's methods are unknown
-2026-11-04 (no-ref) [7c00c01c9852] fix(gateway): bypass sessions keep the built-in side-task defaults
-2026-11-04 (no-ref) [6e7567be260b] fix(gateway): a bypass session's turn never reloads the profile's .env
-2026-11-04 (no-ref) [8bc8980657bd] fix(gateway): a local turn reloads the profile's .env, as a messaging turn does
-2026-11-04 (no-ref) [2afffc46ba15] fix(gateway): side tasks read the profile's config.yaml, like every other side-task reader
-2026-11-04 (no-ref) [9767033cada0] fix(tui): /save refusal names the missing capability (older gateway or sidecar without the session authority), not just an outdated gateway
-2026-11-04 (no-ref) [2ac12f6c92bd] fix(tui): /save on a gateway without session.export refuses options it cannot honour
-2026-11-04 (no-ref) [7ab170ea6d36] fix(matrix): a reaction on a settled approval card reports that it expired
-2026-11-04 (no-ref) [8ebc4ef6ccab] test(gateway): stale-card binding covers Matrix, WhatsApp Cloud, Teams and relay
-2026-11-04 (no-ref) [79f28901db7f] docs(gateway): adapter guides and plugin allowlist name resolve_gateway_approval_card
-2026-11-04 (no-ref) [5ab58da1f63a] fix(gateway): a stale approval card no longer approves the next request
-2026-11-04 (no-ref) [7f4c4882429e] docs(/save): note the older-gateway fallback
-2026-11-04 (no-ref) [a3e24a4de985] fix(gateway): --cpu-profile writes the profile on gateway exit
-2026-11-04 (no-ref) [ca14c438e486] fix(mcp): an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one
-2026-11-04 (no-ref) [4c466d86f25a] fix(gateway): no runtime footer to a bot peer (a streamed reply sends it as its own message)
-2026-11-04 (no-ref) [17c2065b2bd8] fix(gateway): only a real is_bot=True source is a bot peer; approval timeout reads the ctx source safely
-2026-11-04 (no-ref) [04d7a37baf5d] docs(bot-mode): exchanges end on every route; offline no-sends do not count; enabled honoured
-2026-11-04 (no-ref) [8180676731e4] fix(gateway): judge a bot message once, at ingress, not again when its admission executes
-2026-11-04 (no-ref) [452d8f98bf90] test+docs: bot-to-bot exchanges end; bot_replies_expect_reply honoured in Bot Mode
-2026-11-04 (no-ref) [4e93f80e4720] fix(gateway): end bot-to-bot exchanges: no runtime notices to bots, a runtime hop cap, replies need no answer
-2026-11-04 (no-ref) [d53973afa97d] test(gateway): pin the unreadable-cmdline path in the runtime-status PID test
-2026-11-04 (no-ref) [787954a49f58] fix(gateway): session.active_list reads waiting while a viewer request holds the turn
-2026-11-04 (no-ref) [7ae16ae9a0fc] fix(tui): announce a background session waiting on an approval on the shared gateway
-2026-11-04 (no-ref) [8ade0ed43e93] fix(docker): park and wait on gateway slots without following symlinks
-2026-11-04 (no-ref) [3b9539fcdf70] fix(docker): keep root out of the hermes-owned gateway scandir
-2026-11-04 (no-ref) [fb98be0dbe0c] fix(webapp): end a Start's restart only on the gateway that replaced the old one
-2026-11-04 (no-ref) [cad0aaaf0d77] fix(slack): tag thread-context senders against the live message's allowlist
-2026-11-04 (no-ref) [3a1e9ef50a57] fix(bot-mode): a running request is not "busy with an earlier turn"; trim the message_agent schema
-2026-11-04 (no-ref) [160339e0dd5c] feat(bot-mode): typed request envelope, a forgotten reply relayed once, and one "never answered" sentence per dead request
-2026-11-04 (no-ref) [9156c854e368] fix(gateway): use followed routes for service-tier choices
-2026-11-04 (no-ref) [6771d29e96fa] test(gateway): import SessionActor in the local retirement and post-delivery tests
-2026-11-03 (no-ref) [9bbe8e880f44] fix(gateway): a resume expands ${VAR} from the profile's current .env
-2026-11-03 (no-ref) [c08c48530595] fix(docker): supervise profile gateways outside the root s6 scandir
-2026-11-03 (no-ref) [cf53dd8b99e8] fix(webapp): a Web Access Start lasts until the restarted gateway serves it
+
+# ==== TAIL APPEND: 770 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-10 (no-ref) [4f6ebb9afeb1] fix(gateway): a healed entry keeps its own key when it shares a relay URL
+2026-11-10 (no-ref) [00d9d600b2d0] fix(gateway): an adopted row with a model but no provider runs on the entry serving it
+2026-11-09 (no-ref) [3b4215785882] fix(telegram): a typing tick no longer freezes a group's streamed preview
+2026-11-09 (no-ref) [74dde239c8a9] fix(telegram): fallback walk fails over inside the send deadline (#136412, salvage #136427)
+2026-11-09 (no-ref) [007d7e8b50a6] fix(telegram): retired adapters edit and delete through their same-profile replacement (#98228, #143364)
+2026-11-09 (no-ref) [039262515c72] fix(telegram): keep seed IPs behind DoH-discovered fallback IPs (#75416, salvage #76685)
+2026-11-09 (no-ref) [455e934c4fed] fix(gateway): a handoff never undoes a /new that finished while it was suspended
+2026-11-09 (no-ref) [a6c4e2993756] fix(telegram): a root message after a threaded follow-up never adopts the new topic
+2026-11-09 (no-ref) [38f2b0b1cc0b] fix(gateway): a suspended handoff no longer overwrites a newer topic /resume
+2026-11-09 (no-ref) [2243a114d135] fix(telegram): an adopted topic opener is not overtaken by threaded follow-ups
+2026-11-09 (no-ref) [93ba47b7995c] fix(gateway): /handoff into a Telegram DM topic rebinds the topic
+2026-11-09 (no-ref) [d2011903ccf4] fix(telegram): log when allowed_topics drops a forum topic
+2026-11-09 (no-ref) [39bd68e46176] fix(gateway): a message during a queued topic /resume cannot restore the older session
+2026-11-09 (no-ref) [168face7fe14] fix(gateway): an older topic /resume cannot rename the topic after a newer one
+2026-11-09 (no-ref) [2a4140b9bf98] fix(gateway): an older topic /resume can no longer undo a newer one's binding
+2026-11-09 (no-ref) [4bfa2ab64260] fix(gateway): /resume refuses a session bound to another Telegram topic before switching
+2026-11-09 (no-ref) [6b305c031d86] fix(gateway): Telegram topic renames obey the receiving bot's disable_topic_auto_rename
+2026-11-09 (no-ref) [8c96f174571a] fix(telegram): a replacement adapter takes the old one's buffered batches before it replays
+2026-11-09 (no-ref) [8bfe13bf1762] test(telegram): a refused first webhook registration still leaves the webhook set
+2026-11-09 (no-ref) [385ff1fe4afe] fix(telegram): hermes send treats a tag inside a double-backtick span as a code example
+2026-11-09 (no-ref) [2903e03e4a4e] fix(telegram): hermes send keeps an HTML tag whose quoted attribute holds `>`
+2026-11-09 (no-ref) [27971aa4d40b] test(e2e): the SDK-mock guard restores Slack's modules too
+2026-11-09 (no-ref) [239609fdb179] fix(telegram): hermes send keeps HTML formatting past a model-invented tag
+2026-11-09 (no-ref) [26d6bb280b6a] test(telegram): the long-burst batching test drives the flush clock instead of racing it
+2026-11-09 (no-ref) [91c7c07b9540] fix(telegram): a delete never sleeps a re-extended flood window inline
+2026-11-09 (no-ref) [430d864cb08c] fix(telegram): a delete whose flood window closes during the last allowed wait still runs
+2026-11-09 (no-ref) [7222595b82e0] fix(telegram): streaming drafts and deletes stay out of a chat's flood window
+2026-11-09 (no-ref) [ed74264afe41] fix(telegram): a long paste split by the client stays one turn
+2026-11-09 (no-ref) [033b6c85301c] fix(telegram): link-shaped text inside a double-backtick code span stays verbatim
+2026-11-09 (no-ref) [e98a7006f8f9] fix(telegram): a send reset after the request was written is never resent
+2026-11-09 (no-ref) [5948ab52e236] fix(telegram): typing keep-alives send one call per chat and share its outbound budget
+2026-11-09 (no-ref) [a0d954f62d38] fix(telegram): links Telegram cannot open render as their label, not raw syntax
+2026-11-09 (no-ref) [763dff809978] fix(gateway): keep held input when an idle reset is refused
+2026-11-09 (no-ref) [97a60d2336f2] test(telegram): an idle /new drops a buffered photo too
+2026-11-09 (no-ref) [0b96330a1467] fix(gateway): an idle /new, /stop or /reset drops the chat's held ingress burst
+2026-11-09 (no-ref) [82bdce51ad7b] fix(telegram): /stop and /new drop buffered photos through base's own debounce discard
+2026-11-09 (no-ref) [f82b18a9fa62] test(telegram): the ingress-shapes e2e stops its fake LLM server
+2026-11-09 (no-ref) [1712c3e9ff4e] test(telegram): the /stop-drops-buffered-photo e2e no longer races the burst timer
+2026-11-09 (no-ref) [51ed48a8e39f] fix(telegram): an observed unmentioned contact card keeps its contents
+2026-11-09 (no-ref) [d742bfddc6e0] fix(telegram): contact cards reach the agent, /stop drops buffered photos, SDK import failures name their cause

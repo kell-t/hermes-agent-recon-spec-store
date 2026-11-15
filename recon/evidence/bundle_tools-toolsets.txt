@@ -62,7 +62,31 @@
 2026-08-26 (#95853) [934b2b94cc81] test(tools): pin open_preview missing-path emit (#95853)
 2026-08-26 (#95853) [5fce460df839] fix(tools): reject directory targets in open_preview (#95853)
 
-# ==== TAIL APPEND (G-01): 54 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+
+# ==== TAIL APPEND: 78 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-09 (no-ref) [ac84ac35552c] test(tools): the concurrent uncached-probe test gets a probe budget a loaded runner cannot exhaust
+2026-11-09 (no-ref) [6a3bd6725915] fix(tools): uncached check_fn probes answer for their own caller, never a shared run
+2026-11-09 (no-ref) [ea909b1ac16f] fix(tools): a settled or never-started check_fn probe leaves the in-flight table
+2026-11-09 (no-ref) [53b39256a693] fix(tools): concurrent cold builds share one probe for a wedged check_fn
+2026-11-09 (no-ref) [eea1579ed8b2] fix(tools): the check_fn probe thread is bound at import, not looked up per call
+2026-11-09 (no-ref) [8bf50cbdf9d8] fix(tools): bound a check_fn probe so a wedged availability check cannot hang the turn
+2026-11-08 (no-ref) [9ecf27d31c05] catalog: plugin_foundry 0.1.1, confined paths and pre_tool_call approval
+2026-11-08 (no-ref) [fd3041ea22c6] fix(catalog): agenda-guardian 0.5.2 (garde pre_tool_call, trois systèmes testés en CI)
+2026-11-08 (no-ref) [aa52eadc5a01] fix(tools): an unhashable plugin standalone sender still delivers
+2026-11-08 (no-ref) [4378953df3d0] test(tools): raise PTB's real NetworkError in the transient Bad Gateway test
+2026-11-08 (no-ref) [913f50b8c426] fix(tools): keep a spilled tool result's lists and dicts out of its preview
+2026-11-07 (no-ref) [261996155154] fix(tools): unwrap built-in tool JSON in spill files so read_file can page them
+2026-11-07 (no-ref) [63f6852249f6] docs(browser): drop 'signed-out' claim; note persistent-profile case
+2026-11-07 (no-ref) [f7bc6cf43dd2] docs(browser): say local TRIES the consented profile, falls back signed-out
+2026-11-07 (no-ref) [3c4c2aa48b59] docs(browser): clarify local engine is a config choice, not a fallback rung
+2026-11-07 (no-ref) [0ea6ea941aee] test(tools): kill Chrome if its CDP port never opens in _launch_chrome
+2026-11-07 (no-ref) [b37553e48d22] fix(tools): point the self-repo guard's clone hint at the pruned scratch dir
+2026-11-06 (no-ref) [2aaaf547ffd6] feat(catalog): construct declares its pre_tool_call hook
+2026-11-06 (no-ref) [275bf8a46272] plugin-catalog: booking-bridge 1.1.0 (approval gate via pre_tool_call)
+2026-11-06 (no-ref) [84e82fec1d60] fix(telemetry): keep the shipped yuanbao toolset and yb_* tool values valid in the v4 contract
+2026-11-06 (no-ref) [b115764185de] fix(terminal): keep the user's own NPM_CONFIG_* in terminal shells
+2026-11-05 (no-ref) [ced0ea775da6] fix(terminal): keep package-manager settings out of user shells
+2026-11-05 (no-ref) [8ec4bdc07ad5] Pin money-magnet v1.0.1 (string tool results fix)
 2026-11-05 (no-ref) [9fb740ec4a57] test(browser): read the child's env from a file, not from redacted output
 2026-11-04 (no-ref) [32a2c3bad68c] fix(terminal): each preview size of a file gets its own kitty image id
 2026-11-04 (no-ref) [64a30e926c5e] fix(tui): inline image cache keys on the tool call, forgets off, stays bounded
@@ -80,26 +104,3 @@
 2026-11-02 (no-ref) [a6cdad3e9fb6] plugin-catalog: re-pin mock-review to v1.1.4 (password-gated here.now boards may wake with wake_toolsets; LAN boards guarded)
 2026-11-02 (no-ref) [c2dac477f58e] fix(tools): start the check_fn grace reuse window when the probe returns
 2026-11-02 (no-ref) [c49a94bee193] fix(tools): keep a pinned Tool Search bridge on a same-process pin restore
-2026-10-31 (no-ref) [fa830bef1db1] plugin-catalog: wakeshift: pin eeef97d (declares tool_request middleware)
-2026-10-31 (no-ref) [f135a3de0a70] refactor(terminal): move graphics detection and encoders out of the pet
-2026-10-31 (no-ref) [adecc4024456] test(terminal): build the profile-home fixtures under the isolated native root
-2026-10-30 (no-ref) [b9e983665c7a] fix(tools): key the tools[] freeze on generation and selection, hold flips on pin restore
-2026-10-30 (no-ref) [09d2e686f9b8] fix(browser): raw CDP metadata check reads the host after userinfo
-2026-10-30 (no-ref) [e10765f7c309] fix(terminal): key a named profile's unnamed chats by its name too
-2026-10-30 (no-ref) [fdb71a95a260] fix(terminal): keep the :ws: key idempotent and test the unmounted key gate
-2026-10-29 (no-ref) [7aca8caeafb1] fix(tools): keep a live session's tools[] frozen when a check_fn flips back
-2026-10-29 (no-ref) [9b839d815eb1] fix(tools): expire the tool-definitions memo with its check_fn verdicts
-2026-10-29 (no-ref) [e20007e4e7c0] fix(browser): raw CDP URL scan reads bracketed IPv6 and scheme-relative hosts
-2026-10-29 (no-ref) [1c11a23f0f61] fix(browser): raw CDP blocklist, interception and cookie calls work on guarded backends
-2026-10-29 (no-ref) [149e3f5539b8] fix(terminal): reuse the profile container for sessionless workers
-2026-10-28 (no-ref) [0e8d47084818] chore(terminal): keep process_registry.py at its line cap after the rebase
-2026-10-28 (no-ref) [35c2783b6ab7] fix(terminal): relative spawn PATH entries survive a resetting login profile
-2026-10-28 (no-ref) [4e1453f3513c] test(terminal): env bash shebang for the stand-in login shell
-2026-10-28 (no-ref) [3580324e8b7f] test(terminal): explicit encodings in the login-shell PATH tests (windows-footguns)
-2026-10-28 (no-ref) [11262fac9655] test(terminal): pin the resetting login profile with a stand-in login shell
-2026-10-28 (no-ref) [854cef24e9f1] test(terminal): pin the profile-home mode in the background PATH test
-2026-10-28 (no-ref) [b9c7d4e8af79] test(terminal): the background PATH test pins the login shell's HOME
-2026-10-28 (no-ref) [29fef14fbf35] fix(terminal): background commands keep spawn PATH dirs a login profile resets
-2026-10-28 (no-ref) [6fa171ce5423] fix(terminal): keep the spawn PATH's dirs a login profile resets out of the snapshot
-2026-10-28 (no-ref) [13461950bf04] test(browser): runtime-root choice and the short-dir claim, independent of the host
-2026-10-28 (no-ref) [92e8a6398d8c] fix(browser): browser_exec binds its daemon socket under a deep HOME
