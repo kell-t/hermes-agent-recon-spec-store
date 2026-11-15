@@ -62,7 +62,37 @@
 2026-06-18 (#48200) [f1254c8eafa4] fix(skills): rmtree scope guard + default pre_update_backup to true (#48200)
 2026-06-17 (#47840) [7bbffceb9c35] feat(curator): make skill consolidation opt-in (prune stays default-on) (#47840)
 
-# ==== TAIL APPEND (G-01): 33 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+
+# ==== TAIL APPEND: 62 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-09 (no-ref) [f5ef9cef0503] ci(skills-index): probe and watchdog steps run scripts under scripts/ci
+2026-11-09 (no-ref) [df14d71581c4] chore(catalog): review disclosure for awskills
+2026-11-09 (no-ref) [ef4d63093530] plugin-catalog: hermes-x-bookmarks 0.3.0 (weekly digest, tasks, skills)
+2026-11-09 (no-ref) [be2e43addf8b] chore(catalog): review disclosure for skillens
+2026-11-09 (no-ref) [2268800bfdce] plugin-catalog: re-pin skillens to b788910 (docs screenshots + image fields)
+2026-11-09 (no-ref) [4ea408538afa] plugin-catalog: skillens 0.1.0 (community)
+2026-11-09 (no-ref) [579d629aacb1] chore(catalog): review disclosure for skill-layers
+2026-11-08 (no-ref) [e9811dd1eff4] feat(catalog): add Cospark workflow skill
+2026-11-08 (no-ref) [7049cb3d4d13] plugin-catalog: add awskills (Aitherium)
+2026-11-08 (no-ref) [899d9ea057c2] feat(plugin-catalog): bump seomatic pin to bdc8ca34 (skill header wording)
+2026-11-08 (no-ref) [5945366d693c] plugin-catalog: add Skill Layers
+2026-11-08 (no-ref) [dfdfdd08c669] plugin-catalog: add listing-automater (skill only)
+2026-11-08 (no-ref) [b67adca067e0] plugin-catalog: bump api-indonesia pin (skill weather param fix)
+2026-11-08 (no-ref) [0798a7f215a3] plugin-catalog: skill-court 1.1.1
+2026-11-08 (no-ref) [00f0420bea87] plugin-catalog: skill-court 1.1.0
+2026-11-08 (no-ref) [c571b2173804] plugin-catalog: skill-court 1.0.1
+2026-11-08 (no-ref) [a2583f979620] plugin-catalog: add skill-court 1.0.0
+2026-11-07 (no-ref) [856e75808d1d] fix(curator): flag dry-run in post_curator_run and stop re-waiting on hung discovery
+2026-11-07 (no-ref) [335256076ba1] fix(curator): never re-announce the previous pass's report
+2026-11-07 (no-ref) [f7efbd1c2a52] fix(curator): fire post_curator_run after the pass's state is saved
+2026-11-07 (no-ref) [fd1cc1d1c4bd] fix(curator): post_curator_run reaches shell hooks and fires only on a complete report
+2026-11-07 (no-ref) [f1037e913a8a] catalog: hindsight-curator — pin 01087e2, add banner and screenshots
+2026-11-07 (no-ref) [fd3b74c78a67] plugin-catalog: add hindsight-curator
+2026-11-07 (no-ref) [57cc831f889f] chore(catalog): re-pin arena-skill to its main commit (same tree 562c878f; the old pin is an orphan commit)
+2026-11-07 (no-ref) [844695a4fee3] chore(catalog): review disclosure for arena-skill
+2026-11-06 (no-ref) [12c20b15c05f] Re-pin Tibber v1.0.4 after skill review fixes
+2026-11-06 (no-ref) [0acc079a01fc] refactor: move the Yuanbao optional skill out of core with the platform
+2026-11-05 (no-ref) [b7315091498b] plugin-catalog: re-pin glorya to e6ffa2b (SKILL.md approval note)
+2026-11-05 (no-ref) [e5f4f5693291] Add catalog entry for arena-skill
 2026-11-05 (no-ref) [6dcdb81f5e8b] fix(plugin-catalog): pethost 1.9.1, the skill writes its own transfer commands and the package holds no token
 2026-11-05 (no-ref) [a53912d2888f] test(aux): pin the skills_hub removal by behaviour, not source text
 2026-11-04 (no-ref) [84a0301415ed] fix(review): the background review never asks the user for a skill's API key
@@ -74,25 +104,3 @@
 2026-11-02 (no-ref) [0aab6dcf8b78] docs(skills): correct the projects reference against the live CLI
 2026-11-01 (no-ref) [c9577b67224b] fix(cache-bounds): atomic expiry vs refresh; one LRU order for skill scopes
 2026-11-01 (no-ref) [557254faa24e] fix(skills): lock guard resolves variables and relative inline code, lets reads through
-2026-11-01 (no-ref) [a639ed0ae491] fix(skills): close terminal lock bypasses; curator honours locks by display name
-2026-11-01 (no-ref) [722d4fac961f] feat(desktop): lock a skill from the Capabilities pane
-2026-11-01 (no-ref) [91c51e04f457] feat(skills): a locked skill can't be changed by the agent through any write path
-2026-10-30 (no-ref) [18d6877f4b00] feat(plugin-catalog): update DSers to v0.1.2 with bundled skills
-2026-10-29 (no-ref) [f282c57b7897] fix(skills): hermes-agent skill describes one-call text+Enter truthfully
-2026-10-29 (no-ref) [a53acf8d3a5d] fix(skills): document env setup never deletes a working env another agent published
-2026-10-29 (no-ref) [b544b82db163] fix(skills): OCR side env stays selected in the next terminal call
-2026-10-28 (no-ref) [395e89060fe3] fix(skills): keep nested-table order and table column names intact
-2026-10-28 (no-ref) [c4f72bc69b57] refactor(skills): move xlsx_restructure formula and freeze-pane steps out of main
-2026-10-28 (no-ref) [cfabecfa797a] fix(skills): pdf --flatten keeps form fields the JSON leaves out
-2026-10-28 (no-ref) [888664fda483] fix(website): the skills catalog can filter by the new vendor taps
-2026-10-28 (no-ref) [08a7c25eecb6] docs(skills): regenerate skill pages and the prompt-surface snapshot
-2026-10-28 (no-ref) [6fdc365d4bf9] refactor(skills): fold docx, powerpoint and xlsx into one microsoft-office skill
-2026-10-28 (no-ref) [183b5ddd5fbc] chore(skills): move niche built-in skills to optional
-2026-10-28 (no-ref) [9347107cdbc0] chore(skills): drop optional skills that official sources now cover
-2026-10-28 (no-ref) [dc82bec3bd4d] fix(skills): the sandbox document venv is built privately and published atomically
-2026-10-28 (no-ref) [d202ddfda225] fix(skills): the tmux prompt wait needs no coreutils timeout
-2026-10-28 (no-ref) [30a8c50a6ff1] fix(skills): document-skill setup works in the Docker sandbox; wait for the prompt before driving Hermes
-2026-10-28 (no-ref) [4a8c01790a03] fix(skills): document skills share one PM-built side environment; pause before Enter in the no-tmux recipe
-2026-10-28 (no-ref) [ad09ca5b4421] docs(skills): regenerate skill pages for the document-skill and tmux recipe edits
-2026-10-28 (no-ref) [b357ebbfc4dc] fix(docker): ship tmux and the Office/PDF libraries; document skills keep a persistent side env
-2026-10-28 (no-ref) [5c668bbe4daa] fix(webapp-access): status poll queries the gateway outside the skills lock

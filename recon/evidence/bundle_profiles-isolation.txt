@@ -62,44 +62,45 @@
 2026-08-31 (#89315) [d3e2ace1dde9] fix(profiles): profile delete refuses to kill another profile's gateway (#89315)
 2026-08-31 (#82871) [5742f6987d80] test(buzz): pin the single-profile config-only allowlist path (#82871)
 
-# ==== TAIL APPEND (G-01): 74 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
-2026-11-05 (no-ref) [1e81ee57e326] fix(webapp): voice relays through the host, and a created profile is served right away
-2026-11-05 (no-ref) [201326cf5894] fix(checkpoints): never snapshot home's parents or Hermes browser profiles
-2026-11-05 (no-ref) [e090092285fa] feat(memory): profile lifecycle and config-storage seams for memory providers
-2026-11-04 (no-ref) [d063eefc6797] fix(plugins): review nits — caution wording, reload wording, per-profile Update all
-2026-11-04 (no-ref) [6b2895cacb85] fix(update): list --cpu-profile in the holder value-flag fallback
-2026-11-04 (no-ref) [ca14c438e486] fix(mcp): an unscoped multiplex load keeps plugin servers after a ${VAR}-templated one
-2026-11-03 (no-ref) [c08c48530595] fix(docker): supervise profile gateways outside the root s6 scandir
-2026-11-03 (no-ref) [ae95c1caffae] test(desktop): profile overrides and never-ready parking through the real registry
-2026-11-03 (no-ref) [7019faa6c470] fix(desktop): a profile secondary records its wire under the backend it resolved
-2026-11-03 (no-ref) [56601f7c9a92] fix(desktop): room_plumbing maps to follow_profile_config only, as on serve
-2026-11-03 (no-ref) [fcdca2dbd4d8] fix(desktop): Team Gateway-managed platforms and profile-scoped link calls
-2026-11-02 (no-ref) [9b83f7cf858d] plugin-catalog: tinyfish 0.2.5 makes setup telemetry opt-in, adds profile tools
-2026-11-02 (no-ref) [6112c2adb9e1] test(profiles): share profile fixtures without shadowing imports
-2026-11-02 (no-ref) [3e0985d01719] test(profiles): move force-install swap tests to their own file
-2026-11-02 (no-ref) [f6e40b0105ff] fix(profiles): keep force-install swap dirs out of skill discovery
-2026-11-02 (no-ref) [b04acfce7f29] refactor(profiles): keep the force-install swap inside _replace_entry
-2026-11-02 (no-ref) [8819d8830861] test(mcp): a same-named stdio server gets its own child per profile
-2026-11-01 (no-ref) [d3e415edb98c] fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default
-2026-11-01 (no-ref) [1345680261f5] fix(desktop): judge each profile liveness path on its own, like the CLI
-2026-11-01 (no-ref) [75cbc7d057e0] fix(desktop): forget remembered local profiles the CLI would refuse
-2026-11-01 (no-ref) [ef989024880c] fix(desktop): decide remote profile repair from the default profile's effective route
-2026-11-01 (no-ref) [5f60d72b65dd] fix(desktop): import the per-gateway profile record at boot, not at module load
-2026-11-01 (no-ref) [c5240e37a481] fix(desktop): restore a remote primary only onto a profile its gateway serves
-2026-11-01 (no-ref) [3c42c4b7a0da] fix(desktop): windows send main single per-gateway profile changes, never their whole map
-2026-11-01 (no-ref) [9acd625c8f7d] fix(desktop): a profile-less primary dial follows the profile a remote boot re-pins
-2026-11-01 (no-ref) [e29791ceb419] fix(desktop): push the per-gateway profile memory to main only on a real change
-2026-11-01 (no-ref) [c193f62e4131] fix(desktop): boot the primary on a profile its gateway serves
-2026-11-01 (no-ref) [527bbf3d9a71] fix(desktop): display and voice writes name their profile, so a shared remote backend applies them there
-2026-11-01 (no-ref) [a475de488396] fix(desktop): a cached down roster row never cancels a same-gateway profile repair
-2026-11-01 (no-ref) [c40d5c001442] fix(desktop): a Settings re-home publishes the new gateway with its own profile
-2026-11-01 (no-ref) [5a4ecb0b41c4] fix(desktop): socket listeners see the whole new route, not the new socket with the old profile
-2026-11-01 (no-ref) [7e907a9ad0cc] fix(desktop): publish the request connection and its profile in one frame
-2026-11-01 (no-ref) [21a6921167b4] fix(desktop): keep every gateway in All profiles when the SSH primary serves the selected profile
-2026-11-01 (no-ref) [9fe3d20f68dd] fix(desktop): SSH shared profiles fail fast on a missing profile, keep older-runtime and pinned session reads
-2026-11-01 (no-ref) [8ef28ee7013a] fix(desktop): serve SSH named profiles from the connection's one remote backend
-2026-11-01 (no-ref) [a8b5fab1c165] fix(desktop): an empty served set keeps the gateway's own profile instead of inventing default
-2026-11-01 (no-ref) [2ca1aa6ca649] fix(desktop): the startup profile restore keeps only a profile the gateway serves
-2026-11-01 (no-ref) [b5182f334298] test(desktop): give the boot harness's fake bridge a profile roster
-2026-11-01 (no-ref) [fc6d8029fcf3] fix(desktop): validate the startup profile on the selected gateway
-2026-11-01 (no-ref) [b29bf60b3a32] fix(nous): an older shared login never replaces a newer profile login
+
+# ==== TAIL APPEND: 122 commits, author date > 2026-10-27, no-ref included, scope-first clustering, newest first, capped 40 ====
+2026-11-09 (no-ref) [e0d3dda02add] fix(hosted-room): keep the room lease alive while a turn waits for its profile lock and runs
+2026-11-08 (no-ref) [d24eebee2d34] moment 0.1.4: re-pin to 1af58dd (per-call profile resolution)
+2026-11-08 (no-ref) [1e2c6a68bae9] fix(desktop): package halves never stand in for a profile's install; tag pins read as current
+2026-11-08 (no-ref) [0179d4276943] gogogoogle: pin f293a64 (0.4.1, background jobs keep the Hermes profile)
+2026-11-07 (no-ref) [2a35007c1e63] plugin-catalog: hermes-standing 0.1.1 (public kanban_comment route, get_hermes_home, L1 default)
+2026-11-07 (no-ref) [8202da899b84] fix: relay live-turn checks are per chat and per profile
+2026-11-07 (no-ref) [75b402dffdd1] fix(desktop): a per-profile route on the removed gateway's host keeps its sign-in
+2026-11-07 (no-ref) [0871e416cae6] fix(desktop): Apply back to a saved SSH profile routes the window to it
+2026-11-07 (no-ref) [2655beeeea33] fix(desktop): applying a second remote profile on a saved SSH host adds it
+2026-11-07 (no-ref) [88f0d3919480] fix(profiles): keep the saved-gateways store out of clones and exports
+2026-11-07 (no-ref) [bb18fc3f1055] fix(groups): a single-profile gateway never advertises the root gateway's listener
+2026-11-07 (no-ref) [9a7931dc310d] feat(groups): lend any served profile to another gateway's group chat
+2026-11-07 (no-ref) [21f1733fc127] fix(vault): round-3 review fixes for real-profile saved-password resolution
+2026-11-07 (no-ref) [ef382179dfc3] fix(vault): harden real-profile saved-password resolution (independent Chrome-151 review)
+2026-11-07 (no-ref) [eb440a8b75cb] fix(vault): harden real-profile saved-password resolution (Greptile review)
+2026-11-07 (no-ref) [5c57517be4d6] docs(vault): document real-profile saved passwords as a login source
+2026-11-07 (no-ref) [394d7dbe8a16] test(vault): invariants for the browser: real-profile login source
+2026-11-07 (no-ref) [75b51688227e] feat(vault): real-profile saved passwords as a read-only browser: login source
+2026-11-07 (no-ref) [88fac4e4d8e2] test(acp): run the profile-selection test on the Windows and macOS lanes
+2026-11-07 (no-ref) [d4e7c3434209] test(acp): isolate the profile-selection test home on Windows
+2026-11-07 (no-ref) [9ca82fc16317] fix(acp): the hermes-acp console script serves the selected profile
+2026-11-07 (no-ref) [7af51a75426c] fix(profiles): a profile imported, installed or renamed onto a deleted name is live
+2026-11-07 (no-ref) [af61005fe8ba] fix(desktop): ask the system proxy about the $HERMES_HOME/npmrc registry
+2026-11-07 (no-ref) [63191e76cfa6] fix(pm): one helper names $HERMES_HOME/npmrc for user_npmrc and the build bridge
+2026-11-06 (no-ref) [aa389eba3df3] test(desktop): split per-profile cookie-scoping preview cases into their own file
+2026-11-06 (no-ref) [cab26df3a16d] fix(desktop): skip the local cookie-jar clear for a remote profile deletion
+2026-11-06 (no-ref) [7b3f7a1dff34] refactor(desktop): offset ratchet growth from the per-profile preview fixes
+2026-11-06 (no-ref) [0b75f67de11a] fix(desktop): preview sign-in cookies follow profile rename and delete
+2026-11-06 (no-ref) [9a949e332275] fix(desktop): per-profile in-app browser cookie jars; remove exactly what was imported; durable ownership before install
+2026-11-06 (no-ref) [393199816574] feat(desktop): sign the in-app browser in with the real browser profile
+2026-11-06 (no-ref) [9e455e7ad47b] test(groups): show a remapped profile settling a turn its old home holds
+2026-11-06 (no-ref) [120314731399] test(plugins): pin that two plugins may share a session env name across profiles
+2026-11-06 (no-ref) [26e16e38345a] fix(plugins): one plugin per session env name, and names stay in their own profile
+2026-11-06 (no-ref) [1f496b7c653a] fix(pm): select $HERMES_HOME/npmrc in user_npmrc as the build bridge does
+2026-11-06 (no-ref) [418171ca1130] fix(groups): an unknown member home keeps a deferred turn of an unserved profile
+2026-11-06 (no-ref) [67472d3122cb] fix(groups): Disband settles a deferred turn of an unserved profile once no daemon owns it
+2026-11-06 (no-ref) [1e7bda8070f4] fix(groups): a deferred turn on another profile's daemon needs its Stop
+2026-11-06 (no-ref) [cb49a66e5d8d] fix(plugins): plugin events stay in the emitting profile, and NaN is refused as not JSON
+2026-11-06 (no-ref) [87746862af16] fix(remote-config): resolve the Nous plane token under its profile's secret scope
+2026-11-05 (no-ref) [9231c1a4866e] plugin-catalog: re-pin xray to 21ca5f6f (isolation fixes + honest disclosure)

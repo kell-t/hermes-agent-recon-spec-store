@@ -1,5 +1,125 @@
 [
  {
+  "sha": "c1420953743b",
+  "date": "2026-10-04",
+  "pr": 132648,
+  "subject": "fix(tui): heal empty-provider session overrides to the owning custom entry (#132648)",
+  "type": "fix",
+  "scope": "tui"
+ },
+ {
+  "sha": "6e488d720a9c",
+  "date": "2026-10-31",
+  "pr": 147239,
+  "subject": "fix(e2e): o mock de SDK s\u00f3 entra quando o m\u00f3dulo n\u00e3o existe de fato (#147239)",
+  "type": "fix",
+  "scope": "e2e"
+ },
+ {
+  "sha": "085d8b5d9876",
+  "date": "2026-11-08",
+  "pr": 124974,
+  "subject": "fix(qqbot): an approval button resolves the request its card was sent for (#124974)",
+  "type": "fix",
+  "scope": "qqbot"
+ },
+ {
+  "sha": "e4ec5c2ce284",
+  "date": "2026-07-29",
+  "pr": 74004,
+  "subject": "fix(telegram): escape MarkdownV2 reserved parens in chunk indicators (#74004)",
+  "type": "fix",
+  "scope": "telegram"
+ },
+ {
+  "sha": "1a7ceb1d4708",
+  "date": "2026-06-24",
+  "pr": 51543,
+  "subject": "fix(telegram): cache channel-post media via effective_message (#51543)",
+  "type": "fix",
+  "scope": "telegram"
+ },
+ {
+  "sha": "4b0be5b74076",
+  "date": "2026-09-14",
+  "pr": 78115,
+  "subject": "fix(gateway): long clarify choices render in full, buttons go positional (#78115)",
+  "type": "fix",
+  "scope": "gateway"
+ },
+ {
+  "sha": "f483ce2667dd",
+  "date": "2026-11-09",
+  "pr": 150198,
+  "subject": "fix(delegation): keep _delegate_from on reserved subagent rows (#150198)",
+  "type": "fix",
+  "scope": "delegation"
+ },
+ {
+  "sha": "0ccdef01e0a8",
+  "date": "2026-11-07",
+  "pr": 150167,
+  "subject": "feat(plugin-catalog): add worldmonitor (#150167)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "e4ec13af8ab8",
+  "date": "2026-11-07",
+  "pr": 149658,
+  "subject": "feat(plugin-catalog): add serpapi (#149658)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "ee9861092baf",
+  "date": "2026-11-07",
+  "pr": 150603,
+  "subject": "feat(plugin-catalog): add getyoutubetranscript (#150603)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "b697c6b49fc1",
+  "date": "2026-11-07",
+  "pr": 150211,
+  "subject": "feat(plugin-catalog): add loci (#150211)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "7569dd626553",
+  "date": "2026-11-07",
+  "pr": 150160,
+  "subject": "feat(plugin-catalog): add helm (#150160)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "7d03e61f6807",
+  "date": "2026-11-07",
+  "pr": 150069,
+  "subject": "feat(plugin-catalog): add dxmt (#150069)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "e0d06fefb133",
+  "date": "2026-11-07",
+  "pr": 148907,
+  "subject": "feat(plugin-catalog): add faxforagents (#148907)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
+  "sha": "6d968fdd3bc8",
+  "date": "2026-11-07",
+  "pr": 149194,
+  "subject": "feat(plugin-catalog): add eventforge (#149194)",
+  "type": "feat",
+  "scope": "plugin-catalog"
+ },
+ {
   "sha": "8b1e49558bae",
   "date": "2026-10-23",
   "pr": 40703,

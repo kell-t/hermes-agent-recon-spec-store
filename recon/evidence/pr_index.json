@@ -1,4 +1,109 @@
 {
+ "132648": {
+  "date": "2026-10-04",
+  "shas": [
+   "c1420953743b"
+  ],
+  "subject": "fix(tui): heal empty-provider session overrides to the owning custom entry (#132648)"
+ },
+ "147239": {
+  "date": "2026-10-31",
+  "shas": [
+   "6e488d720a9c"
+  ],
+  "subject": "fix(e2e): o mock de SDK s\u00f3 entra quando o m\u00f3dulo n\u00e3o existe de fato (#147239)"
+ },
+ "124974": {
+  "date": "2026-11-08",
+  "shas": [
+   "085d8b5d9876"
+  ],
+  "subject": "fix(qqbot): an approval button resolves the request its card was sent for (#124974)"
+ },
+ "74004": {
+  "date": "2026-07-29",
+  "shas": [
+   "e4ec5c2ce284"
+  ],
+  "subject": "fix(telegram): escape MarkdownV2 reserved parens in chunk indicators (#74004)"
+ },
+ "51543": {
+  "date": "2026-06-24",
+  "shas": [
+   "1a7ceb1d4708"
+  ],
+  "subject": "fix(telegram): cache channel-post media via effective_message (#51543)"
+ },
+ "78115": {
+  "date": "2026-09-14",
+  "shas": [
+   "4b0be5b74076"
+  ],
+  "subject": "fix(gateway): long clarify choices render in full, buttons go positional (#78115)"
+ },
+ "150198": {
+  "date": "2026-11-09",
+  "shas": [
+   "f483ce2667dd"
+  ],
+  "subject": "fix(delegation): keep _delegate_from on reserved subagent rows (#150198)"
+ },
+ "150167": {
+  "date": "2026-11-07",
+  "shas": [
+   "0ccdef01e0a8"
+  ],
+  "subject": "feat(plugin-catalog): add worldmonitor (#150167)"
+ },
+ "149658": {
+  "date": "2026-11-07",
+  "shas": [
+   "e4ec13af8ab8"
+  ],
+  "subject": "feat(plugin-catalog): add serpapi (#149658)"
+ },
+ "150603": {
+  "date": "2026-11-07",
+  "shas": [
+   "ee9861092baf"
+  ],
+  "subject": "feat(plugin-catalog): add getyoutubetranscript (#150603)"
+ },
+ "150211": {
+  "date": "2026-11-07",
+  "shas": [
+   "b697c6b49fc1"
+  ],
+  "subject": "feat(plugin-catalog): add loci (#150211)"
+ },
+ "150160": {
+  "date": "2026-11-07",
+  "shas": [
+   "7569dd626553"
+  ],
+  "subject": "feat(plugin-catalog): add helm (#150160)"
+ },
+ "150069": {
+  "date": "2026-11-07",
+  "shas": [
+   "7d03e61f6807"
+  ],
+  "subject": "feat(plugin-catalog): add dxmt (#150069)"
+ },
+ "148907": {
+  "date": "2026-11-07",
+  "shas": [
+   "e0d06fefb133"
+  ],
+  "subject": "feat(plugin-catalog): add faxforagents (#148907)"
+ },
+ "149194": {
+  "date": "2026-11-07",
+  "shas": [
+   "6d968fdd3bc8"
+  ],
+  "subject": "feat(plugin-catalog): add eventforge (#149194)"
+ },
  "40703": {
   "date": "2026-10-23",
   "shas": [
