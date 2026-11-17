@@ -254,17 +254,26 @@ The gateway turn executor SHALL hand work to parked threads instead of starting 
 **Sub-area: Tail fold (commits after 2026-10-27, bundle TAIL APPEND G-01)**
 
 ### Requirement: Turns reload the routed profile's current .env
-A turn SHALL reload the serving profile's current `.env` on every execution path — messaging turns, local turns, and bypass sessions alike — so `${VAR}` references resolve against the profile's live values rather than values frozen at boot.
+A turn SHALL reload the serving profile's current `.env` on the messaging and local execution paths, while a bypass session (`ignore_user_config`) SHALL never read the profile's `.env` — so `${VAR}` references resolve against the profile's live values rather than values frozen at boot.
 **Status**: VERIFIED
-**Evidence**: [commit 8bc8980657bd] "a local turn reloads the profile's .env, as a messaging turn does"; [commit 6e7567be260b] "a bypass session's turn never reloads the profile's .env"; [commit 9bbe8e880f44] "a resume expands ${VAR} from the profile's current .env"
-**Anchor**: `gateway/run_turn_runner.py:1275-1279` ("Rotated .env keys reach this turn's config reads (side tasks read config.yaml), as on the messaging path ... A bypass session never reads the profile." → `if not policy.ignore_user_config: _reload_runtime_env_preserving_config_authority()`), `gateway/run.py:1580-1586` (`_reload_runtime_env_preserving_config_authority` — "Reload .env per turn for rotated keys while config.yaml stays authoritative for budgets ... Multiplex never reloads .env globally")
+**Evidence**: [commit 8bc8980657bd] "a local turn reloads the profile's .env, as a messaging turn does"; [commit 6e7567be260b] "a bypass session's turn never reloads the profile's .env"; [commit 9bbe8e880f44] "a resume expands ${VAR} from the profile's current .env". Drift correction (pass 7, 2026-11-18, own finding verified at pin): the statement previously read "on every execution path — messaging turns, local turns, and bypass sessions alike"; the pin contradicts "bypass sessions alike" twice over — the code comment "A bypass session never reads the profile." gates the reload behind `if not policy.ignore_user_config:`, and this requirement's own cited commit 6e7567be260b says the bypass turn NEVER reloads; statement rewritten to exclude bypass sessions, old wording preserved here append-only
+**Anchor**: `gateway/run_turn_runner.py:1305-1309` ("Rotated .env keys reach this turn's config reads (side tasks read config.yaml), as on the messaging path ... A bypass session never reads the profile." → `if not policy.ignore_user_config: _reload_runtime_env_preserving_config_authority()`; re-anchored from :1275-1279 in the 2026-11-18 pass-7 resweep — the old lines are the `_run_sync_scoped` docstring/import region), `gateway/run.py:1574-1584` (`_reload_runtime_env_preserving_config_authority` — "Reload .env per turn for rotated keys while config.yaml stays authoritative for budgets ... Multiplex never reloads .env globally"; re-anchored from :1580-1586)
 
+#### Scenario: A local turn sees .env keys rotated after boot
+- **WHEN** a local session's turn runs after a key was rotated in the profile's `.env`
+- **THEN** the turn's `${VAR}` reads SHALL resolve against the profile's live `.env` value, not the value the gateway process started with
+- **AND** the session's own turn budget SHALL be kept instead of the profile's `agent.max_turns`
+- Source: test: tests/gateway/test_session_config_loaders.py::test_a_local_turn_reloads_the_profiles_env_file_and_keeps_its_own_turn_budget
 
-#### Scenario: Conformance check (derived)
-- **WHEN** the behavior described by this requirement is exercised
-- **THEN** A turn SHALL reload the serving profile's current `.env` on every execution path — messaging turns, local turns, and bypass sessions alike — so `${VAR}` references resolve against the profile's live values rather than values frozen at boot.
-- NOTE: SCENARIO-DEBT (derived, pass-4 conformance) — no scenario evidence in pass-3 corpus;
-  replace with evidence-backed scenarios on next recon pass.
+#### Scenario: A bypass session never reads the profile's .env
+- **WHEN** a local-path turn runs on a bypass (`--ignore-user-config`) session
+- **THEN** the turn SHALL NOT reload the profile's `.env`, keeping the environment value the gateway started with
+- Source: test: tests/gateway/test_session_config_loaders.py::test_a_local_turn_reloads_the_profiles_env_file_and_keeps_its_own_turn_budget
+
+#### Scenario: A resume expands ${VAR} from the profile's current .env
+- **WHEN** a session is resumed and config.yaml references a `${VAR}` whose value lives in the profile's `.env`
+- **THEN** the resume refresh SHALL expand it against the profile's current `.env`, not the environment the gateway process started with
+- Source: test: tests/gateway/test_session_resume_config_refresh.py::test_a_resume_expands_var_references_from_the_profiles_current_env
 
 ### Requirement: Side tasks resolve the profile's config with built-in defaults
 A gateway side task SHALL read the routed profile's `config.yaml` like every other side-task reader, and a bypass session SHALL keep the built-in side-task defaults rather than overriding them.
@@ -292,7 +301,7 @@ In Bot Mode, the teammate roster SHALL list every bot's saved description, not j
 
 ## Known gaps / open questions
 - Streaming contract invariants 2/4: RESOLVED at pass 2b — enforcement anchors opened and set (`gateway/stream_consumer.py:335/:547`, `gateway/run_turn.py:1298`, `gateway/run_notifications.py:334-344`); requirement statuses upgraded to VERIFIED.
-- DOC-vs-CODE (pass 2b, flagged not fixed): tail-folded "Turns reload ... .env" wording says "bypass sessions alike", but the pinned code deliberately NEVER reloads the profile `.env` for a bypass session (`gateway/run_turn_runner.py:1278-1279` — `if not policy.ignore_user_config:`, comment "A bypass session never reads the profile"), consistent with cited commit 6e7567be260b. The requirement text overstates the bypass clause.
+- DOC-vs-CODE (pass 2b, flagged not fixed): tail-folded "Turns reload ... .env" wording says "bypass sessions alike", but the pinned code deliberately NEVER reloads the profile `.env` for a bypass session (`gateway/run_turn_runner.py:1278-1279` — `if not policy.ignore_user_config:`, comment "A bypass session never reads the profile"), consistent with cited commit 6e7567be260b. The requirement text overstates the bypass clause. — FIXED pass 7 (2026-11-18, drift D-08): requirement statement rewritten to exclude bypass sessions; anchors re-anchored (block moved to run_turn_runner.py:1305-1309); 3 Tier-C scenarios grounded.
 - D-01 (ledger drift register): CLOSED at pass 2b — the 85% gateway-hygiene constant claimed by agent/AGENTS.md ("gateway session hygiene (85% threshold)") exists at the pin: `gateway/run_turn_hygiene.py:102` (`threshold_pct=0.85`; :97 "deliberately HIGHER than the agent's compressor (0.50)"). Pass 1 searched `gateway/session*.py` only; the constant lives in `run_turn_hygiene.py`. (No requirement in this file carries the hygiene claim — recorded for the agent-turn-loop owner / ledger.)
 - Gateway lifecycle vs Desktop app section of gateway/AGENTS.md not drafted (ownership boundary with deferred desktop-ui capability).
 - `builtin_hooks/` extension point ("none shipped") — contract for always-registered gateway hooks undocumented beyond its existence; UNVERIFIED.
@@ -304,4 +313,5 @@ In Bot Mode, the teammate roster SHALL list every bot's saved description, not j
 - REQ "Multi-tenant gateway isolation": no doc-grounded trigger; kept as invariant. (Only evidence is PR #121352's phrasing — echoed verbatim in the requirement itself; no Tier A release note, no Tier B doc section, and no test asserts "never attaches/refuses/reports as ours". Anchor located at pass 2b — `gateway/host_attach.py:118` docstring — but that is implementation comment, not a Tier A/B trigger+outcome doc, so no scenario added.)
 - REQ "Multiplexed gateways serve profiles created after boot": the third clause (per-conversation offer flag saved in the routed profile, #127818) has no Tier A/B/C grounding found — scenario-ified for the first two clauses only.
 - REQ "Admin gating opt-in per platform": "in-flight agents SHALL not bypass admin gating" is scenario-ified from the busy-path authorization test (#17775), which covers inbound sender gating while a session runs — it does not test an in-flight agent circumventing `allow_admin_from`. The requirement's wording may overstate what the evidence shows.
+- Pass-7 resweep (2026-11-18, own findings at pin): REQ "Turns reload the routed profile's current .env" GROUNDED with 3 Tier-C scenarios (tests/gateway/test_session_config_loaders.py::test_a_local_turn_reloads_the_profiles_env_file_and_keeps_its_own_turn_budget — bypass-parametrized, pins BOTH the reload and the bypass exclusion — and tests/gateway/test_session_resume_config_refresh.py::test_a_resume_expands_var_references_from_the_profiles_current_env); the pass-2b DOC-vs-CODE overstatement below is FIXED as drift D-08 (bypass clause corrected, anchors re-anchored). "Multi-tenant gateway isolation" and "Side tasks resolve the profile's config with built-in defaults" re-swept against the v0.23.0..v0.23.1 window (759 modified/added test files + v0.23.1 relnotes): no Tier A/B/C trigger+outcome text found — stay invariant debt.
 - Tail folds: 3 requirements added (max 3 allowed). Deferred tail candidates: stale approval-card binding cluster (5ab58da1f63a, 79f28901db7f, 8ebc4ef6ccab, 7ab170ea6d36 — strong Tier B/C grounding, better folded with the approvals capability); bot-to-bot loop-cap cluster (4e93f80e4720, 8180676731e4, 160339e0dd5c — Bot Mode engine, mostly undocumented); Slack thread-context allowlist tagging (cad0aaaf0d77); all desktop/tui/webapp/docker/mcp/model-routing lines per scope notes.
