@@ -1,1 +1,6 @@
 /repo/
+
+# Regenerable doc-corpus copies of upstream docs (pass-5 citation
+# fallback; wholesale upstream text stays out of recon/ per LICENSE tiering —
+# re-extract from the pinned clone with git show at any time).
+/recon/evidence/docs/
