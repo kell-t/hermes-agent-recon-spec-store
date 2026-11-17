@@ -137,11 +137,21 @@ A toolset SHALL declare the session platforms it exists for (`platforms=` in its
 - Evidence: doc: tools/AGENTS.md § "Surface capability is a property of the SESSION, never of the process env"; supersedes the removed role grant (see Known gaps drift note, #119491)
 - Anchor: `toolsets.py:143` (`onboarding` toolset, `platforms=frozenset({"desktop"})`), `toolsets.py:244` (`TOOLSET_SESSION_PLATFORMS` derived from specs), `toolsets.py:449` (`session_platform_tool_drops`)
 
+#### Scenario: Only the declared session platform carries a platform-gated toolset
+- **WHEN** a toolset declares its session platforms (`platforms=` → `TOOLSET_SESSION_PLATFORMS`) — e.g. `manage_catalog` is desktop-only — and an agent session runs on another platform
+- **THEN** `session_platform_tool_drops()` SHALL name those tools for every other session platform (cli, tui, telegram, cron) and not for the declared one, so only a desktop session carries the tool
+- Source: test: tests/tools/test_connectors_catalog.py::test_only_a_desktop_session_carries_the_tool
+
 ### Requirement: Shared argument repair for inline tools
 Inline agent tools (clarify, todo, memory, session_search) SHALL go through the same shared argument-repair path as registry tools.
 - Status: VERIFIED
 - Evidence: [PR #127781](https://github.com/NousResearch/hermes-agent/pull/127781) — "Inline agent tools get the shared argument repair" — code: INLINE_TOOL_EXECUTORS wraps every entry in coerce_tool_args, the same call handle_function_call makes (a2840f954b, #127781)
-- Anchor: `agent/inline_tool_executors.py:307-315` (`_coerced` / `INLINE_TOOL_EXECUTORS`) — every inline executor (todo_list, memory, session_search, clarify, …) is wrapped so `coerce_tool_args(name, args)` runs before it; `model_tools.py:902` (`handle_function_call`) — the registry dispatch path applies the same `coerce_tool_args(function_name, function_args)`; `tools/arg_coercion.py:21` (`coerce_tool_args`) — the single shared repair/coercion implementation (imported at `agent/inline_tool_executors.py:17`)
+- Anchor: `agent/inline_tool_executors.py:346-355` (`_coerced` / `INLINE_TOOL_EXECUTORS` — every executor in `_RAW_INLINE_TOOL_EXECUTORS` is wrapped via `{name: _coerced(name, executor) ...}` so `coerce_tool_args(name, args)` runs before it; re-anchored from :307-315 in the 2026-11-18 pass-7 resweep — the old lines are the raw dict region; import at :18, re-anchored from :17); `model_tools.py:897` (`handle_function_call`) — the registry dispatch path applies the same `coerce_tool_args(function_name, function_args)` at :914 (re-anchored from :902); `tools/arg_coercion.py:21` (`coerce_tool_args`) — the single shared repair/coercion implementation
+
+#### Scenario: A malformed inline-tool call is repaired before the executor runs
+- **WHEN** an inline agent tool is dispatched through `INLINE_TOOL_EXECUTORS` with malformed arguments — `todo_list` given `todos` as a JSON string instead of a list
+- **THEN** the inline dispatch SHALL coerce the argument before the executor body runs and the call succeeds without an error
+- Source: test: tests/tools/test_todo_tool_type_coercion.py::TestJsonStringCoercion::test_json_string_is_parsed_into_list
 
 ### Requirement: Pruned spill archives read as expired
 Reading a pruned tool-result spill archive SHALL report "expired", and spill pointers appearing inside structured content and Windows paths SHALL count as references (kept out of pruning).
@@ -232,7 +242,7 @@ A tool result nested beyond the normal depth SHALL still deliver its `tool.compl
 
 ## Scenario-ification notes
 - REQ "Role-gated setup toolset": no doc-grounded trigger; kept as invariant. (#119491's wording exists only as a bundle commit title; no release note, in-repo doc, or test names the role grant.)
-- REQ "Shared argument repair for inline tools": no doc-grounded trigger; kept as invariant. (tests/agent/test_repair_tool_call_arguments.py pins the shared repair path itself, not the inline-tool membership claim; PR #127781 is not in any release-note body.)
+- REQ "Shared argument repair for inline tools": no doc-grounded trigger; kept as invariant. (tests/agent/test_repair_tool_call_arguments.py pins the shared repair path itself, not the inline-tool membership claim; PR #127781 is not in any release-note body.) — CLOSED pass 7 (2026-11-18): tests/tools/test_todo_tool_type_coercion.py::TestJsonStringCoercion::test_json_string_is_parsed_into_list dispatches THROUGH INLINE_TOOL_EXECUTORS (wrapper chain live at pin, re-anchored) — grounded Tier-C. "Session-platform-gated toolsets" (the drift-rewritten successor of Role-gated setup toolset) likewise GROUNDED pass 7 via tests/tools/test_connectors_catalog.py::test_only_a_desktop_session_carries_the_tool — never re-checked after the pass-3 rewrite; the test names the drop contract exactly. "Stable tool-row identity for display" re-swept vs the v0.23.0..v0.23.1 window: still no Tier A/B/C text — stays debt.
 - REQ "Stable tool-row identity for display": no doc-grounded trigger; kept as invariant. (#117750 absent from release-note bodies; the adjacent reused-tool-call-ids bullets (#128003/#131758, relnote 0.22.0) are desktop-side and excluded by ownership.)
 - Tail req "A too-deeply nested tool result still completes the tool event": commit-only evidence; no Tier A/B/C trigger+outcome pair found.
 - Tail items rejected (out of capability ownership): desktop tool-row/reasoning-render items (#128009, #128003, #126479, #107386, #118271), TUI/terminal inline-image rendering tail commits (2026-11-04 cluster: kitty image ids, half-block painter, iTerm2 sizing, inline image cache — display/TUI surface), terminal-backend PATH/login-shell tail commits (29fef14fbf35, 6fa171ce5423, 35c2783b6ab7 — tools/environments backends sub-capability), Sprites backend docs (docs/website), plugin-catalog re-pins (a6cdad3e9fb6, fa830bef1db1), browser CDP URL-scan/interception details (09d2e686f9b8, e20007e4e7c0, 1c11a23f0f61 — browser sub-capability), test-infra chores.
