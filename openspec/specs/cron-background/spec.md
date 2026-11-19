@@ -256,6 +256,103 @@ While a gateway drain holds cron dispatch, a one-shot becoming due SHALL NOT be 
 - **THEN** it fires once the next gateway ticks (it is neither dropped nor double-fired)
 - Source: test: tests/cron/test_oneshot_due_during_drain_hold.py::test_oneshot_due_during_a_drain_fires_once_the_next_gateway_ticks
 
+### Requirement: The drain hold stamps its window in the cron store and crosses the restart
+While a gateway drain holds cron dispatch, every held tick SHALL stamp `dispatch_held.json` in the cron store (`since` = first held tick, `last` = latest) so the hold crosses the restart: the next gateway reads it from the same store. Continuing another process's stamped hold requires its stamp still fresh (within twice the tick slack). A one-shot whose grace lapsed while the gateway never returned SHALL still be retired — no stale reminders after downtime (#93526).
+**Status**: VERIFIED
+**Evidence**: [commit c7b72e1fe4a7] — a one-shot due while a gateway drain holds dispatch fires once afterwards; [commit b425edd28617] — the file continues another process's hold only when that hold is still being stamped (commit body) — code: dispatch_hold module docstring "Each held tick stamps ... It crosses the restart: the next gateway reads it from the same store"
+**Anchor**: `cron/dispatch_hold.py:25` (`_FILE` = "dispatch_held.json") — the stamp file lives in the active cron store; `cron/dispatch_hold.py:50` (`atomic_json_write`) — every held tick writes `{"since": ..., "last": now}`; `cron/dispatch_hold.py:46` (`now - held["last"] <= 2 * TICK_SLACK_SECONDS`) — continuation only while the other process's stamp is still being refreshed
+
+#### Scenario: Gateway never returns, the stale reminder is still retired
+- **WHEN** a one-shot came due during a drain hold and the gateway never came back within the grace
+- **THEN** the next gateway's first tick retires it as missed instead of firing a stale reminder hours late
+- Source: test: tests/cron/test_oneshot_due_during_drain_hold.py::test_stale_oneshot_is_retired_despite_a_hold
+
+### Requirement: Quota-hold seconds come only from a rate-limited AuthError
+The scheduler SHALL derive a provider-window hold duration only from a rate-limited `AuthError` inside the failure's cause chain — its `retry_after` attribute or a `retry after <N>s` phrase on that error itself — and only when the value is positive. Unrelated "retry after" text elsewhere SHALL never park a job's fires.
+**Status**: VERIFIED
+**Evidence**: [commit b680dcd5d48d] — hold fires through a provider's closed usage window instead of re-firing every tick (#89376, API-verified closed ISSUE in recon/evidence/verified_numbers.json; creation commit verified ancestor of the pin) — code: quota_hold docstring "Anchored on the AuthError itself, never on arbitrary text"
+**Anchor**: `cron/quota_hold.py:50` (`isinstance(cur, AuthError) and is_rate_limited_auth_error(cur)`) — only a rate-limited AuthError yields seconds; `cron/quota_hold.py:36` (`_RETRY_AFTER_RE`) — the `retry after (\d+)s` phrase; `cron/quota_hold.py:56` (`cur.__cause__ or cur.__context__`) — cycle-safe walk of the cause chain; `cron/scheduler.py:2649` (`hold_seconds_from_failure(e)`) — the failing run flags the hold duration
+
+#### Scenario: Only the rate-limited AuthError parks the job
+- **WHEN** a cron run fails with an exception whose cause chain carries a rate-limited AuthError with a wait hint (versus unrelated text merely mentioning retry-after)
+- **THEN** the hold duration comes from that AuthError alone and arbitrary text yields no hold
+- Source: test: tests/cron/test_quota_hold.py::test_hold_seconds_only_from_rate_limited_auth_error_in_cause_chain
+
+### Requirement: A closed provider window parks fires at the first legal occurrence
+When a cron or interval job fails into a known-closed provider window with its natural next run inside the window, the scheduler SHALL park `next_run_at` at the first scheduled occurrence after the window end (interval jobs park at the boundary itself, plus 60 s slack), stamp `quota_hold_until`, coalesce the skipped occurrences, and deliver one failure alert carrying the hold notice. A queued run-now waits for the boundary, not the next cron slot; paused and one-shot jobs are not parked.
+**Status**: VERIFIED
+**Evidence**: [commit b680dcd5d48d] — the hold mirrors cron/unreachable_retry in the opposite direction; mark_job_run parks next_run_at at the first scheduled occurrence after the window — code: `cron/quota_hold.py:113` plan_hold under the jobs lock after the natural next run was computed; bookkeeping hands the flagged seconds to `mark_job_run`
+**Anchor**: `cron/quota_hold.py:135` (`kind == "cron" and blocked and not extra_fire.queued(job)`) — cron coalescing skipped while a run-now is queued; `cron/quota_hold.py:138` (`compute_next_run(`) — park at the first legal occurrence after the window; `cron/quota_hold.py:142` (`parked = window_end.isoformat()`) — interval jobs park at the boundary itself; `cron/quota_hold.py:149` (`job[STATE_KEY] = parked`) — stamps `quota_hold_until`; `cron/scheduler_bookkeeping.py:79` (`mark_kwargs["quota_hold_seconds"]`) — a failed run carries the flagged duration into bookkeeping
+
+#### Scenario: Parked past the window, silent until then
+- **WHEN** a provider reports its usage window closed and a scheduled job's next occurrences fall inside it
+- **THEN** missed occurrences are coalesced, `next_run_at` moves to the first scheduled occurrence after the window, and nothing fires or alerts before it
+- Source: doc: website/docs/user-guide/features/cron.md § Holding a job through a closed provider usage window "missed occurrences are coalesced and `next_run_at` moves to the first scheduled occurrence after the window. The parked instant is stored as `quota_hold_until`; nothing fires or alerts before it."
+
+### Requirement: Only a sparse cron retries its consumed fire once at the hold boundary
+A blocked scheduled occurrence SHALL retry once at the recovery boundary only for a cron-kind job that does not already carry `quota_hold_until` — a recovery fire that fails again waits for the natural schedule instead of re-parking — and whose natural occurrence falls at least half a cadence period past the boundary. Dense schedules, manual runs and interval jobs retain their natural next run.
+**Status**: VERIFIED
+**Evidence**: [commit b680dcd5d48d] — initial hold; the recovery-fire bound reuses the half-period rule of `cron.jobs._compute_grace_seconds` — code: quota_hold docstring + `_recovery_worthwhile` guard "a job already carrying `quota_hold_until` IS the recovery fire failing again"
+**Anchor**: `cron/quota_hold.py:110` (`>= cadence / 2`) — sparse threshold: natural occurrence at least half a period past the boundary; `cron/quota_hold.py:107` (`if job.get(STATE_KEY):`) — an already-held job returns False (no re-park); `cron/quota_hold.py:130` (`recover_consumed_fire`) — recovery only when a scheduled fire (not a manual run) was consumed
+
+#### Scenario: Sparse recovery fire, once per window
+- **WHEN** the provider reopens well before a sparse cron job's next natural occurrence
+- **THEN** the blocked occurrence retries once at the recovery boundary and a second quota failure waits for the natural schedule
+- Source: doc: website/docs/user-guide/features/cron.md § Holding a job through a closed provider usage window "a blocked scheduled occurrence retries once at that recovery boundary; a second quota failure waits for the natural schedule."
+
+#### Scenario: Dense schedules and repeated holds get no extra fire
+- **WHEN** a dense-schedule job enters a quota hold, or a job already holding fails again
+- **THEN** no recovery fire is planned — the job keeps its natural next run instead of a probe per hold window
+- Source: test: tests/cron/test_quota_hold.py::test_recovery_fire_skips_dense_schedules_and_never_re_parks
+
+### Requirement: The quota hold shields its window and clears on model contact or schedule edit
+While `quota_hold_until` lies in the future the job SHALL stay silent (an expired marker is inert) and the stale-error re-arm SHALL treat an active hold as deliberate parking, not a wedge. The recovery exception binds to the exact parked instant plus the schedule expression, so a directly edited schedule re-anchors without inheriting it. Any run that reached the model clears the marker, and so does an explicit schedule edit.
+**Status**: VERIFIED
+**Evidence**: [commit b680dcd5d48d] — the stale-error re-arm (#62002) treats an active hold as deliberate; "Any run that reaches the model clears it" — code: `cron/quota_hold.py:60` hold_active; `cron/jobs.py:1003-1004` re-arm skip
+**Anchor**: `cron/quota_hold.py:65` (`_instant_after(until, now or _hermes_now())`) — expired marker is inert; `cron/jobs.py:1004` (`deliberately parked past a provider usage window`) — stale-error re-arm skips an active hold; `cron/quota_hold.py:82` (`job.get(STATE_KEY) == next_run`) — recovery fire recognised only at the exact parked instant (with the `quota_hold_cron_expr` fingerprint at :83); `cron/jobs.py:2553` (`quota_hold.clear_state(job)`) — a run that reached the model clears it; `cron/jobs.py:2152` (`_clear_quota_hold(updated)`) — a schedule edit drops the marker
+
+#### Scenario: Held job survives the stale-error re-arm and clears on the next model contact
+- **WHEN** a job parked in a provider window is seen by the stale-error re-arm sweep, and later a run of the same job reaches the model
+- **THEN** the re-arm leaves the park untouched, and the model-reaching run clears the marker
+- Source: test: tests/cron/test_quota_hold.py::test_quota_hold_parks_past_window_survives_stale_rearm_and_clears_on_model_reach
+
+#### Scenario: Model contact ends the silence
+- **WHEN** any run of a held job reaches the model (either outcome)
+- **THEN** the hold marker is cleared; the docs state it plainly
+- Source: doc: website/docs/user-guide/features/cron.md § Holding a job through a closed provider usage window "Any run that reaches the model clears the hold."
+
+### Requirement: A live-but-deadlocked cron owner is released past the derived stale bound
+Recovery SHALL mark a claimed/running execution `unknown` when its owner process is alive but the claim has been silent past the derived bound `max(3 × HERMES_CRON_TIMEOUT, script timeout, 7200 s)`; silence SHALL be measured from the last progress stamp (rows predating the column fall back to claim age). Without a finite positive inactivity timeout the sweep SHALL fail closed and never reclaim live owners; the wedged process is not terminated.
+**Status**: VERIFIED
+**Evidence**: [commit 086da1e0727e] — wall-clock stale-claim guard for live-but-deadlocked workers (#115692, API-verified closed ISSUE in recon/evidence/verified_numbers.json) — code: `cron/executions.py` recovery sweep; the ledger row records the wedged-owner reason verbatim
+**Anchor**: `cron/executions.py:187` (`_live_owner_stale_after_seconds`) — "Derived from the existing knobs, never a bare wall-clock constant"; `cron/executions.py:199` (`inactivity <= 0`) — unbounded/zero timeout returns None, fail closed; `cron/executions.py:202` (`CLAIM_TTL_INACTIVITY_HEADROOM`) — the 3× inactivity term of the max; `cron/executions.py:36` (`LIVE_OWNER_STALE_CLAIM_FLOOR_SECONDS = 7200.0`) — the 7200 s floor; `cron/executions.py:220` (`_claim_age_seconds(progress_at or claimed_at)`) — silence measured from the last stamp; `cron/executions.py:472` (`_OWNER_WEDGED_REASON`) — "The process was not terminated"; `cron/executions.py:489` (`recover_interrupted_executions`) — the sweep marking abandoned attempts unknown
+
+#### Scenario: A wedged worker's claim is released
+- **WHEN** an owner process stays alive but its execution row has been silent past the derived stale bound
+- **THEN** recovery marks the attempt `unknown` (never rerunning it automatically) so the job can fire again, without killing the wedged process
+- Source: test: tests/cron/test_stale_running_recovery.py::test_live_owner_stale_claim_gets_recovered
+
+#### Scenario: A healthy long run is never reclaimed mid-run
+- **WHEN** a multi-hour run keeps stamping progress while idle time stays short
+- **THEN** the stale-claim sweep leaves the live owner alone — silence, not run length, drives the bound
+- Source: doc: website/docs/user-guide/features/cron.md § Execution history "so a healthy multi-hour job is never reclaimed mid-run, while a worker deadlocked on a lock stops stamping and is released once the bound passes."
+
+#### Scenario: Progress stamped during the sweep keeps the run
+- **WHEN** the owner stamps progress between the sweep's snapshot read and its write
+- **THEN** the sweep acts only on the snapshot it judged and a freshly stamped row is preserved across sweeps
+- Source: test: tests/cron/test_stale_running_recovery.py::test_progress_stamped_during_the_sweep_keeps_the_run
+
+### Requirement: Progress stamps fence silence to agent idleness and row ownership
+The run monitor SHALL stamp the execution row's progress at most once per configured cadence and SHALL NOT stamp while the agent's idle time has reached the cadence, so the ledger goes quiet exactly when the inactivity watchdog would act. A stamp SHALL only land on a claimed/running row whose recorded process id and pid match the stamper: a canonical run's owner and the row's firer can be different processes.
+**Status**: VERIFIED
+**Evidence**: [commit 086da1e0727e] — the live-owner stale-claim sweep measures silence since the last stamp, fed by the progress stamper (#115692) — code: `cron/scheduler_liveness.py` module docstring "a busy multi-hour job keeps stamping and is never reclaimed under a healthy owner"
+**Anchor**: `cron/scheduler_liveness.py:76` (`self._idle_seconds() >= self._every`) — idle at/above the cadence suppresses the stamp; `cron/scheduler_liveness.py:81` (`touch_execution_progress`) — the ledger stamp call; `cron/executions.py:230` (`process_id=? AND pid=?`) — the stamp is fenced to the owning process
+
+#### Scenario: Active run stamps, idle run goes quiet
+- **WHEN** the stamper ticks for an active agent versus one idle past the cadence
+- **THEN** the active run refreshes `progress_at` and the idle run writes nothing, so the ledger goes silent exactly when the watchdog fires
+- Source: test: tests/cron/test_execution_progress_stamp.py::test_active_run_stamps_progress_and_idle_run_does_not
+
 ### Requirement: Per-job catch_up composes with grace_minutes and the global setting
 Each job SHALL pick its own missed-run policy: the job's `catch_up` beats the global setting, an explicit `grace_minutes` still skips past it unless the job opts into `catch_up`, and a `catch_up: off` skip books exactly one missed row with the count.
 **Status**: VERIFIED
@@ -531,7 +628,7 @@ e62c15e667e4; 89f13590e0e8).
 
 ## Known gaps / open questions
 - Kanban pass 3 (G-07) residual scenario-debt, kept ungrounded per rule (no Tier A/B/C trigger+outcome text): REQ "Board is the hard isolation boundary" — cron/AGENTS.md states the invariant but no incident/documented trigger exists at the pin; REQ "Owner recovery refuses to guess" — evidence is code docstrings (invariants) + tail commit subjects, no documented scenario pair.
-- Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2.
+- Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2. **PART-CLOSED 2026-11-20 (pass 9, priority-run): quota-hold mechanics drafted (4 requirements: hold-source, park, sparse recovery fire, marker shield/clear) + wall-clock stale-claim guard and progress-stamp fencing drafted (2 requirements) + drain-hold stamping across restart drafted (1) — all VERIFIED, anchors opened live at the pin; #89376/#115692 API-verified closed ISSUES added to recon/evidence/verified_numbers.json. Residual: `extra_fire.settle` mechanics still undrafted.**
 - Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass. **CLOSED 2026-11-19 (pass 8, priority-run): drafted as `## Sub-area: Chronos managed cron (NAS scale-to-zero fire)` above — 8 requirements VERIFIED from the contract doc + `plugins/cron_providers/chronos/*` + `gateway/platforms/api_server.py` + `hermes_cli/web_server_cron.py` at the pin; #97494 API-verified as a closed ISSUE (not a pull) via GET issues/97494, added to recon/evidence/verified_numbers.json.**
 - Kanban dispatcher invariants (cron/AGENTS.md second half) not read/drafted; kanban sits at the deferred plugins boundary — ownership decision needed.
 - `hermes cron` CLI surface verbs drafted only as part of scheduling entry points.

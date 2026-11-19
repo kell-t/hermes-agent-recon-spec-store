@@ -34,7 +34,7 @@ anchor_extensions: [py, md, ts, tsx, yaml, yml, json, sh, toml]
 
 # Data files the behavior writes at runtime (never in-repo): exempt from
 # the bare-path existence rule.
-runtime_artifacts: [config.yaml, jobs.json, cron-jobs.json, .usage.json, manifest.json]
+runtime_artifacts: [config.yaml, jobs.json, cron-jobs.json, .usage.json, manifest.json, dispatch_held.json]
 
 capabilities:
   agent-turn-loop:
