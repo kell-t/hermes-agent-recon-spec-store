@@ -72,5 +72,13 @@
     "checked_via": "GET /repos/NousResearch/hermes-agent/issues/115460",
     "checked": "2026-11-08",
     "note": "pass-3 kanban drafting child cite; API-verified by spec-writer"
+  },
+  "97494": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "[Bug]: Chronos provisioning rejects hosted Nous Cloud agents with HTTP 403",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/97494",
+    "checked": "2026-11-19",
+    "note": "cited in-code in plugins/cron_providers/chronos/__init__.py:42 and in the chronos contract doc; fallback behavior implemented at pin (identity_rejected property + _note_identity_rejected); NOT a pull"
   }
 }
