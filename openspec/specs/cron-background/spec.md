@@ -275,6 +275,156 @@ Each job SHALL pick its own missed-run policy: the job's `catch_up` beats the gl
 - Source: test: tests/cron/test_cron_stop_and_missed_policy.py::test_explicit_grace_skips_past_it_unless_the_job_opts_into_catch_up
 - Source: [relnote 0.23.0] "Each job picks its own missed-run policy (`--catch-up on|off`)."
 
+**Sub-area: Chronos managed cron (NAS scale-to-zero fire)**
+
+### Requirement: Chronos replaces the in-process ticker with NAS-armed one-shots
+The Chronos cron provider SHALL arm exactly one external one-shot per enabled job at the agent-computed next-fire time through NAS's agent-cron endpoints, and start() SHALL arm and return without holding a loop or any periodic wake — between fires the agent process can be fully stopped (scale-to-zero). Reconcile SHALL run only on a warm process: gateway boot/wake, after each successful job mutation, and piggybacked after each fire.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` — "the agent asks NAS to arm exactly one external one-shot per job at that job's real next-fire time"; doc: `plugins/cron_providers/chronos/__init__.py` module docstring (wire contract points at the same file)
+**Anchor**: `plugins/cron_providers/chronos/__init__.py:75` (`def start`) — docstring: "Arm all enabled jobs via NAS, then RETURN — no loop, no periodic wake (scale-to-zero)"; `plugins/cron_providers/chronos/__init__.py:173` (`def reconcile`) — "Converge NAS one-shots toward jobs.json: arm missing/changed, cancel orphans"; `plugins/cron_providers/chronos/__init__.py:88` (`def on_jobs_changed`)
+
+#### Scenario: Scale-to-zero boot
+- **WHEN** the gateway boots with the chronos provider selected in config
+- **THEN** "start() never blocks or spawns a periodic wake; reconcile runs only on a warm process (start / on_jobs_changed / fire)"
+- Source: doc: plugins/cron_providers/chronos/__init__.py:4-5 (module docstring)
+
+#### Scenario: Warm reconcile converges NAS arms toward jobs.json
+- **WHEN** reconcile runs on a warm process
+- **THEN** every enabled job with a next_run_at is armed (missing or changed-time jobs re-armed, orphans cancelled)
+- Source: test: tests/plugins/test_chronos_cron.py::test_reconcile_arms_all_enabled
+
+### Requirement: Chronos availability is config-only and its absence falls back to the built-in ticker
+is_available() SHALL check config presence only — portal URL, publicly reachable callback URL and a stored Nous access token — with no network call. When any is missing the resolver SHALL fall back to the built-in in-process ticker so cron never loses its trigger.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § Config
+**Anchor**: `plugins/cron_providers/chronos/__init__.py:51` (`def is_available`) — docstring: "Config presence only — NO network: portal URL, publicly reachable callback URL and a Nous login; otherwise the resolver falls back to the built-in ticker"; token presence check at `plugins/cron_providers/chronos/__init__.py:59` (`get_provider_auth_state`)
+
+#### Scenario: Blank config or no login falls back
+- **WHEN** callback_url / portal_url is blank or the agent has no Nous login
+- **THEN** "is_available() returns False and the resolver falls back to the built-in in-process ticker — cron never loses its trigger"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Config (closing paragraph)
+
+#### Scenario: Availability check performs no network
+- **WHEN** is_available() runs without config present
+- **THEN** it returns False without any HTTP call (the NAS client is constructed lazily)
+- Source: test: tests/plugins/test_chronos_cron.py::test_is_available_false_without_config
+
+### Requirement: Provision, cancel and list use the NAS agent-cron endpoints with the agent's own Nous token
+Arming SHALL POST to the agent-cron provision endpoint with job_id, agent-computed ISO-8601 fire_at (second granularity — the agent owns the time), agent_callback_url and a dedup key composed as job_id colon fire_at; cancellation SHALL POST the cancel endpoint idempotently; auth SHALL be the agent's existing Nous Portal access token as Bearer — no new secret is introduced and the agent holds no scheduler credentials.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § Endpoint 1 / Endpoint 2 — "No new secret is introduced on the agent: hop 1 reuses the token the agent already uses for the portal"
+**Anchor**: `plugins/cron_providers/chronos/_nas_client.py:69` (`def provision`) — posts job_id/fire_at/agent_callback_url/dedup_key; `plugins/cron_providers/chronos/_nas_client.py:44` (`def _headers`) — "Bearer auth with the agent's existing Nous Portal access token (refresh-aware)"; `plugins/cron_providers/chronos/__init__.py:101` (`def _arm_one_shot`) — builds dedup_key from job id and fire_at
+
+#### Scenario: Re-arming the same fire is a no-op
+- **WHEN** a fire is provisioned twice for the same job and fire time
+- **THEN** "NAS upserts by (agent_id, job_id) so re-arming the same fire is idempotent (no duplicate one-shots)"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Endpoint 1 (dedup_key bullet)
+
+#### Scenario: Provision carries the full arm payload
+- **WHEN** the provider arms a job
+- **THEN** the request body carries job_id, fire_at, agent_callback_url and dedup_key
+- Source: test: tests/plugins/test_chronos_cron.py::test_arm_one_shot_sends_provision
+
+### Requirement: A 403 invalid_client is deterministic and hands the process's fires to the built-in ticker
+When provision answers 403 with error code invalid_client — the bearer is not the identity NAS maps to a provisioned instance — the rejection is deterministic for the life of that credential, so the provider SHALL log ONE warning naming that a hermes auth re-login cannot fix it, stop calling NAS, and start the built-in ticker for the rest of the process so jobs keep firing on time. Transient failures (5xx, transport) SHALL NOT trigger this degradation; the next reconcile retries them.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § Config ("Identity rejection at runtime"); [issue #97494](https://github.com/NousResearch/hermes-agent/issues/97494) — hosted Nous Cloud agents rejected 403 at provisioning (issue, state closed; API-verified 2026-11-19 — NOT a pull)
+**Anchor**: `plugins/cron_providers/chronos/__init__.py:116` (`_note_identity_rejected`) — sets the flag once, logs the single remedy warning, spawns InProcessCronScheduler via spawn_context_thread at :136-138; `plugins/cron_providers/chronos/_nas_client.py:32` (`identity_rejected`) — true iff status 403 and error code invalid_client ("never transient"); arm-side guard at `plugins/cron_providers/chronos/__init__.py:104` — comment: "the built-in ticker owns this process's fires"
+
+#### Scenario: Identity rejection degrades to the ticker once
+- **WHEN** any NAS call returns 403 invalid_client
+- **THEN** the provider stops calling NAS and the built-in ticker takes this process's fires
+- Source: test: tests/plugins/test_chronos_cron.py::test_identity_rejection_hands_fires_to_the_builtin_ticker
+
+#### Scenario: Transient failure does not degrade
+- **WHEN** provisioning fails with a 5xx or transport error
+- **THEN** "Transient failures (5xx, transport) do not degrade; the next reconcile retries them"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Config (identity-rejection paragraph)
+- Also: test: tests/plugins/test_chronos_cron.py::test_transient_provision_failure_does_not_degrade
+
+### Requirement: Fire JWT verification fails closed on signature, audience, issuer, expiry and purpose
+The agent SHALL verify the NAS-minted fire JWT with PyJWT against the NAS JWKS: asymmetric signature only, aud equal to this agent's expected audience, iss equal to the portal URL when configured, exp/nbf with 30-second leeway, and purpose equal to cron_fire so a general agent JWT cannot be replayed against the fire endpoint. Verification SHALL never raise and SHALL refuse on a missing JWKS/key — never an unsigned decode — so the handler answers 401 without leaking which check failed.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § Inbound (Auth bullets + Behavior bullets)
+**Anchor**: `plugins/cron_providers/chronos/verify.py:41` (`verify_nas_fire_token`) — docstring: "never raises ... Checks asymmetric signature (JWKS URL or inline PEM; symmetric rejected)"; `plugins/cron_providers/chronos/verify.py:49` (`jwks_or_key`) — comment: "never fall back to unsigned decode on a security boundary"; `plugins/cron_providers/chronos/verify.py:67` (`_FIRE_PURPOSE`) — purpose mismatch returns None; process-wide JWKS client cache at `plugins/cron_providers/chronos/verify.py:25` (`_get_jwk_client`) with explicit Accept/User-Agent headers at :36
+
+#### Scenario: A general agent JWT is refused at the fire endpoint
+- **WHEN** a validly-signed token lacks or carries a different purpose claim
+- **THEN** verification returns None and the handler answers 401 — "a general agent JWT (no/other purpose) is rejected so it can't be replayed against this endpoint"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Inbound (Auth bullet list)
+- Also: test: tests/plugins/test_chronos_verify.py::test_missing_purpose_rejected
+
+#### Scenario: Missing key configuration refuses every token
+- **WHEN** no JWKS URL or key is configured
+- **THEN** the verifier refuses the token instead of attempting an unsigned decode
+- Source: test: tests/plugins/test_chronos_verify.py::test_no_key_configured_refuses
+
+#### Scenario: Wrong audience or expiry outside leeway rejected
+- **WHEN** the token audience differs from expected or it is expired beyond the 30 s leeway
+- **THEN** "invalid/missing/forged/expired/wrong-aud/wrong-purpose token → 401, no execution"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Inbound (Behavior bullets)
+
+### Requirement: Valid fires claim before acknowledging and run 202-in-background at-most-once
+A valid fire SHALL be claimed with a store-level compare-and-set before acknowledgement, then run in the background answering 202 accepted so a long agent turn never trips the relay's HTTP timeout. A relay retry arriving while the first fire is in flight, or after it completed, loses the claim and gets 200 duplicate without a second run; a missing job_id gets 400. Across N gateway replicas sharing one store exactly one replica runs each fire.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § Inbound (Behavior) + § At-most-once & re-arm semantics
+**Anchor**: `gateway/platforms/api_server.py:3456` (`_handle_cron_fire`) — docstring: "202 + background run so a long turn never trips NAS's timeout; the store CAS claim guards double-fire on retry"; `cron/jobs.py:2723` (`claim_job_for_fire`) — docstring: "Atomically claim a job for one external 'fire' (multi-machine at-most-once)"; `cron/scheduler_provider.py:200` (`claim_fire`)
+
+#### Scenario: Retry loses the claim and does not double-run
+- **WHEN** a relay retry arrives while the first fire is in flight or after completion
+- **THEN** "A relay/scheduler retry that arrives while the first fire is in flight (or after it completed) loses the claim and does not double-run"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Inbound (At-most-once paragraph)
+
+#### Scenario: Multi-replica at-most-once
+- **WHEN** N gateway replicas sharing one store receive the same fire
+- **THEN** "the store CAS makes the fire at-most-once across N gateway replicas sharing one HERMES_HOME — exactly one replica runs each fire"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § At-most-once & re-arm semantics
+- Also: test: tests/plugins/test_chronos_cron.py::test_fire_due_no_rearm_when_claim_lost
+
+### Requirement: Hosted fires enter through the dashboard and an unreachable gateway answers 503 for retry
+On hosted deployments the dashboard is the agent's only public door: it verifies the fire JWT and forwards byte-preserved to the loopback gateway api_server (default port 8642) — no in-dashboard execution fallback. A gateway still starting or unreachable SHALL answer 503 with Retry-After 60 and nothing claimed, so NAS retries and the store CAS de-dupes; startup wait is bounded at 7 s from receipt. A gateway stopped by operator intent SHALL drop the fire with 200 — retrying can never succeed.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § Inbound (two-hop description + Behavior bullets)
+**Anchor**: `hermes_cli/web_server_cron.py:390` (`_forward_cron_fire_to_gateway`) — docstring: "Forward a Chronos fire callback byte-preserved to the gateway api_server on loopback"; `hermes_cli/web_server_cron.py:421` (`_gateway_intentionally_stopped`) — durable desired_state splits retryable from never-succeed; `gateway/platforms/api_server_fire_startup.py:21` (`FIRE_STARTUP_WAIT_SECONDS`) = 7.0; the 503 refusal at `gateway/platforms/api_server_fire_startup.py:51` — "gateway unreachable; retry" with Retry-After 60
+
+#### Scenario: Dashboard forwards with the NAS bearer preserved
+- **WHEN** a valid fire callback reaches the dashboard on a hosted deployment
+- **THEN** it forwards the same job_id and bearer to the loopback gateway and does not execute the job itself
+- Source: test: tests/hermes_cli/test_cron_fire_dashboard.py::test_valid_fire_forwards_to_gateway
+
+#### Scenario: Operator-stopped gateway drops the fire instead of 503
+- **WHEN** the profile's durable desired_state says the gateway is stopped by intent
+- **THEN** the fire is dropped with 200 because "retrying into an operator-stopped gateway can never succeed"
+- Source: test: tests/hermes_cli/test_cron_fire_dashboard.py::test_gateway_intentionally_stopped_drops_with_200
+
+#### Scenario: Scale-to-zero wake waits out the startup budget
+- **WHEN** the gateway is still starting when the fire arrives
+- **THEN** "the fire waits up to 7 s, counted from receipt, for the gateway to finish starting. If it doesn't, or a drain begins meanwhile → 503 ... nothing claimed (NAS retries)"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § Inbound (Behavior bullets)
+
+### Requirement: Re-arm after fire only when a future run exists; schedules stop without orphaned one-shots
+After a successful fire the provider SHALL re-provision a one-shot for the advanced next_run_at only while the job still exists, is enabled and has a future run; when the job is gone (repeat.times deletes it at the limit), disabled, or the run did not execute, it SHALL NOT re-arm — "the schedule stops cleanly with no orphaned one-shot". Chronos SHALL keep the split-fire admission path (claim admission, cancel-aware drain) by deliberately not overriding the legacy single-phase fire_due hook.
+**Status**: VERIFIED
+**Evidence**: doc: `website/docs/developer-guide/chronos-managed-cron-contract.md` § At-most-once & re-arm semantics
+**Anchor**: `plugins/cron_providers/chronos/__init__.py:192` (`def fire_claimed`) — re-arms only when the job survives enabled with a next_run_at (:200-201); the deliberate omission comment at `plugins/cron_providers/chronos/__init__.py:189` — provider_supports_split_fire "treats ANY override as the legacy single-phase signal"; `cron/scheduler_provider.py:265` (`provider_supports_split_fire`)
+
+#### Scenario: Recurring fire re-arms the next one-shot
+- **WHEN** a recurring job fires successfully and remains enabled
+- **THEN** "on fire, the agent advances next_run_at (under its store lock) as part of the claim, runs the job, then re-provisions a one-shot for the new next_run_at"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § At-most-once & re-arm semantics
+- Also: test: tests/plugins/test_chronos_cron.py::test_fire_due_rearms_next_oneshot
+
+#### Scenario: A finished job stops cleanly with no orphaned arm
+- **WHEN** the final fire of a repeat.times=N job completes and get_job returns None
+- **THEN** the agent does not re-arm — "the schedule stops cleanly with no orphaned one-shot"
+- Source: doc: website/docs/developer-guide/chronos-managed-cron-contract.md § At-most-once & re-arm semantics
+- Also: test: tests/plugins/test_chronos_cron.py::test_fire_due_no_rearm_when_job_gone
+
+#### Scenario: Chronos stays on the split-fire path
+- **WHEN** the split-fire capability probe checks the chronos provider
+- **THEN** it is split-fire capable precisely because it defines no fire_due override
+- Source: test: tests/plugins/test_chronos_cron.py::test_chronos_is_split_fire_capable
+
 **Sub-area: Kanban (multi-agent work queue)**
 
 ### Requirement: The dispatcher is a long-lived loop running inside the gateway
@@ -372,6 +522,7 @@ e62c15e667e4; 89f13590e0e8).
 **Anchor**: `hermes_cli/kanban_owner_recovery.py:46` (`owner_reclaim_paused` docstring) — "Missing/ambiguous owner receipts never authorize another attempt"; `hermes_cli/kanban_owner_recovery.py:153` (`owner_attempt_provably_over`) — "Missing evidence is never proof"; `hermes_cli/kanban_worker_client.py:68` (comment) — "The wait is bounded from the owner's last answer"; `hermes_cli/kanban_db.py:3211` (`_fire_task_hook("kanban_task_blocked", ...)`) — fired outside the write transaction
 
 
+
 #### Scenario: Conformance check (derived)
 - **WHEN** the behavior described by this requirement is exercised
 - **THEN** The dispatcher SHALL not authorize another attempt on missing or ambiguous owner receipts
@@ -381,7 +532,7 @@ e62c15e667e4; 89f13590e0e8).
 ## Known gaps / open questions
 - Kanban pass 3 (G-07) residual scenario-debt, kept ungrounded per rule (no Tier A/B/C trigger+outcome text): REQ "Board is the hard isolation boundary" — cron/AGENTS.md states the invariant but no incident/documented trigger exists at the pin; REQ "Owner recovery refuses to guess" — evidence is code docstrings (invariants) + tail commit subjects, no documented scenario pair.
 - Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2.
-- Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass.
+- Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass. **CLOSED 2026-11-19 (pass 8, priority-run): drafted as `## Sub-area: Chronos managed cron (NAS scale-to-zero fire)` above — 8 requirements VERIFIED from the contract doc + `plugins/cron_providers/chronos/*` + `gateway/platforms/api_server.py` + `hermes_cli/web_server_cron.py` at the pin; #97494 API-verified as a closed ISSUE (not a pull) via GET issues/97494, added to recon/evidence/verified_numbers.json.**
 - Kanban dispatcher invariants (cron/AGENTS.md second half) not read/drafted; kanban sits at the deferred plugins boundary — ownership decision needed.
 - `hermes cron` CLI surface verbs drafted only as part of scheduling entry points.
 - PR-ref window ends 2026-10-27 vs pin 2026-11-05.
