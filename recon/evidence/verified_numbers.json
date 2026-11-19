@@ -1,4 +1,28 @@
 {
+  "62002": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "cron: get_due_jobs stale-entry recovery deletes a live one-shot mid-run when the run outlives its run_claim TTL (run outcome + delivery record lost)",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/62002",
+    "checked": "2026-11-20",
+    "note": "NOT a pull (issues API carries no pull_request field); cited in code (cron/executions.py:236, cron/jobs.py docstrings); not a pr_index key and outside the bundle ref window — surfaced while drafting pass-9 quota-hold requirements"
+  },
+  "89376": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "Cron scheduler ignores provider retry-after and re-fires into a known-closed quota window",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/89376",
+    "checked": "2026-11-20",
+    "note": "NOT a pull (issues API carries no pull_request field); creation commit b680dcd5d48d ('hold fires through a provider's closed usage window...', Fixes #89376, follow PR #89395) verified ancestor of pin; commit provenance via GET commits?path=cron/quota_hold.py"
+  },
+  "115692": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "Dead-owner cron recovery cannot clear a claim held by a live-but-deadlocked worker (futex_wait), blocking every subsequent run",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/115692",
+    "checked": "2026-11-20",
+    "note": "NOT a pull (issues API carries no pull_request field); fix commit 086da1e0727e is in bundle_cron-background (2026-09-19, ref window)"
+  },
   "112647": {
     "kind": "issue",
     "state": "closed",
