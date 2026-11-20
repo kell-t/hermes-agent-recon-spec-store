@@ -270,9 +270,72 @@ A compression summary request refused by provider safety filtering SHALL abort t
 - **THEN** compression treats it as a refusal and aborts with the transcript intact, never committing the lossy fallback
 - Source: test: tests/agent/test_compressor_truncated_summary_guard.py::TestGenerateSummaryTruncationGuard::test_gemini_safety_blocked_summary_request_aborts_and_preserves — "Gemini's safety block of the summary request is a refusal: abort, never the lossy fallback."
 
+### Requirement: Manual /compress is one parser and sequence for every surface
+Manual `/compress` is the one sanctioned history mutation: every surface shares ONE parser and one sequence — split `here [N]`, estimate, compress, lock-skip detection, verbatim-tail rejoin, summarize — so flags cannot drift per surface. `--preview` (aliases `--dry-run`, `--dryrun`) is stripped anywhere in the args; `--aggressive` SHALL be refused with the fixed text, never mis-parsed as a focus topic (no surface has an LLM-free hard-truncate path).
+- Status: VERIFIED
+- Evidence: [commit 7114da3de6dc] "refactor(agent): manual /compress runs through one core with --preview/--aggressive on every surface" — code: `agent/conversation_compression_manual.py:49` parse_compress_args; `hermes_cli/partial_compress.py:50` extract_compress_flags
+- Anchor: `agent/conversation_compression_manual.py:1` (module docstring — "core shared by the CLI, gateway, TUI and ACP surfaces"); `agent/conversation_compression_manual.py:16` (`AGGRESSIVE_UNSUPPORTED`) — the same refusal every surface renders; `agent/conversation_compression_manual.py:49` (`parse_compress_args`) — "One parser for every surface: flags anywhere, then the boundary-aware / focus positional forms."; `hermes_cli/partial_compress.py:21` (`parse_partial_compress_args`) — `here [N]` / `up to here [N]` / `--keep N` / `-k N` / `--keep=N` select the partial form, anything else is a focus topic; `hermes_cli/partial_compress.py:50` (`extract_compress_flags`) — flags stripped anywhere in the string
+
+#### Scenario: Dry-run spellings all mean preview
+- **WHEN** the argument string carries `--dry-run`, `--dryrun`, or `--DRY-RUN` (case-insensitive, any position)
+- **THEN** the request parses with preview set and the flag removed from the remaining args
+- Source: test: tests/hermes_cli/test_compress_flags.py::test_dry_run_is_preview
+
+#### Scenario: Flags coexist with a focus topic
+- **WHEN** a focus topic is given together with flags
+- **THEN** the flags are extracted and the focus topic survives as the positional remainder
+- Source: test: tests/hermes_cli/test_compress_flags.py::test_flags_coexist_with_focus_topic
+
+#### Scenario: Every surface honours preview without compressing
+- **WHEN** any of the surfaces runs a preview request
+- **THEN** no compression happens on that surface
+- Source: test: tests/agent/test_conversation_compression_manual.py::test_every_surface_honours_preview_without_compressing
+
+### Requirement: Preview mutates nothing and the estimate counts full request pressure
+A `preview` result SHALL carry report lines with status `preview` while performing no compression and leaving the agent untouched. The before/after token estimate SHALL count transcript + system prompt + tool schemas: a transcript-only figure understates real request pressure and can even appear to grow after a dense handoff summary replaces many short turns (issue #6217, closed).
+- Status: VERIFIED
+- Evidence: issue #6217 (closed) — "/compress can report higher token counts after successful compaction because the banner us[es a transcript-only figure]"; the estimator now measures whole-request pressure — code: `agent/conversation_compression_manual.py:58` estimate_request_tokens
+- Anchor: `agent/conversation_compression_manual.py:58` (`estimate_request_tokens`) — "Transcript + system prompt + tool schemas"; `agent/conversation_compression_manual.py:102` (`if request.preview:`) — returns report lines, history unchanged; `agent/conversation_compression_manual.py:69` (`compress_now` docstring) — "preview=True performs no compression and leaves ``agent`` untouched"
+
+#### Scenario: Preview leaves history and agent byte-identical
+- **WHEN** a preview request runs against a raw history
+- **THEN** the history and the agent are byte-identical afterwards
+- Source: test: tests/agent/test_conversation_compression_manual.py::test_preview_leaves_history_and_agent_byte_identical
+
+#### Scenario: Preview is side-effect free
+- **WHEN** the CLI renders a preview report
+- **THEN** nothing is compressed and no state changes
+- Source: test: tests/hermes_cli/test_compress_flags.py::test_preview_is_side_effect_free
+
+#### Scenario: Preview counts report boundary-aware numbers
+- **WHEN** full and partial previews render their counts
+- **THEN** the reported figures follow the request form (full vs partial boundary)
+- Source: test: tests/hermes_cli/test_compress_flags.py::test_preview_full_compress_counts; tests/hermes_cli/test_compress_flags.py::test_preview_partial_boundary_counts
+
+### Requirement: Partial here [N] keeps the verbatim tail; the nothing-to-compress gate is gateway-only
+For a partial request the history is split so everything but the most recent N exchanges (default 2, clamped by a hard ceiling) is summarized and the verbatim tail rejoined after compression; a degenerate split with no tail SHALL fall back to full compression. The nothing-to-compress gate SHALL be gateway-only: the gateway answers `nothing_to_do` when no summarizable middle exists, while in-process surfaces still reach `_compress_context` even without a summary window.
+- Status: VERIFIED
+- Evidence: [commit b5f072e2ceab] "fix(agent): manual /compress \"nothing to compress\" gate stays gateway-only" — code: `agent/conversation_compression_manual.py:108` skip_without_window gate; `hermes_cli/partial_compress.py:126` split_history_for_partial_compress
+- Anchor: `agent/conversation_compression_manual.py:98` (`if request.partial:`) — split via split_history_for_partial_compress; `agent/conversation_compression_manual.py:100` (`if not tail:`) — "degenerate split: nothing to keep verbatim → full compression"; `agent/conversation_compression_manual.py:108` (`skip_without_window and callable(has_content)`) — gateway-only `nothing_to_do`; `hermes_cli/partial_compress.py:15` (`DEFAULT_KEEP_LAST = 2`); `hermes_cli/partial_compress.py:18` (`MAX_KEEP_LAST = 100`) — a fat-fingered `/compress here 9999` clamps instead of no-op'ing
+
+#### Scenario: Compressed result rejoins the verbatim tail and never mutates input
+- **WHEN** a partial manual compression completes
+- **THEN** the kept tail is rejoined after the compressed head and the input history is not mutated
+- Source: test: tests/agent/test_conversation_compression_manual.py::test_compressed_result_rejoins_verbatim_tail_and_never_mutates_input
+
+#### Scenario: The windowless gate is gateway-only
+- **WHEN** the local compressor sees no summarizable middle
+- **THEN** the gateway surface answers `nothing_to_do` while in-process surfaces still reach `_compress_context`
+- Source: test: tests/agent/test_conversation_compression_manual.py::test_windowless_gate_is_gateway_only_so_in_process_surfaces_still_reach_compress_context
+
+#### Scenario: Here [N] keeps N exchanges verbatim
+- **WHEN** the user invokes `/compress here [N]`
+- **THEN** everything except the most recent N exchanges (default 2) is summarized and the rest kept verbatim, per the slash-command reference
+- Source: doc: website/docs/reference/slash-commands.md § /compress "`/compress here [N]` summarizes everything except the most recent N exchanges (default 2), kept verbatim"
+
 ## Known gaps / open questions
 - The 85% gateway session-hygiene threshold is documented in agent/AGENTS.md but its code constant was not located under `gateway/session*.py` at the pin — confirm owner file (compression vs. gateway) next pass.
 - `turn_recovery_autorecover` post-exhaustion wait-and-retry ladder (agent/AGENTS.md) has no drafted requirement: no PR-ref evidence sampled.
-- `/compress` manual parser semantics (`here [N]`, focus, `--preview`, `--aggressive` — `agent/conversation_compression_manual.py:69`) are a behavior contract worth a requirement; bundle PR refs for the parser itself were not found.
+- `/compress` manual parser semantics (`here [N]`, focus, `--preview`, `--aggressive` — `agent/conversation_compression_manual.py:69`) are a behavior contract worth a requirement; bundle PR refs for the parser itself were not found. **CLOSED 2026-11-21 (pass 10, priority-run): 3 requirements drafted (one-parser-every-surface + --aggressive refusal, preview-inert + full-request estimate #6217, partial here [N] tail/gate) — all VERIFIED, every anchor opened live at the pin; #6217 API-verified closed ISSUE allowlisted.**
 - PR-ref window ends 2026-10-27 while the pin is 2026-11-05: tail commits (incl. recent compression-chain work dated after #131412 on 2026-10-02 in-bundle) lack refs — re-extract without the `(#NNNN)` filter for pass 2.
 - Compression "idle fence" semantics (#114938 dispatch alone must not reset the summary idle fence) referenced in bundle; underlying fence implementation not opened — UNVERIFIED contract.

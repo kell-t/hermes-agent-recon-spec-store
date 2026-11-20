@@ -104,5 +104,29 @@
     "checked_via": "GET /repos/NousResearch/hermes-agent/issues/97494",
     "checked": "2026-11-19",
     "note": "cited in-code in plugins/cron_providers/chronos/__init__.py:42 and in the chronos contract doc; fallback behavior implemented at pin (identity_rejected property + _note_identity_rejected); NOT a pull"
+  },
+  "6217": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "/compress can report higher token counts after successful compaction because the banner uses a transcript-only figure",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/6217",
+    "checked": "2026-11-21",
+    "note": "NOT a pull (issues API carries no pull_request field); cited in agent-turn-loop preview/estimate requirement (pass 10)"
+  },
+  "86721": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "cron run from one-shot CLI orphans the job: async delegation dies with the calling process",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/86721",
+    "checked": "2026-11-21",
+    "note": "NOT a pull; cited in cron-background CLI run-now requirement (code comment hermes_cli/cron.py:890, pass 10)"
+  },
+  "88113": {
+    "kind": "issue",
+    "state": "closed",
+    "title": "[Bug]: subagent worktree cleanup deletes uncommitted work when Git inspection fails",
+    "checked_via": "GET /repos/NousResearch/hermes-agent/issues/88113",
+    "checked": "2026-11-21",
+    "note": "NOT a pull; cited in delegation-orchestration worktree teardown requirement (pass 10)"
   }
 }

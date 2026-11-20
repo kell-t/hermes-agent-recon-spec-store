@@ -226,9 +226,46 @@ The completion sweep SHALL re-offer a delegation completion into the queue only 
 - **AND** "restart replay and sweep never offer the same row twice"
 - Source: test: tests/tools/test_async_delegation_orphan_sweep.py::test_row_owned_by_a_live_process_is_never_swept, ::test_live_owner_row_whose_queue_copy_was_lost_is_re_offered_after_a_lease, ::test_restart_replay_and_sweep_never_offer_the_same_row_twice (#G-01 tail, 8a10a3cbef53 / b84774186502)
 
+### Requirement: Worktree isolation for children is opt-in, git-only, local-backend-only, and degrades silently
+`delegation.worktree_isolation` (bool, default false) gives each child its own git worktree branched off the parent's HEAD, so parallel children never contend for one working copy. The feature is git-only and local-backend-only: a non-git directory, an unborn HEAD, or a non-local terminal backend SHALL yield no worktree (the child shares the parent workspace), and setup failures SHALL degrade silently rather than fail the dispatch.
+- Status: VERIFIED
+- Evidence: [commit 6ee58f4088e7] "Inspired by Muse Code: opt-in git worktree isolation for delegated subagents"; doc: website/docs/user-guide/features/delegation.md § Worktree Isolation — "Set `delegation.worktree_isolation: true` to give each child its own git worktree, branched from the repo's current `HEAD`"
+- Anchor: `tools/delegate_tool_config.py:168` (`_get_worktree_isolation`) — "delegation.worktree_isolation (bool, default False)"; `tools/delegate_tool_child_run.py:449` (`_create_isolated_worktree`) — "Git-only, local-backend-only; failures degrade silently to the shared workspace"; `tools/subagent_worktree.py:39` (`local_backend_active`) — non-local backends skip; `tools/subagent_worktree.py:77` (`create_subagent_worktree`) — returns None outside a repo
+
+#### Scenario: Isolation creates its own worktree
+- **WHEN** isolation is on and the parent cwd is inside a git repo
+- **THEN** the child gets an isolated worktree
+- Source: test: tests/tools/test_subagent_worktree.py::SubagentWorktreeTests::test_create_makes_isolated_worktree
+
+#### Scenario: Non-git and unborn-HEAD parents get no worktree
+- **WHEN** the parent cwd is not a git repo, or the repo HEAD is unborn
+- **THEN** creation returns None and the child shares the parent workspace
+- Source: test: tests/tools/test_subagent_worktree.py::SubagentWorktreeTests::test_create_in_non_git_returns_none, ::test_create_unborn_head_returns_none
+
+### Requirement: Worktree teardown prunes clean trees and fails closed on unproven state
+At child teardown a clean worktree is pruned; a worktree carrying commits or uncommitted changes is kept/archived. A failed git inspection SHALL keep the worktree instead of deleting it, and an unproven teardown state SHALL be reported distinguishably from a pruned one (issue #88113, closed — cleanup once deleted uncommitted work when Git inspection failed).
+- Status: VERIFIED
+- Evidence: [commit 2b490a0513ee] "fix(delegate): keep the worktree when git inspection fails"; [commit 38ea711fd0f5] "fix(delegate): tell the parent when a worktree was preserved un-inspected"; issue #88113 (closed) — "[Bug]: subagent worktree cleanup deletes uncommitted work when Git inspection fails"
+- Anchor: `tools/subagent_worktree.py:141` (`finalize_subagent_worktree`) — prune-vs-archive decision; `tools/subagent_worktree.py:214` (`_archive_finished_worktree`) — dirty/committed trees archived; `tools/subagent_worktree.py:116` (`mark_worktree_payload_unproven`) — unproven state labelled in the payload
+
+#### Scenario: Clean worktree is pruned
+- **WHEN** a child worktree has no commits and no changes at finalize
+- **THEN** it is pruned
+- Source: test: tests/tools/test_subagent_worktree.py::SubagentWorktreeTests::test_finalize_prunes_clean_worktree
+
+#### Scenario: Dirty worktree is archived, clean siblings pruned
+- **WHEN** a child worktree carries uncommitted changes (or commits) at finalize
+- **THEN** it is archived, not deleted
+- Source: test: tests/tools/test_subagent_worktree.py::SubagentWorktreeTests::test_finalize_archives_dirty_worktree, ::test_finalize_archives_worktree_with_commits
+
+#### Scenario: Failed inspection keeps the worktree and the state is distinguishable
+- **WHEN** git inspection fails or raises during finalize
+- **THEN** the worktree is kept and the payload flags the unproven state distinguishably
+- Source: test: tests/tools/test_subagent_worktree.py::SubagentWorktreeTests::test_finalize_keeps_worktree_when_git_inspection_fails, ::test_finalize_flags_unproven_state_distinguishably
+
 ## Known gaps / open questions
 - Kanban multi-agent queue vs delegate_task orchestration boundary: kanban dispatcher lives at the deferred plugins boundary (cron/AGENTS.md); its fencing root is the child env marker VALUE (agent/AGENTS.md) — cross-capability contract, needs one owner next pass.
-- Worktree isolation knob (`_get_worktree_isolation`) seen in config imports — never drafted; UNVERIFIED contract.
+- Worktree isolation knob (`_get_worktree_isolation`) seen in config imports — never drafted; UNVERIFIED contract. **CLOSED 2026-11-21 (pass 10, priority-run): 2 requirements drafted (opt-in/git-only/local-backend-only/silent-degrade + teardown prune-vs-archive/fail-closed-unproven) — both VERIFIED, anchors opened live at the pin (`tools/delegate_tool_config.py:168`, `tools/delegate_tool_child_run.py:449`, `tools/subagent_worktree.py`); #88113 API-verified closed ISSUE allowlisted.**
 - Fleet reconciliation of gateway processes (#103679, #93406 "fleet probe") is update/packaging scope (deferred) — the "fleet" keyword false-positives here; regex to tighten.
 - Child timeout semantics (`_get_child_timeout`) and orchestrator enable flag (`_get_orchestrator_enabled`) not drafted.
 - PR-ref window ends 2026-10-27 vs pin 2026-11-05; bundle is thin (84 items) and older than other caps' newest evidence.

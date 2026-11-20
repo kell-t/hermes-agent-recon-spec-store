@@ -372,6 +372,108 @@ Each job SHALL pick its own missed-run policy: the job's `catch_up` beats the gl
 - Source: test: tests/cron/test_cron_stop_and_missed_policy.py::test_explicit_grace_skips_past_it_unless_the_job_opts_into_catch_up
 - Source: [relnote 0.23.0] "Each job picks its own missed-run policy (`--catch-up on|off`)."
 
+### Requirement: A run-now is an extra fire whose claim leaves the pending slot crash-safe
+A manual run — `cronjob run`, `hermes cron run`, dashboard Run, gateway-forwarded `trigger_job` — SHALL leave the job's pending scheduled occurrence and its `repeat` budget alone. The claim decides once, under the jobs lock, and stamps the slot on the fire claim while putting `next_run_at` back on it in the same save, so a crash between claim and completion leaves the job due on its slot; a run-now once the slot is already due IS the scheduled fire.
+- Status: VERIFIED
+- Evidence: [commit f656543e030e] "fix(cron): a manual run is an extra fire, never the scheduled one" — code: `cron/extra_fire.py:38` pending_slot; `cron/jobs.py:2539` settle path replaces the scheduled advance
+- Anchor: `cron/extra_fire.py:38` (`pending_slot`) — "The still-future scheduled instant an explicit run-now must leave in place, or None when this fire IS the scheduled occurrence"; `cron/extra_fire.py:48` (`stamp_claim`) — "so the scheduled occurrence survives a crash before ``mark_job_run``"; `cron/extra_fire.py:56` (`is_extra`) — every later step reads the claim stamp; `cron/jobs.py:2539` (`extra_fire.settle(job, now)`) — the extra path instead of `_advance_after_run` (jobs.py:2541)
+
+#### Scenario: A test-fired reminder keeps its real fire
+- **WHEN** a manual run completes for a job with a pending scheduled occurrence
+- **THEN** the occurrence survives and the `repeat` count is not spent
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_manual_run_keeps_the_scheduled_oneshot_and_it_still_fires
+- Source: doc: website/docs/user-guide/features/cron.md § job actions "A manual run is an extra fire: the scheduled run still happens and the `repeat` count is not spent, so test-firing an `in 30m` reminder keeps the real one (a run once the slot is already due is that scheduled run)"
+
+#### Scenario: Crash mid-run leaves the slot due
+- **WHEN** the process dies between the run-now claim and completion
+- **THEN** `next_run_at` is already back on the scheduled slot
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_crash_mid_manual_run_leaves_the_scheduled_oneshot_due
+
+#### Scenario: Run at or after the due slot is the scheduled fire
+- **WHEN** a run-now arrives once the scheduled slot is already due
+- **THEN** it IS the scheduled occurrence: no extra slot is preserved
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_run_at_or_after_the_due_slot_is_the_scheduled_fire
+
+### Requirement: Unclaimed run-now intent is durable and mid-run triggers are their own fire
+Unclaimed run-now intent SHALL be durable as a marker pair (the manual stamp equal to `next_run_at` plus the saved restore slot): the tick's pre-run advance leaves such a job alone and the claim restores the saved slot; a repeated trigger before the claim keeps the first trigger's saved slot, never its own `now`. A `trigger_job` that lands while an extra fire is in flight is its own run-now: its markers are re-installed after the completing run clears the markers.
+- Status: VERIFIED
+- Evidence: [commit f799cf71d90b] "fix(cron): extra fires key on explicit run-now intent only" — code: `cron/extra_fire.py:17` queued; `cron/jobs.py:2534` job.update(held)
+- Anchor: `cron/extra_fire.py:17` (`queued`) — the marker pair "IS the durable manual intent", the tick's pre-run advance leaves such a job alone; `cron/extra_fire.py:25` (`restore_target`) — "a repeated trigger before the claim keeps the first trigger's saved slot, never that trigger's own \"now\""; `cron/extra_fire.py:64` (`held_markers`) — "That trigger is its own run-now, so the caller puts these back after the outcome clears the markers"; `cron/jobs.py:2534` (`job.update(held)`) — "a run-now queued mid-run is its own fire, not this one"
+
+#### Scenario: Gateway-forwarded trigger restores the slot at claim time
+- **WHEN** a gateway-forwarded run-now is claimed
+- **THEN** the overwritten scheduled slot is restored from the saved value
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_gateway_forwarded_trigger_restores_the_slot_at_claim_time
+
+#### Scenario: Repeated trigger before the claim keeps the original slot
+- **WHEN** a second `trigger_job` arrives before the first claim
+- **THEN** the first trigger's saved slot is kept
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_second_trigger_before_the_claim_keeps_the_original_slot
+
+#### Scenario: Trigger landing mid-run survives completion
+- **WHEN** a `trigger_job` lands while a manual run is in flight and the run completes
+- **THEN** the new trigger's markers are re-installed and it claims as its own fire
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_trigger_landing_during_a_manual_run_survives_its_completion
+
+### Requirement: Settle after an extra fire: untouched when future or queued, else one-shot now / recurring next natural
+Settling an extra fire SHALL leave `repeat.completed` untouched: when a run-now is queued or the pending slot is still future, settle returns without touching the schedule. A slot that passed while the run was in flight: a one-shot SHALL fire at once (`next_run_at` = now); a recurring job SHALL drop it and take its next natural occurrence, as on a scheduled run. Under a quota hold the park moves a queued run-now's marker with it instead of spending a repeat.
+- Status: VERIFIED
+- Evidence: code: `cron/extra_fire.py:81` settle — "repeat.completed untouched, the job keeps its pending slot"; [commit f656543e030e] introduced the settle path
+- Anchor: `cron/extra_fire.py:81` (`settle`); `cron/extra_fire.py:89` (`if queued(job) or _future_slot(`) — untouched when a run-now is queued or the slot is still future; `cron/extra_fire.py:91` (`kind") == "once"`) — one-shot fires at once; `cron/extra_fire.py:94` (`compute_next_run(`) — recurring takes the next natural occurrence; `cron/extra_fire.py:72` (`reschedule`) — "the run-now is delayed, not turned into a scheduled fire"; `cron/quota_hold.py:148` (`extra_fire.reschedule(job, parked)`) — the park moves the marker
+
+#### Scenario: Recurring budget and schedule survive the manual run
+- **WHEN** a recurring job is run manually
+- **THEN** its `repeat` budget is not spent and its schedule does not shift
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_manual_run_does_not_spend_a_recurring_repeat_budget_or_shift_the_schedule
+
+#### Scenario: Forwarded recurring run survives the tick advance
+- **WHEN** a gateway-forwarded recurring run is in flight while ticks advance the schedule
+- **THEN** the pending occurrence survives to its settle
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_forwarded_recurring_run_survives_the_tick_advance
+
+#### Scenario: Quota-hold delays a queued run-now without spending the schedule
+- **WHEN** a manual run hits a quota hold while a run-now is queued
+- **THEN** the queued run-now moves to the parked instant and the schedule is not spent
+- Source: test: tests/cron/test_manual_run_extra_fire.py::test_quota_hold_on_a_manual_run_delays_a_queued_run_now_without_spending_the_schedule
+
+### Requirement: hermes cron dispatches one verb table with list default and explicit aliases
+`hermes cron` SHALL dispatch through a single subcommand table covering list/status/doctor/tick/runs/incidents/notepad/create/edit/pause/resume/run/cancel/remove: bare `hermes cron` means `list`; `history` aliases `runs`, `add` aliases `create`, and `rm`/`delete` alias `remove`; an unknown verb prints the usage line (`list|create|edit|pause|resume|run|cancel|remove|status|runs|doctor|tick`) and exits 1.
+- Status: VERIFIED
+- Evidence: code: `hermes_cli/cron.py:1019` _CRON_SUBCOMMANDS; `hermes_cli/cron.py:1040` cron_command dispatcher
+- Anchor: `hermes_cli/cron.py:1019` (`_CRON_SUBCOMMANDS = {`) — the one table; `hermes_cli/cron.py:1035` (`_CRON_SUBCOMMANDS["history"]`) — history→runs, add→create at :1036, rm/delete→remove at :1037; `hermes_cli/cron.py:1043` (`"list" if subcmd is None else subcmd`) — bare invocation defaults to list; `hermes_cli/cron.py:1046` (`Unknown cron command`) — usage print then `sys.exit(1)`
+
+#### Scenario: Tick verb drives one scheduler pass
+- **WHEN** `hermes cron tick` runs
+- **THEN** exactly one scheduler pass executes, verbose and headless
+- Source: test: tests/hermes_cli/test_cron.py::test_cron_tick_invokes_scheduler_tick_verbose_and_headless
+
+#### Scenario: Create failure is a nonzero exit
+- **WHEN** `hermes cron create` fails
+- **THEN** the command returns nonzero
+- Source: test: tests/hermes_cli/test_cron.py::test_cron_create_failure_returns_nonzero
+
+### Requirement: CLI run-now executes synchronously and reports dispatch versus verdict
+A `run` issued by the one-shot CLI SHALL force synchronous execution: the delivery channel is declared stateless for that call only (in-process callers unaffected), because a background-dispatched run would be orphaned mid-LLM-call when the CLI exits (issue #86721, closed). The outcome line SHALL distinguish a background dispatch (the run outlives the CLI) from a synchronous verdict (succeeded / failed / cancelled / skip note); a known synchronous failure exits nonzero.
+- Status: VERIFIED
+- Evidence: issue #86721 (closed) — "cron run from one-shot CLI orphans the job: async delegation dies with the calling process"; code: `hermes_cli/cron.py:879` _job_action stateless token; `hermes_cli/cron.py:914` _run_outcome
+- Anchor: `hermes_cli/cron.py:879` (`def _job_action`) — run-scoped synchrony forcing; `hermes_cli/cron.py:892` (`_SESSION_ASYNC_DELIVERY.set(False)`) — "See #86721" comment at :890; `hermes_cli/cron.py:914` (`def _run_outcome`) — "A background-dispatched run ... keeps running after this CLI exits, so report the dispatch rather than a success/failure verdict"; `hermes_cli/cron.py:910` (`return 1`) — synchronous failure exit code (guard at :907-909: executed, failed, not cancelled, not background)
+
+#### Scenario: Background dispatch is not reported as failure
+- **WHEN** a run-now dispatches in background (delegation id present)
+- **THEN** the outcome line reports the dispatch, not a failed verdict
+- Source: test: tests/hermes_cli/test_cron.py::TestCronRunBackgroundDispatch::test_background_dispatch_with_delegation_id_does_not_report_failed
+
+#### Scenario: Synchronous failure is still reported
+- **WHEN** a synchronous run-now fails
+- **THEN** the failure is reported (and the command signals it)
+- Source: test: tests/hermes_cli/test_cron.py::TestCronRunBackgroundDispatch::test_sync_run_failure_still_reported
+
+#### Scenario: Cancelled run reports cancelled, not failed
+- **WHEN** a run-now is stopped by cancel
+- **THEN** the verdict line reads cancelled
+- Source: test: tests/hermes_cli/test_cron.py::TestCronRunBackgroundDispatch::test_run_stopped_by_a_cancel_reports_cancelled_not_failed
+- Source: doc: website/docs/user-guide/features/cron.md § run outcome "hermes cron run exits nonzero for a known synchronous execution failure; background dispatch is not a terminal success/failure verdict."
+
 ## Sub-area: Chronos managed cron (NAS scale-to-zero fire)
 
 ### Requirement: Chronos replaces the in-process ticker with NAS-armed one-shots
@@ -614,10 +716,10 @@ e62c15e667e4; 89f13590e0e8).
 
 ## Known gaps / open questions
 - Kanban pass 3 (G-07) residual scenario-debt, kept ungrounded per rule (no Tier A/B/C trigger+outcome text): REQ "Board is the hard isolation boundary" — cron/AGENTS.md states the invariant but no incident/documented trigger exists at the pin; REQ "Owner recovery refuses to guess" — evidence is code docstrings (invariants) + tail commit subjects, no documented scenario pair.
-- Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2. **PART-CLOSED 2026-11-20 (pass 9, priority-run): quota-hold mechanics drafted (4 requirements: hold-source, park, sparse recovery fire, marker shield/clear) + wall-clock stale-claim guard and progress-stamp fencing drafted (2 requirements) + drain-hold stamping across restart drafted (1) — all VERIFIED, anchors opened live at the pin; #89376/#115692 API-verified closed ISSUES added to recon/evidence/verified_numbers.json. Residual: `extra_fire.settle` mechanics still undrafted.**
+- Wall-clock stale-claim guard for live-but-deadlocked workers (#115692) and dispatch-hold/quota-hold mechanics (`cron/dispatch_hold.py`, `extra_fire.settle`) referenced by doc/bundle, not drafted — pass 2. **PART-CLOSED 2026-11-20 (pass 9, priority-run): quota-hold mechanics drafted (4 requirements: hold-source, park, sparse recovery fire, marker shield/clear) + wall-clock stale-claim guard and progress-stamp fencing drafted (2 requirements) + drain-hold stamping across restart drafted (1) — all VERIFIED, anchors opened live at the pin; #89376/#115692 API-verified closed ISSUES added to recon/evidence/verified_numbers.json. Residual: `extra_fire.settle` mechanics still undrafted.** **CLOSED 2026-11-21 (pass 10, priority-run): extra-fire mechanics drafted (3 requirements: crash-safe claim, durable queued intent / mid-run triggers, settle one-shot-vs-recurring + quota-hold marker move) — all VERIFIED, anchors opened live at the pin (`cron/extra_fire.py`, `cron/jobs.py` mark_job_run path, `cron/quota_hold.py:148`).**
 - Chronos managed-cron contract (`website/docs/developer-guide/chronos-managed-cron-contract.md`, #97494 403 failover to built-in ticker) not drafted — external service contract, needs a dedicated requirement pass. **CLOSED 2026-11-19 (pass 8, priority-run): drafted as `## Sub-area: Chronos managed cron (NAS scale-to-zero fire)` above — 8 requirements VERIFIED from the contract doc + `plugins/cron_providers/chronos/*` + `gateway/platforms/api_server.py` + `hermes_cli/web_server_cron.py` at the pin; #97494 API-verified as a closed ISSUE (not a pull) via GET issues/97494, added to recon/evidence/verified_numbers.json.**
 - Kanban dispatcher invariants (cron/AGENTS.md second half) not read/drafted; kanban sits at the deferred plugins boundary — ownership decision needed.
-- `hermes cron` CLI surface verbs drafted only as part of scheduling entry points.
+- `hermes cron` CLI surface verbs drafted only as part of scheduling entry points. **CLOSED 2026-11-21 (pass 10, priority-run): drafted 2 requirements at the pin — the single subcommand table (`hermes_cli/cron.py:1019` `_CRON_SUBCOMMANDS`, `list` default at :1043, aliases history/add/rm/delete at :1035-1037, unknown-verb usage + exit 1 at :1046) and the run verb's forced-synchronous execution + dispatch-versus-verdict outcome (`:879` `_job_action`, `:914` `_run_outcome`, #86721 closed ISSUE) — both VERIFIED, anchors opened live at the pin.**
 - PR-ref window ends 2026-10-27 vs pin 2026-11-05.
 
 ## Scenario-ification notes
