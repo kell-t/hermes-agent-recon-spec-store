@@ -69,7 +69,7 @@ else:
 dd = os.path.join(EV, "docs")
 os.makedirs(dd, exist_ok=True)
 for d in cfg["docs"]:
-    src = os.path.join(REPO, d)
+    src = os.path.join(common.SRC, d)
     if os.path.exists(src):
         open(os.path.join(dd, d.replace("/", "_")), "w").write(open(src).read())
         print("doc:", d, os.path.getsize(src), "bytes")
@@ -80,7 +80,7 @@ for d in cfg["docs"]:
 # the source repo's test framework (pytest defs, JS describe/it, go TestXxx).
 inv = []
 for tf in cfg.get("test_files", []):
-    p = os.path.join(REPO, tf)
+    p = os.path.join(common.SRC, tf)
     if not common.PinTree().exists(tf):
         print("test file MISSING:", tf)
         continue

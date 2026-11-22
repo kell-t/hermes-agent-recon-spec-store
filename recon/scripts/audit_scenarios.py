@@ -33,7 +33,7 @@ rel_bodies = common.relnote_bodies({})
 
 
 def resolve_doc(path):
-    for cand in (os.path.join(DOCS, path), os.path.join(common.REPO, path),
+    for cand in (os.path.join(DOCS, path), os.path.join(common.SRC, path),
                  os.path.join(DOCS, path.replace("/", "_"))):
         if os.path.exists(cand):
             return cand

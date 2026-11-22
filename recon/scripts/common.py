@@ -18,7 +18,23 @@ STORE = os.environ.get(
     os.path.abspath(os.path.join(SCRIPTS_DIR, os.pardir, os.pardir)))
 DRAFTS = os.path.join(STORE, "specs_draft")
 EV = os.path.join(STORE, "recon", "evidence")
-REPO = os.path.join(STORE, "repo")
+REPO = os.path.join(STORE, ".repo")   # persistent git-ignored BARE source
+# cache; created/refreshed with sync_repo.py (spec:
+# recon/openspec/specs/repo-cache). No fallback to legacy `repo/`:
+# sync_repo.py adopts it once by rename.
+
+
+def _store_branch():
+    r = subprocess.run(["git", "-C", STORE, "branch", "--show-current"],
+                       capture_output=True, text=True)
+    return (r.stdout or "").strip() or "main"
+
+
+# Checked-out source view: the cache's named worktree for this store's
+# current branch (spec: repo-cache working-tree requirement). Disk reads
+# of source files go here — never into REPO itself (a bare cache has no
+# root tree; reading it directly is a bug).
+SRC = os.path.join(REPO, "wt", _store_branch())
 
 _DEFAULTS = {
     "pin_sha": "",
@@ -108,10 +124,11 @@ def token_overlap(quote, body):
 
 
 class PinTree:
-    """Read-only view of the source clone at the pin, with caches."""
+    """Read-only view of the source at the pin (default view: current-branch
+    worktree), with caches."""
 
-    def __init__(self, repo=REPO):
-        self.repo = repo
+    def __init__(self, repo=None):
+        self.repo = repo or SRC
         self._files = {}
         self._shas = {}
         self._names = None
