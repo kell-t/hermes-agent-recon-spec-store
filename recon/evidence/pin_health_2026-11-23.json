@@ -1,0 +1,911 @@
+{
+ "total_anchors": 509,
+ "totals": {
+  "SHIFTED": 113,
+  "OK": 363,
+  "OOB": 6,
+  "HINT-DEAD": 5,
+  "DEAD-FILE": 21,
+  "MOVED": 1
+ },
+ "per_cap": {
+  "agent-turn-loop": {
+   "SHIFTED": 14,
+   "OK": 27,
+   "OOB": 1
+  },
+  "cli-surface": {
+   "OK": 30,
+   "HINT-DEAD": 1,
+   "SHIFTED": 4
+  },
+  "config-provider-models": {
+   "SHIFTED": 13,
+   "OK": 24
+  },
+  "cron-background": {
+   "OK": 127,
+   "SHIFTED": 21,
+   "HINT-DEAD": 2
+  },
+  "delegation-orchestration": {
+   "SHIFTED": 9,
+   "OK": 33
+  },
+  "gateway-messaging": {
+   "SHIFTED": 14,
+   "OK": 28
+  },
+  "profiles-isolation": {
+   "SHIFTED": 15,
+   "OK": 27
+  },
+  "sessions-state": {
+   "DEAD-FILE": 19,
+   "HINT-DEAD": 1,
+   "OOB": 5,
+   "OK": 3,
+   "SHIFTED": 6
+  },
+  "skills-system": {
+   "OK": 48,
+   "SHIFTED": 4
+  },
+  "tools-toolsets": {
+   "OK": 16,
+   "SHIFTED": 13,
+   "DEAD-FILE": 2,
+   "HINT-DEAD": 1,
+   "MOVED": 1
+  }
+ },
+ "non_ok": [
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_loop.py:1746",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 341
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/agent_runtime_helpers.py:2768",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 2
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/skill_commands.py:311",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 218
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/turn_facade_lease.py:129",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 136
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/context_compressor.py:5462",
+   "verdict": "OOB",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/system_prompt.py:189",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 195
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/context_compressor.py:60",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/inline_tool_executors.py:313",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 366
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/prompt_builder.py:1033",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 573
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_compression_manual.py:49",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 3
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_compression_manual.py:58",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 4
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_compression_manual.py:102",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 25
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_compression_manual.py:108",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 82
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_compression_manual.py:98",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 27
+  },
+  {
+   "cap": "agent-turn-loop",
+   "anchor": "agent/conversation_compression_manual.py:100",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 5
+  },
+  {
+   "cap": "cli-surface",
+   "anchor": "hermes_cli/commands.py:211",
+   "verdict": "HINT-DEAD"
+  },
+  {
+   "cap": "cli-surface",
+   "anchor": "cli.py:1143",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1221
+  },
+  {
+   "cap": "cli-surface",
+   "anchor": "hermes_cli/skills_hub.py:1637",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 552
+  },
+  {
+   "cap": "cli-surface",
+   "anchor": "hermes_cli/skills_hub.py:1646",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 39
+  },
+  {
+   "cap": "cli-surface",
+   "anchor": "hermes_cli/cli_backtrack.py:195",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 260
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "hermes_cli/config_defaults.py:588",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "providers/__init__.py:140",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "providers/__init__.py:218",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 14
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "agent/auxiliary_client.py:4568",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 157
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "agent/turn_recovery.py:1519",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 972
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "agent/turn_recovery.py:1524",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 972
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "hermes_cli/auth_nous.py:1460",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 27
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "hermes_cli/auth_nous.py:1710",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1560
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "providers/base.py:449",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 147
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "tools/browser_use_cli.py:925",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 941
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "tools/browser_use_cli.py:961",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 972
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "web/src/components/ChatSidebar.tsx:161",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 11
+  },
+  {
+   "cap": "config-provider-models",
+   "anchor": "agent/bedrock_adapter.py:1507",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 89
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/jobs.py:1875",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 37
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/jobs.py:3198",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 829
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "gateway/run_bootstrap.py:398",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 17
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/executions.py:565",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 351
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/quota_hold.py:56",
+   "verdict": "HINT-DEAD"
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/scheduler.py:2649",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 2606
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/jobs.py:2553",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1349
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/jobs.py:2152",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 431
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/executions.py:489",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 41
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/scheduler_liveness.py:76",
+   "verdict": "HINT-DEAD"
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/jobs.py:2539",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 243
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "cron/jobs.py:2534",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 302
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "gateway/platforms/api_server.py:3456",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1034
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/web_server_cron.py:390",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 367
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/web_server_cron.py:421",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 400
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/kanban_db_dispatch.py:2026",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1705
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/kanban_db_dispatch.py:2754",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/kanban_db_dispatch.py:2847",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 5
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/kanban_db_dispatch.py:2810",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 77
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "gateway/kanban_watchers_notifier.py:162",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 170
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "gateway/kanban_watchers_notifier.py:145",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 130
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "hermes_cli/kanban_db_dispatch.py:2790",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 978
+  },
+  {
+   "cap": "cron-background",
+   "anchor": "agent/agent_init.py:1045",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1024
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "agent/inline_tool_executors.py:303",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 352
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "tools/delegate_tool.py:552",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 10
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "tools/delegate_tool.py:545",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 6
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "tools/delegate_tool.py:376",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 215
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "tools/delegate_tool.py:585",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 33
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "tools/delegate_tool.py:363",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 39
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "model_tools.py:175",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 78
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "gateway/run_notifications.py:1621",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1597
+  },
+  {
+   "cap": "delegation-orchestration",
+   "anchor": "tools/delegate_tool.py:659",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 10
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/platforms/base.py:1882",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 3916
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/platforms/base.py:3747",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1163
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run_busy.py:1049",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 653
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run_busy.py:1055",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1061
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run_busy.py:1063",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1052
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/stream_consumer_transport.py:319",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/stream_consumer.py:240",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run_notifications.py:1828",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1813
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run_notifications.py:1017",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 225
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/control_socket.py:534",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 6
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run.py:1580",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 70
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/run_turn_prepare.py:543",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 394
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "gateway/host_attach.py:374",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 12
+  },
+  {
+   "cap": "gateway-messaging",
+   "anchor": "plugins/platforms/telegram/adapter.py:6560",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 225
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_constants.py:194",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 54
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_constants.py:648",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 692
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "agent/secret_scope.py:230",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 8
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "gateway/run_shutdown.py:1254",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 5
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "gateway/session_identity.py:201",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 6
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "gateway/run.py:4197",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 70
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/env_loader.py:684",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 40
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/env_loader.py:685",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 775
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/env_loader.py:669",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 12
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "gateway/control_socket.py:546",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 6
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/gateway.py:2230",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 2144
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/gateway.py:2262",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 97
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "tools/terminal_tool.py:503",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 271
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/auth_nous.py:437",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 457
+  },
+  {
+   "cap": "profiles-isolation",
+   "anchor": "hermes_cli/auth_nous.py:503",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 423
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_wal.py:62",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_wal.py:58",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_schema.py:1066",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_mutation_guards.py:6",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_prune_rewrite.py:133",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_prune_rewrite.py:29",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_errors.py:30",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_errors.py:67",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_reconcile.py:107",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state.py:198",
+   "verdict": "HINT-DEAD"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state.py:835",
+   "verdict": "OOB"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_readpool.py:1",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state.py:741",
+   "verdict": "OOB"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_fts.py:15",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_fts.py:165",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_fts.py:178",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_schema.py:918",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_repair.py:815",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_media.py:8",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_media.py:21",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_common.py:160",
+   "verdict": "OOB"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_common.py:164",
+   "verdict": "OOB"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_common.py:265",
+   "verdict": "OOB"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_sessions.py:1243",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "agent/image_replay.py:86",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 8
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "website/docs/user-guide/features/hooks.md:1113",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 96
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "hermes_state_sessions.py:957",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "tui_gateway/methods_session.py:679",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 115
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "tui_gateway/methods_prompt.py:607",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 619
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "tui_gateway/session_workdir.py:715",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 749
+  },
+  {
+   "cap": "sessions-state",
+   "anchor": "tui_gateway/session_workdir.py:789",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 68
+  },
+  {
+   "cap": "skills-system",
+   "anchor": "tools/skills_tool.py:661",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 101
+  },
+  {
+   "cap": "skills-system",
+   "anchor": "tools/terminal_tool_guards.py:375",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "skills-system",
+   "anchor": "tools/skill_usage.py:453",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "skills-system",
+   "anchor": "agent/curator.py:232",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 4
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tools/registry.py:955",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1059
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tools/registry.py:963",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 2
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tools/registry.py:268",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 21
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "model_tools.py:479",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 487
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "model_tools.py:490",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 300
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "hermes_cli/plugins.py:463",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 7
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tui_gateway/agent_factory.py:446",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 15
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "model_tools.py:349",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 333
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "agent/inline_tool_executors.py:346",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 1
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "model_tools.py:897",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 5
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "hermes_state_identity.py:99",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "hermes_state_messages.py:1106",
+   "verdict": "DEAD-FILE"
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tools/mcp_tool_agent.py:100",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 86
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tools/browser_harness_dirs.py:98",
+   "verdict": "HINT-DEAD"
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "tools/browser_harness_dirs.py:170",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 134
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "utils.py:679",
+   "verdict": "MOVED",
+   "moved_candidates": [
+    "plugins/platforms/qqbot/utils.py"
+   ]
+  },
+  {
+   "cap": "tools-toolsets",
+   "anchor": "agent/terminal_image.py:374",
+   "verdict": "SHIFTED",
+   "nearest_hint_line": 366
+  }
+ ]
+}
