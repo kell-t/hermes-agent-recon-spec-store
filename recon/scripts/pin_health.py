@@ -26,7 +26,10 @@ import common
 
 cfg = common.load_config()
 DRAFTS = common.DRAFTS
-tree = common.PinTree()
+# PIN_HEALTH_REPO: survey an alternate checkout (e.g. a scratch worktree at
+# a candidate re-pin target) without disturbing the pinned clone checkout.
+# Same override as the gufo store's copy (promoted 2026-11-18).
+tree = common.PinTree(os.environ.get("PIN_HEALTH_REPO") or None)
 EXTS = cfg["anchor_extensions"]
 
 ANCHOR_RE = re.compile(r"`([\w./\-]+\.(?:%s)):(\d+)(?:-\d+)?(?:\s*\([^)]*\))?`"
